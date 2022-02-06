@@ -2,7 +2,7 @@
 Contains folder structure for the manual recordings done to compare with the original Ted Talk ones.  Currently uses absolute path for example scripts too. 
 
 **IMPORTANT: Please run the python script to make it work locally:**
-- Install the following packages on your machine (feel free to create a local environment): `numpy`, `pandas`, and `gitpython`. 
+- Install the following packages on your machine (feel free to create a local environment): `gitpython`, 
 then run `python3 generate_csv_from_recordings.py`
 
 ## Description of recordings_metadata File
