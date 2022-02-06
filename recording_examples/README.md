@@ -1,6 +1,10 @@
 # Recording_examples directory
 Contains folder structure for the manual recordings done to compare with the original Ted Talk ones. 
 
+Currently uses absolute path for example scripts too. Please run the python script to make it work locally. 
+Install the following packages on your machine (feel free to create a local environment): `numpy`, `pandas`, and `gitpython`. 
+then run `python3 generate_csv_from_recordings.py`
+
 ## Description of recordings_metadata File
 Contains pathing to the original recordings and the example recordings. If new recordings are added, please run the python script to remake the files. Please note that the pathing generated in the CSV file right now is only valid on a **DICE** machine, as the original dataset is found on the University of Edinburgh Informatics network.
 Headers:
@@ -14,7 +18,7 @@ Headers:
 - original_transcript: Transcription of the original recording
 - example_transcript: Transcription of the recorded example
 - path_to_original: Absolute path on the DICE machine to the file
-- path_to_example: Relative path to each example, assuming root is the top of the github repository
+- path_to_example: Absolute path to each example, assuming root is the top of the github repository
   - i.e) For instance, ./recording_examples/[example_category]/[unique_folder_id]/[audio_file]
 
 The example recordings were made in .m4a format, while the original recordings were made in .mp4 format (including video).
