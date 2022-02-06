@@ -10,7 +10,7 @@ Headers:
   - samples: Represents recordings where only a phrase is stated from the original one
   - exact_recordings: Represents recording examples where the full sentence in the original one is re-iterated.
   - imperfect_examples: Represents hard recording examples sentences that contains key terms from the original recordings, but not exact:
-    -i.e) Original recording transcription: They went through his files and they didn't find anything **v.s** Example Recording Transcription: They didn't find the files
+    - i.e) Original recording transcription: They went through his files and they didn't find anything **v.s** Example Recording Transcription: They didn't find the files
 - original_transcript: Transcription of the original recording
 - example_transcript: Transcription of the recorded example
 - path_to_original: Absolute path on the DICE machine to the file
