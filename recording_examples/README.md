@@ -1,3 +1,4 @@
+# Recording_examples directory
 Contains folder structure for the manual recordings done to compare with the original Ted Talk ones. 
 
 ## Description of recordings_metadata File
