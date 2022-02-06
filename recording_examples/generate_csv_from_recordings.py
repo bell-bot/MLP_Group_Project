@@ -1,7 +1,6 @@
 import os 
 import csv
 import copy
-import pandas as pd
 import git
 
 
