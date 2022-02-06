@@ -3,6 +3,8 @@ import csv
 import copy
 import pandas as pd
 
+#TODO: Clean this file
+
 ORIGINAL_TED_TALK_TRAINVAL_PATH = "/group/corpora/public/lipreading/LRS3/trainval"
 TEST_RECORDED_LABELS_PATH = "./" #TODO: Could make the code more flexible by accepting arguments in the terminal for where the recording examples will be located
 FINAL_PATH_FROM_ROOT_DIRECTORY = os.path.basename(os.getcwd()) #Current script is in directory called recording_examples
@@ -35,16 +37,13 @@ def write_csv_file():
                                         if files is not None:
                                                 for file_name in files:
                                                         row_csv = {}
-
-                                                        count+=1 #Delete this TODO:
                                                         unique_folder_id = os.path.basename(path)
                                                         original_file_name = copy.deepcopy(file_name)
                                                         if "_" in file_name:  #In case multiple recordings of same file name exist, they will be followed with underscore and an alphabet. Make sure to remove that when looking for the original file name
                                                                         #Example: 50007_a.m4a or 50007_b.m4a
                                                                 original_file_name = file_name.split("_")[0]
-                                                        print(file_name)
                                                         original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_file_name)
-                                                        full_relative_path = os.path.join(path,file_name)
+                                                        full_relative_path = os.path.join("./recording_examples",name,file_name)
                                                         fname_without_extension, extension = os.path.splitext(file_name)
                                                         original_fname_without_extension, _ =  os.path.splitext(original_file_name)
                                                         if extension in AUDIO_EXTENSIONS:
@@ -54,7 +53,6 @@ def write_csv_file():
                                                                 prefix="example_{}".format(example_category_name))
                                                                 row_csv["path_to_original"] = original_file_path
                                                                 row_csv["path_to_example"] = full_relative_path
-                                                                print(full_relative_path)
                                                                 original_transcript = read_text_file(
                                                                         text_file = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_fname_without_extension + ".txt"),
                                                                         original_text_file_format=True)
@@ -64,7 +62,7 @@ def write_csv_file():
                                                                 else:
                                                                         row_csv["example_transcript"] = read_text_file(
                                                                                 text_file=os.path.join(path,fname_without_extension + ".txt"))
-
+                                                                print(full_relative_path)
                                                                 
                                                                 row_csv["example_category"] = example_category_name
                                                                 w.writerow(row_csv)
