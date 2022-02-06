@@ -1,9 +1,5 @@
-import soundfile as sf 
 import numpy as np     
 
-def temp_read_audio_file(file_path):
-    data, samplerate = sf.read(file_path) 
-    return data, samplerate
 
 """
 Given a flattened numpy array, transforms the data into sliding windows, and the overlap between each window can be defined by step size.
@@ -27,9 +23,11 @@ def create_sliding_windows(audio_input, window_size = 25, step_size = 25, copy =
 
 #Test Sliding windows
 if __name__ == "__main__": 
-    # data, sample_rate = temp_read_audio_file(file_path=TEMP_FILE_PATH)
     data = np.arange(1,10)
+    print("Original data shape: {}", data.shape)
     print(data)
-    m = create_sliding_windows(data,copy=False)
-    print(m.shape)
-    print(m)
+    output = create_sliding_windows(data,copy=False)
+    print("New transformed data shape: {}", output.shape)
+    print(output)
+
+
