@@ -2,13 +2,23 @@ import os
 import csv
 import copy
 import pandas as pd
+import git
+
+
 
 #TODO: Clean this file
+def get_git_root(path):
+
+        git_repo = git.Repo(path, search_parent_directories=True)
+        git_root = git_repo.git.rev_parse("--show-toplevel")
+        return git_root
+
+
 
 ORIGINAL_TED_TALK_TRAINVAL_PATH = "/group/corpora/public/lipreading/LRS3/trainval"
-TEST_RECORDED_LABELS_PATH = "./" #TODO: Could make the code more flexible by accepting arguments in the terminal for where the recording examples will be located
-FINAL_PATH_FROM_ROOT_DIRECTORY = os.path.basename(os.getcwd()) #Current script is in directory called recording_examples
-
+#Get the absolute path of the script
+#TODO: Could make the code more flexible by accepting arguments in the terminal for where the recording examples will be located
+TEST_RECORDED_LABELS_PATH = os.path.join(get_git_root(os.getcwd()), 'recording_examples')
 CSV_HEADER = ["original_recording_id", "example_recording_id",
         "example_category",
         "original_transcript", "example_transcript",  
@@ -18,6 +28,8 @@ CSV_HEADER = ["original_recording_id", "example_recording_id",
 CSV_FILE_PATH= "./recordings_metadata.csv"
 
 AUDIO_EXTENSIONS = [".m4a", ".mp4"]
+
+
 
 def read_csv_file(csv_file_path):
         pass
@@ -31,8 +43,10 @@ def write_csv_file():
                 for name in dir_list:
                         #Check if it is a directory
                         if os.path.isdir(name):
-                                example_category_name = name
+                                example_category_name = os.path.basename(name)
                                 current_path = os.path.join(TEST_RECORDED_LABELS_PATH, example_category_name)
+                                print(example_category_name)
+                                print(current_path)
                                 for path, _ ,files in os.walk(current_path):
                                         if files is not None:
                                                 for file_name in files:
@@ -43,7 +57,8 @@ def write_csv_file():
                                                                         #Example: 50007_a.m4a or 50007_b.m4a
                                                                 original_file_name = file_name.split("_")[0]
                                                         original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_file_name)
-                                                        full_relative_path = os.path.join("recording_examples",name,unique_folder_id,file_name)
+                                                        full_relative_path = os.path.join(TEST_RECORDED_LABELS_PATH, unique_folder_id,file_name)
+                                                        # print(full_relative_path)
                                                         fname_without_extension, extension = os.path.splitext(file_name)
                                                         original_fname_without_extension, _ =  os.path.splitext(original_file_name)
                                                         if extension in AUDIO_EXTENSIONS:
@@ -62,7 +77,7 @@ def write_csv_file():
                                                                 else:
                                                                         row_csv["example_transcript"] = read_text_file(
                                                                                 text_file=os.path.join(path,fname_without_extension + ".txt"))
-                                                                print(full_relative_path)
+                                                                # print(full_relative_path)
                                                                 
                                                                 row_csv["example_category"] = example_category_name
                                                                 w.writerow(row_csv)
@@ -102,7 +117,9 @@ def unit_test2():
         pass
 
 if __name__ == "__main__":
+        #Change working directory to where the script is
+        os.chdir(TEST_RECORDED_LABELS_PATH) 
+        #Generate CSV file
         write_csv_file()
-        # recordings_original= read_original(recording_examples)
-        # create_csv_file(recording_examples, recordings_original)
+
 
