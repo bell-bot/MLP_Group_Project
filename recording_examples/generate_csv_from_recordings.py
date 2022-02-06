@@ -43,7 +43,7 @@ def write_csv_file():
                                                                         #Example: 50007_a.m4a or 50007_b.m4a
                                                                 original_file_name = file_name.split("_")[0]
                                                         original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_file_name)
-                                                        full_relative_path = os.path.join("./recording_examples",name,file_name)
+                                                        full_relative_path = os.path.join("recording_examples",name,unique_folder_id,file_name)
                                                         fname_without_extension, extension = os.path.splitext(file_name)
                                                         original_fname_without_extension, _ =  os.path.splitext(original_file_name)
                                                         if extension in AUDIO_EXTENSIONS:
