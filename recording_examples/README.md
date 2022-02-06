@@ -1,6 +1,6 @@
 Contains folder structure for the manual recordings done to compare with the original Ted Talk ones. 
 
-* Description of recordings_metadata File
+## Description of recordings_metadata File
 Contains pathing to the original recordings and the example recordings. If new recordings are added, please run the python script to remake the files. Please note that the pathing generated in the CSV file right now is only valid on a **DICE** machine, as the original dataset is found on the University of Edinburgh Informatics network.
 Headers:
 - original_recording_id: Generated a unique recording id, truncuated from file path for conciseness
