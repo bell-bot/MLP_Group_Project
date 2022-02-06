@@ -1,8 +1,8 @@
 # Recording_examples directory
-Contains folder structure for the manual recordings done to compare with the original Ted Talk ones. 
+Contains folder structure for the manual recordings done to compare with the original Ted Talk ones.  Currently uses absolute path for example scripts too. 
 
-Currently uses absolute path for example scripts too. Please run the python script to make it work locally. 
-Install the following packages on your machine (feel free to create a local environment): `numpy`, `pandas`, and `gitpython`. 
+**IMPORTANT: Please run the python script to make it work locally:**
+- Install the following packages on your machine (feel free to create a local environment): `numpy`, `pandas`, and `gitpython`. 
 then run `python3 generate_csv_from_recordings.py`
 
 ## Description of recordings_metadata File
