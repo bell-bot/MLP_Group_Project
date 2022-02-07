@@ -21,6 +21,6 @@ Contains pathing to the original recordings and the example recordings. If new r
 - `example_transcript`: Transcription of the recorded example
 - `path_to_original`: Absolute path on the DICE machine to the file
 - `path_to_example`: Absolute path to each example, assuming root is the top of the github repository
-  - i.e) For instance, ./recording_examples/[example_category]/[unique_folder_id]/[audio_file]
+
 
 The example recordings were made in .m4a format, while the original recordings were made in .mp4 format (including video).
