@@ -105,11 +105,11 @@ def get_wav(language_num):
     y, sr = librosa.load('./{}.wav'.format(language_num)) #Make sure to have audio file in your desktop or you may change the path as per your need
     return resample_audio(data=y, sampling_rate=sr)
 
-def resample_audio(data, sampling_rate):
+def resample_audio(data, sampling_rate, target_rate=RATE):
     return(librosa.core.resample(y=data,orig_sr=sampling_rate,target_sr=RATE, scale=True))
 
 
-def to_mfcc(wav):
+def to_mfcc(wav, target_rate=RATE, n_mfcc=N_MFCC):
     '''
     Converts wav file to Mel Frequency Ceptral Coefficients
     :param wav (numpy array): Wav form
@@ -119,7 +119,7 @@ def to_mfcc(wav):
 ###############################################################################################
 
 ###########################Multiple Files in local dir folder##################################
-def preprocess(list_of_audio_filenames):
+def preprocess_files(list_of_audio_filenames):
     '''
     Does preprocessing steps for multiple files
     :param list_of_audio_filenames (list): list of JUST names of files ("Shrek" not "Shrek.wav")
@@ -138,10 +138,17 @@ def preprocess(list_of_audio_filenames):
         a = open(file_name, 'r')
 
     # Press the green button in the gutter to run the script.
+
+def preprocess(fs, data, target_rate=RATE, n_mfcc= N_MFCC):
+    audio = resample_audio(data=data,sampling_rate=fs, target_rate=target_rate)
+    audio = to_mfcc(audio, target_rate, n_mfcc)
+    # return audio.reshape((audio.shape[0],audio.shape[1]))
+    return audio
+
 if __name__ == '__main__':
     list_of_files = list()
     list_of_files.append("Shrek")
-    preprocess(list_of_files)
+    preprocess_files(list_of_files)
     print("Done!")
 
     ##EXAMPLES######################################

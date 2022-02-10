@@ -16,8 +16,8 @@ Note: Depending on the configuration of window size and step size, values at the
 :param copy: If copy is set to False, this creates a memory-shared view (shallow copy/ reference). Changing the output returned will change the input as well. Set copy to True to return a new object (deep copy).
 :return Return numpy array with sliding windows
 """
-def create_sliding_windows(audio_input, window_size = 25, step_size = 25, copy = False):
-    output_view = np.lib.stride_tricks.sliding_window_view(x= audio_input, window_shape = window_size)[0::step_size]
+def create_sliding_windows(audio_input, window_size = 50, step_size = 25, axis = 0, copy = True):
+    output_view = np.lib.stride_tricks.sliding_window_view(x= audio_input, axis=axis, window_shape = window_size)[0::step_size]
     return output_view.copy() if copy else output_view
 
 
