@@ -59,7 +59,7 @@ def read_audio(file, extension):
 
     fp_arr = np.array(samples).T.astype(np.float32)
     fp_arr /= np.iinfo(samples[0].typecode).max
-    return fp_arr
+    return sound.frame_rate, fp_arr
 
 
 def write_WAV_audio(fs, data, file_name):
