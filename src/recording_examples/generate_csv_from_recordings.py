@@ -59,7 +59,7 @@ def write_csv_file():
                                                         fname_without_extension, extension = os.path.splitext(file_name)
                                                         original_fname_without_extension, _ =  os.path.splitext(original_file_name)
                                                         original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_fname_without_extension+ ".mp4")
-                                                        full_relative_path = os.path.join(TEST_RECORDED_LABELS_PATH, unique_folder_id,fname_without_extension + ".m4a")
+                                                        full_relative_path = os.path.join(TEST_RECORDED_LABELS_PATH, example_category_name, unique_folder_id,fname_without_extension + ".m4a")
                                                         # print(full_relative_path)
                                                         if extension in AUDIO_EXTENSIONS:
                                                                 row_csv["original_recording_id"] = generate_recording_ids(file_unique_id=os.path.join(unique_folder_id, original_fname_without_extension),
