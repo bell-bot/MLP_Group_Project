@@ -54,10 +54,8 @@ def play_WAV_audio(fs, data):
 # From https://github.com/jiaaro/pydub/blob/master/API.markdown
 def read_audio(file, extension):
     sound = AudioSegment.from_file(file, format=extension)
-    print(sound)
-    # print(channel_sounds[0])
-    print(np.array(sound.get_array_of_samples()).shape)
-    samples = [s.get_array_of_samples() for s in sound]
+    channel_sounds = sound.split_to_mono()
+    samples = [s.get_array_of_samples() for s in channel_sounds]
 
     fp_arr = np.array(samples).T.astype(np.float32)
     fp_arr /= np.iinfo(samples[0].typecode).max
