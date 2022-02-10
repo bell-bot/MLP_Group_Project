@@ -38,7 +38,7 @@ def read_MP4_file(mp4_path, output_file):
     '''
     video = mp.VideoFileClip(mp4_path)  # here sample.mp4 is the name of video clip. 'r' indicates that we are
     # reading a file
-    # video.audio.write_audiofile(output_file)  # Here output_file is the name of the audio file with type e.g "Shrek.wav"
+    video.audio.write_audiofile(output_file)  # Here output_file is the name of the audio file with type e.g "Shrek.wav"
 
     return video.audio.to_soundarray()
 
@@ -53,6 +53,12 @@ def play_WAV_audio(fs, data):
 
 # From https://github.com/jiaaro/pydub/blob/master/API.markdown
 def read_audio(file, extension):
+    '''
+    reads media files into audio and returns numpy array and frame rate
+    :param file : file path to the media file
+    :param extension: extension of the file to be read. Example, to read mp4 files, provide "mp4" to the extension. 
+    return numpy array and frame rate (sampling frequency in hz)
+    '''
     sound = AudioSegment.from_file(file, format=extension)
     channel_sounds = sound.split_to_mono()
     samples = [s.get_array_of_samples() for s in channel_sounds]
