@@ -55,11 +55,12 @@ def write_csv_file():
                                                         if "_" in file_name:  #In case multiple recordings of same file name exist, they will be followed with underscore and an alphabet. Make sure to remove that when looking for the original file name
                                                                         #Example: 50007_a.m4a or 50007_b.m4a
                                                                 original_file_name = file_name.split("_")[0]
-                                                        original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_file_name)
-                                                        full_relative_path = os.path.join(TEST_RECORDED_LABELS_PATH, unique_folder_id,file_name)
-                                                        # print(full_relative_path)
+
                                                         fname_without_extension, extension = os.path.splitext(file_name)
                                                         original_fname_without_extension, _ =  os.path.splitext(original_file_name)
+                                                        original_file_path = os.path.join(ORIGINAL_TED_TALK_TRAINVAL_PATH, unique_folder_id, original_fname_without_extension+ ".mp4")
+                                                        full_relative_path = os.path.join(TEST_RECORDED_LABELS_PATH, unique_folder_id,fname_without_extension + ".m4a")
+                                                        # print(full_relative_path)
                                                         if extension in AUDIO_EXTENSIONS:
                                                                 row_csv["original_recording_id"] = generate_recording_ids(file_unique_id=os.path.join(unique_folder_id, original_fname_without_extension),
                                                                 prefix="original")
