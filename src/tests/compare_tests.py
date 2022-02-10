@@ -1,7 +1,6 @@
 import inspect
 import sys
 import unittest
-import numpy as np
 import os
 import torch
 import math
