@@ -5,6 +5,8 @@ from IPython.display import Audio
 import moviepy.editor as mp
 import librosa
 
+from pydub import AudioSegment
+
 ##Inspired by code from
 #https://iq.opengenus.org/mfcc-audio/
 #and
@@ -36,8 +38,9 @@ def read_MP4_file(mp4_path, output_file):
     '''
     video = mp.VideoFileClip(mp4_path)  # here sample.mp4 is the name of video clip. 'r' indicates that we are
     # reading a file
-    video.audio.write_audiofile(output_file)  # Here output_file is the name of the audio file with type e.g "Shrek.wav"
+    # video.audio.write_audiofile(output_file)  # Here output_file is the name of the audio file with type e.g "Shrek.wav"
 
+    return video.audio.to_soundarray()
 
 def play_WAV_audio(fs, data):
     '''
@@ -46,7 +49,19 @@ def play_WAV_audio(fs, data):
     :param data (1d array): aduio data in 1d form
     :return None: plays audio
     '''
-    Audio(data, rate=fs)    #plays the audio
+    return Audio(data, rate=fs)    #plays the audio
+
+# From https://github.com/jiaaro/pydub/blob/master/API.markdown
+def read_audio(file, extension):
+    sound = AudioSegment.from_file(file, format=extension)
+    print(sound)
+    # print(channel_sounds[0])
+    print(np.array(sound.get_array_of_samples()).shape)
+    samples = [s.get_array_of_samples() for s in sound]
+
+    fp_arr = np.array(samples).T.astype(np.float32)
+    fp_arr /= np.iinfo(samples[0].typecode).max
+    return fp_arr
 
 
 def write_WAV_audio(fs, data, file_name):
