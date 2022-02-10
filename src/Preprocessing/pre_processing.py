@@ -103,7 +103,11 @@ def get_wav(language_num):
     :return (numpy array): Down-sampled wav file
     '''
     y, sr = librosa.load('./{}.wav'.format(language_num)) #Make sure to have audio file in your desktop or you may change the path as per your need
+    return resample_audio(data=y, sampling_rate=sr)
+    
+def resample_audio(data, sampling_rate):
     return(librosa.core.resample(y=y,orig_sr=sr,target_sr=RATE, scale=True))
+
 
 def to_mfcc(wav):
     '''
