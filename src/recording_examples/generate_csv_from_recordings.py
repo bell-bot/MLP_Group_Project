@@ -17,7 +17,7 @@ def get_git_root(path):
 ORIGINAL_TED_TALK_TRAINVAL_PATH = "/group/corpora/public/lipreading/LRS3/trainval"
 #Get the absolute path of the script
 #TODO: Could make the code more flexible by accepting arguments in the terminal for where the recording examples will be located
-TEST_RECORDED_LABELS_PATH = os.path.join(get_git_root(os.getcwd()), 'recording_examples')
+TEST_RECORDED_LABELS_PATH = os.path.join(get_git_root(os.getcwd()), 'src' ,'recording_examples')
 CSV_HEADER = ["original_recording_id", "example_recording_id",
         "example_category",
         "original_transcript", "example_transcript",  
