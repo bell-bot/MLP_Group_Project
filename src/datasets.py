@@ -18,10 +18,18 @@ DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
 
 class KeywordsCSVHeaders:
+    """
+    Represents the fields keywords.csv file
+        KEYWORD: The keyword linking the two audio files (sample of a TED audio file and an MSWC recording of that keyword)
+        TED_SAMPLE_ID: Represents the sample id of an audio. In other words, it is a unique id that maps to a segment of a TED audio file. 
+                    Hence, this is NOT the same as "talk_id", which represents the id of an entire audio file
+        TED_DATASET_TYPE: The type of dataset the sample exists in (Train vs Dev vs Test set) 
+        MSWC_ID: The id of the keyword recording
+    """
     KEYWORD = "Keyword"
-    TED_ID= "TEDLIUM_AudioFileID"
+    TED_SAMPLE_ID= "TEDLIUM_SampleID"
     TED_DATASET_TYPE = "TEDLIUM_SET"
-    MSWC_ID = "MSWC_AudioFileID"
+    MSWC_ID = "MSWC_AudioID"
 
 
 #TODO! Customise for each subset, in speaker-adaptation. Might require changing the metadata
@@ -73,7 +81,7 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
         """
         return super()._load_audio(path, start_time, end_time, sample_rate)
 
-    def __getitem__(self, filesampleID: int) -> Dict:
+    def __getitem__(self, sampleID: int) -> Dict:
 
         """Load the n-th sample from the dataset, where n is the audioFileID/fileSampleId
         Please note that filesampleID is different from talk_id returned by the function, which denotes the entire recording instead
@@ -84,7 +92,7 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
         Returns:
             tuple: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
             """
-        return super().__getitem__(filesampleID)
+        return super().__getitem__(sampleID)
 
 
 
@@ -197,7 +205,6 @@ class MultiLingualSpokenWordsEnglish():
     def __getitem__(self, MSWC_AudioID) -> Dict:
         """Retrieves sample data from file given Audio ID
         """
-        print(self._path)
         path_to_audio = os.path.join(self._path, "en", "clips", MSWC_AudioID)
         waveform, sample_rate= self._load_audio(path_to_audio)
         results_dict = {
@@ -207,7 +214,15 @@ class MultiLingualSpokenWordsEnglish():
         return results_dict
 
 #TODO! Ensure same sampling rate
+#TODO! Create mapping between talk ids and datatype set (i.e not just sample mapping). Use the defined train_audio_sets, dev_audio_sets, test_audio_sets to help. Might be better to implement this in the TEDLIUMCustom instead of here.
 class CTRLF_DatasetWrapper:
+    """
+    Main class wrapper for both TEDLIUM dataset and MSWC dataset. Using the labels csv file, use the functions to retrieve audio samples and their corresponding keywords that was linked to.
+        
+    Args:
+        single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
+            ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
+    """
     def __init__(self,path_to_keywords_csv, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
@@ -227,17 +242,37 @@ class CTRLF_DatasetWrapper:
         self.MSWC = MultiLingualSpokenWordsEnglish(root=path_to_MSWC)
 
 
- 
-    #TODO! Ensure same sampling rate
-    def get_data(self, TEDAudio_id: int, dataset_type: str):
-        TED_results_dict = self.TED.__getitem__(TEDAudio_id)
+    
+    #TODO! Ensure retrieving the same sampling rate!!!
+    def get_data(self, TEDSample_id: int, dataset_type: str):
+        """
+        Given Ted Sample ID and the dataset type, return the corresponding data from Ted audio sample and Keyword recording data
+        Returns:
+            TED_results_dict:
+                { 
+                    "waveform": audio data of the Ted talk sample as type Tensor,
+                    "sample_rate": sample rate as type int ,
+                    "transcript": transcript string as type str, 
+                    "talk_id": talk id (of the entire audio file) as str,
+                    "speaker_id":speaker id as str ,
+                    "identifier": identifier ,
+                    "start_time": start time of the audio sample in seconds,
+                    "end_time": end time of the audio sample in seconds, 
+                }
+            MSWC_results_dict:
+                {
+                    "waveform": audio data of the keyword recording
+                    "sample_rate": sample rate of the keyword recording
+                }
+        """
+        TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         subset_keywords_df = self.audio_keywords_dataset_dict[dataset_type]
 
-        MSWC_audio_ids = subset_keywords_df[subset_keywords_df[KeywordsCSVHeaders.TED_ID] == TEDAudio_id]
+        MSWC_audio_ids = subset_keywords_df[subset_keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == TEDSample_id]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
-            print(f"NOT FOUND: \nSample TED Audio ID {TEDAudio_id} does not exist in the csv file")
+            print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
             print("*" * 80)
             return TED_results_dict, {}
         MSWC_results_dict = None
@@ -245,6 +280,10 @@ class CTRLF_DatasetWrapper:
             MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID][0])
 
         return TED_results_dict, MSWC_results_dict
+
+    #TODO! Make a Function that returns the entire audio recording given Talk id. 
+    def get_specific_audio_file(self, TED_talk_id):
+        pass
 
 if __name__== "__main__":
     ####### Testing CTRLF_DatasetWrapper

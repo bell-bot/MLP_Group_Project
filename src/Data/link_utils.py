@@ -1,7 +1,7 @@
 import csv 
 import regex as re
 """
-Utility functions to help in generating keywords
+Utility functions to help in generating keywords from MSWC dataset
 """
 
 

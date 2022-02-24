@@ -17,7 +17,7 @@ from random import randint
 import numpy as np
 from src.datasets import TEDLIUMCustom, MultiLingualSpokenWordsEnglish, DATASET_MLCOMMONS_PATH, DATASET_TEDLIUM_PATH, KeywordsCSVHeaders
 import link_utils  
-CSV_HEADER = [KeywordsCSVHeaders.KEYWORD, KeywordsCSVHeaders.TED_ID, KeywordsCSVHeaders.TED_DATASET_TYPE, KeywordsCSVHeaders.MSWC_ID]
+CSV_HEADER = [KeywordsCSVHeaders.KEYWORD, KeywordsCSVHeaders.TED_SAMPLE_ID, KeywordsCSVHeaders.TED_DATASET_TYPE, KeywordsCSVHeaders.MSWC_ID]
 
 
 #TODO See if all edge cases were handled
@@ -59,8 +59,9 @@ class KeywordsLink:
                 item = self.TEDLIUMCustomDataset.__getitem__(i)
                 word, not_found, error_words = self.get_keyword_from_TED_audio_sample(sample_num=i, item_sample=item, not_found=not_found, error_words= error_words)
                 if word in self.MSWCDataset.keywords:
-                    keyword, ted_audioid, dataset_tag, mswc_audioid = self.match(sample_number=i, sample=item, word=word)
-                    row = [keyword, ted_audioid, dataset_tag, mswc_audioid]
+                    #Append to the list of rows
+                    ted_sampleid, dataset_tag, mswc_audioid = self.match(sample_number=i, sample=item, word=word)
+                    row = [word, ted_sampleid, dataset_tag, mswc_audioid]
                     csv_rows.append(row)
                 else:
                     print(f"Sample id {i} contained no word to link to the keyword dataset.")
@@ -72,7 +73,19 @@ class KeywordsLink:
         self.create_log_files(not_found, error_words, samples_with_no_links)
 
     def get_keyword_from_TED_audio_sample(self, sample_num, item_sample, not_found, error_words):
-    
+        """
+        Helper Function that returns a random keyword from a TED Talk audio sample
+        Args:
+            sample_num: The sample number of the audio file, also used as the TED_AudioFileId for our purposes
+            item_sample: The sample of the audio file, containing access to metadata like timestamp and the transcript of that sample
+            not_found: Dictionary maintained while retrieving words that are not found in the Keyword Dataset
+            error_words: Words that recieved an error while linking to the Keyword dataset, mostly due to parsing issues.
+
+        Returns:
+            word: a random keyword from the audio sample
+            not_found
+            error_words
+        """
         transcript = item_sample["transcript"]
 
 
@@ -106,13 +119,21 @@ class KeywordsLink:
         return word, not_found, error_words
 
     def match(self,sample_number, sample, word):
+        """
+        Helper Function that returns relevant information to link the two datasets
+        Args:
+            sample_number: The sample number of the audio file, also used as the TED_AudioFileId for our purposes 
+            sample: The sample of the audio file, containing access to metadata like timestamp and the transcript of that sample
+            word: keyword to link the two datasets with
+        Returns:
+            ted_sampleid: Audio Sample id of the TEDTalk sample. Corresponds to the sample number when calling the TedliumCustom dataset (it is NOT identical to talk_id).
+            dataset_tag: The type of dataset that the TED Audio belongs to
+            mswc_audioid: Audio id of the keyword from the MSWC dataset
+
+        """
         labels_df = self.MSWCDataset.splits_df[self.MSWCDataset.splits_df["WORD"] == word]
         labels_df.reset_index(inplace=True)
-
-        #Retrieve random word from the list of all keywords recordings available in the MSWC dataset
-        random_number = randint(0,len(labels_df)-1)
-        keyword = labels_df.iloc[random_number]['WORD']
-        ted_audioid = sample_number
+        ####### Dataset Tag (Train vs dev vs test)
         dataset_tag = None
         talk_id = sample["talk_id"]
         for dataset_type, talk_ids in self.TEDLIUMCustomDataset.recordings_set_dict.items():
@@ -122,9 +143,14 @@ class KeywordsLink:
         if dataset_tag == None:
             print("SOMETHING WENT WRONG! transcript: {}, talk_id: {}")
             assert(False)
+        ####### Ted Audio ID
+        ted_sampleid = sample_number
+        ####### MSWC Audio ID
+        #Retrieve random word from the list of all keywords recordings available in the MSWC dataset
+        random_number = randint(0,len(labels_df)-1)
         mswc_audioid = labels_df.iloc[random_number]["LINK"]
 
-        return keyword, ted_audioid, dataset_tag, mswc_audioid
+        return ted_sampleid, dataset_tag, mswc_audioid
 
     #### -------Extra Helper Functions ------- ####
 

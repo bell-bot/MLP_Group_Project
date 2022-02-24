@@ -1,6 +1,3 @@
-Keyword,TEDLIUM_AudioFileID,TEDLIUM_SET,MSWC_AudioFileID
-because,0,train,because/common_voice_en_657130.opus
-and,1,train,and/common_voice_en_22151368.opus
-world,2,train,world/common_voice_en_695511.opus
-two,3,train,two/common_voice_en_19747050.opus
-later,4,train,later/common_voice_en_57244.opus
+Keyword,TEDLIUM_SampleID,TEDLIUM_SET,MSWC_AudioID
+because,0,train,because/common_voice_en_68615.opus
+consider,1,train,consider/common_voice_en_22362754.opus
