@@ -11,6 +11,11 @@ import csv
 from torch import Tensor
 from torch.utils.data import Dataset
 
+from threading import Thread
+from queue import Queue
+from concurrent.futures import ThreadPoolExecutor
+
+
 
 import pandas as pd
 from random import randint
@@ -25,10 +30,10 @@ class KeywordsLink:
     KEYWORDS_LINK_FILENAME = "keywords.csv"
     
     def __init__(self):
-        self.TEDLIUMCustomDataset = TEDLIUMCustom(root=DATASET_TEDLIUM_PATH,release="release3")
         print("Preparing Ted Dataset...")
-        self.MSWCDataset = MultiLingualSpokenWordsEnglish(root=DATASET_MLCOMMONS_PATH, read_splits_file=True, subset="train")
+        self.TEDLIUMCustomDataset = TEDLIUMCustom(root=DATASET_TEDLIUM_PATH,release="release3")
         print("Preparing MSWC Dataset...")
+        self.MSWCDataset = MultiLingualSpokenWordsEnglish(root=DATASET_MLCOMMONS_PATH, read_splits_file=True, subset="train")
 
     ### ----------- Linking Datasets Functions ------------ ###
 
@@ -39,7 +44,6 @@ class KeywordsLink:
 
 
     ## ---- Keywords ---- ##
-
     def create_keywords_csv(self):
         #Initialise dictionaries and list which store log information 
         not_found = defaultdict(list)
@@ -71,6 +75,7 @@ class KeywordsLink:
         
         #Log words that did not make it to the csv file
         self.create_log_files(not_found, error_words, samples_with_no_links)
+
 
     def get_keyword_from_TED_audio_sample(self, sample_num, item_sample, not_found, error_words):
         """
@@ -136,12 +141,13 @@ class KeywordsLink:
         ####### Dataset Tag (Train vs dev vs test)
         dataset_tag = None
         talk_id = sample["talk_id"]
+        transcript= sample["transcript"]
         for dataset_type, talk_ids in self.TEDLIUMCustomDataset.recordings_set_dict.items():
             if talk_id in talk_ids:
                 dataset_tag = dataset_type
                 break
         if dataset_tag == None:
-            print("SOMETHING WENT WRONG! transcript: {}, talk_id: {}")
+            print(f"SOMETHING WENT WRONG! transcript: {transcript}, talk_id: {talk_id}")
             assert(False)
         ####### Ted Audio ID
         ted_sampleid = sample_number
@@ -160,6 +166,73 @@ class KeywordsLink:
         link_utils.log_ids_in_csv(filename="logs/samples_with_no_links.csv", list_of_ids=samples_with_no_links)
 
 
+
+    # def create_keywords_csv_threaded(self):
+    #     #Initialise dictionaries and list which store log information 
+    #     not_found = defaultdict(list)
+    #     samples_with_no_links =  []
+    #     error_words = defaultdict(list)
+    #     queue = Queue()
+    #     number_of_items = self.TEDLIUMCustomDataset.__len__()
+    #     number_of_items = 10
+
+    #     csv_file =  open(self.KEYWORDS_LINK_FILENAME, "w")
+    #     w = csv.writer(csv_file)
+    #     w.writerow(CSV_HEADER)
+    #     def consume():
+    #         print("Am i called?")
+    #         while True:
+    #             if not queue.empty():
+    #                 if (i%1000==0):
+    #                     print(f"----- Sample {i} out of {number_of_items}-----")
+
+    #                 i, row = queue.get()
+    #                 print("QUEUE", i)
+
+    #                 #Ensure finals rows are written
+    #                 if row !=[]:
+    #                     w.writerow(row)
+
+    #                 print(i)
+    #                 if i == number_of_items-1:
+    #                     return
+
+
+    #     consumer = Thread(target=consume)
+    #     consumer.setDaemon(True)
+    #     consumer.start()
+
+
+    #     def produce(i):
+    #         # Data processing goes here; row goes into queue
+
+    #         # print(i)
+    #         #Get Audio sample
+    #         item = self.TEDLIUMCustomDataset.__getitem__(i)
+    #         word, not_found, error_words = self.get_keyword_from_TED_audio_sample(sample_num=i, item_sample=item, not_found=not_found, error_words= error_words)
+    #         if word in self.MSWCDataset.keywords:
+    #             #Append to the list of rows
+    #             ted_sampleid, dataset_tag, mswc_audioid = self.match(sample_number=i, sample=item, word=word)
+    #             row = [word, ted_sampleid, dataset_tag, mswc_audioid]
+    #             queue.put((i, row))
+    #         else:
+    #             print(f"Sample id {i} contained no word to link to the keyword dataset.")
+    #             # samples_with_no_links.append(i)
+    #             queue.put((i, []))
+
+
+
+    #     with ThreadPoolExecutor(max_workers=2) as executor:
+
+    #         for i in range(0,number_of_items):
+    #             executor.submit(produce, i)
+        
+
+    #     consumer.join()
+    #     csv_file.close()
+
+    #     #Log words that did not make it to the csv file
+    #     # self.create_log_files(not_found, error_words, samples_with_no_links)
 
 
 if __name__== "__main__":

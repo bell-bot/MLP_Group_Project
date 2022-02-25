@@ -299,6 +299,7 @@ if __name__== "__main__":
     print("Tedlium") 
 
     y = TEDLIUMCustom()
+    print(y.__len__())
     print(y.__getitem__(1))
 
 
