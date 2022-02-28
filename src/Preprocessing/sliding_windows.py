@@ -1,6 +1,9 @@
-import numpy as np     
+import numpy as np
+import librosa
 
 
+
+print(np.__version__)
 """
 Given a flattened numpy array, transforms the data into sliding windows, and the overlap between each window can be defined by step size.
 If the window_size == step_size, then there will be no overlap between the windows created. 
@@ -18,16 +21,30 @@ Note: Depending on the configuration of window size and step size, values at the
 """
 def create_sliding_windows(audio_input, window_size = 25, step_size = 25, copy = False):
     output_view = np.lib.stride_tricks.sliding_window_view(x= audio_input, window_shape = window_size)[0::step_size]
-    return output_view.copy() if copy else output_view
-
+    return (output_view.copy() if copy else output_view)
 
 #Test Sliding windows
 if __name__ == "__main__": 
-    data = np.arange(1,10)
-    print("Original data shape: {}", data.shape)
-    print(data)
-    output = create_sliding_windows(data,copy=False)
-    print("New transformed data shape: {}", output.shape)
-    print(output)
+    #data = np.arange(1,10)
+    #print("Original data shape: {}", data.shape)
+    #print(data)
+    #output = create_sliding_windows(data,copy=False)
+    #print("New transformed data shape: {}", output.shape)
+    #print(output)
+    ##^^ this is not a sliding window##
+    x = np.arange(0, 128)
+    frame_len, hop_len = 16, 8
+    frames = librosa.util.frame(x, frame_length=frame_len, hop_length=hop_len)
+    windowed_frames = np.hanning(frame_len).reshape(-1, 1) * frames
+
+    # Print frames
+    for i, frame in enumerate(frames):
+        print("Frame {}: {}".format(i, frame))
+
+    # Print windowed frames
+    for i, frame in enumerate(windowed_frames):
+        print("Win Frame {}: {}".format(i, np.round(frame, 3)))
+
+
 
 
