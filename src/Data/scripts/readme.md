@@ -14,7 +14,7 @@
 # Downloading the scripts
 Use the scripts to download the datasets (on any machine, Google Cloud, DICE, etc...). They also create a new directory as represented in the Data directory structure.
 
-**Please run them in the same directory the files exist in (under scripts/current directory).**
+**Please run them in the same directory the files exist in (inside of scripts).**
 
 To run the script, make the files executable `chmod 700 script_name.sh`, and then run `./script_name.sh`.
 
