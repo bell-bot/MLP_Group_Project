@@ -1,4 +1,5 @@
 # Data Structure:
+```
 +-- Data/
 |   +-- Tedlium_release-3/
 |       +-- ...
@@ -7,6 +8,7 @@
 |       +-- download_ted.sh
 |       +-- download_keywords.sh
 |   +-- ...
+```
 
 
 # Downloading the scripts
@@ -23,14 +25,14 @@ Once you are logged into the mlp clusters (`ssh mlp1`), go to the git repository
 1) `ssh mlp1`
 2) `cd path/to/scripts/`
 3) `chmod 700 script_name.sh`
-4) _Optional_ You can use `screen` in order to bring background processes into foreground. This allows you to "save" linux shells so you can bring them back and see the progress
+4) _Optional_: You can use `screen` in order to bring background processes into foreground. This allows you to "save" linux shells so you can bring them back and see the progress
   -  `screen -S screen_name`. For example, `screen -S downloading_ted`.
   -   Please check this link to see how to attach or deattach: https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to/ ,
   -   This is also a useful resouce for helpful commands: https://linuxize.com/post/how-to-use-linux-screen/
 5) `longjob -c ./script_name.sh`. You will be prompted to enter your DICE password.
   - In case you didn't use screen, you can use `ps -ef | grep script_name.sh` to see if the process is running (although I recommend using `screen` personally)
 6) Done! 
-  - _Optional_ You can come back to see progress by using `screen` commands or by checking processes using `ps`.
+  - _Optional_: You can come back to see progress by using `screen` commands or by checking processes using `ps`.
 
 
 
