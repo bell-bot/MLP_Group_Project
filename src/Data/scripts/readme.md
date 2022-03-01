@@ -12,14 +12,16 @@
 
 
 # Downloading the scripts
-Use the scripts to download the datasets (on any machine, Google Cloud, DICE, etc...). They also create a new directory as represented in the Data directory structure.
+Use the scripts to download the datasets (on any machine, Google Cloud, DICE, etc...). They also create a new directory as represented in the Data directory structure, and unzip the downloaded files.
+
 
 **Please run them in the same directory the files exist in (inside of scripts).**
 
-To run the script, make the files executable `chmod 700 script_name.sh`, and then run `./script_name.sh`.
+### To run the script:
+make the files executable `chmod 700 script_name.sh`, and then run `./script_name.sh`. You might need to log into the mlp clusters first `ssh mlp1` for DICE machines
 
 ## DICE Machines
-_This step is optional. In case you need to do something else, you can run the longjob commands on DICE to not worry about logging out_.
+_These steps are optional. However, in case you need to do something else or leave, you can run the longjob commands on DICE to not worry about logging out_.
 
 Once you are logged into the mlp clusters (`ssh mlp1`), go to the git repository and find the scripts folder under Data folder. 
 1) `ssh mlp1`
