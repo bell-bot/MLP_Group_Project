@@ -9,3 +9,6 @@
 |       +-- download_keywords.sh
 |   +-- ...
 ```
+
+# Downloading Datasets
+Please check the scripts folder for more information
