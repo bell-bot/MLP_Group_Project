@@ -1,0 +1,8 @@
+TEDLIUM_release-3/
+Multilingual_Spoken_Words/
+scripts/download_ted.sh
+scripts/download_keywords.sh
+scripts/audio.tar.gz
+scripts/splits.tar.gz
+scripts/alignments.tar.gz
+scripts/TEDLIUM_release-3.tgz
