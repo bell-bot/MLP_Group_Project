@@ -5,6 +5,8 @@ from IPython.display import Audio
 import moviepy.editor as mp
 import librosa
 
+from pydub import AudioSegment
+
 ##Inspired by code from
 #https://iq.opengenus.org/mfcc-audio/
 #and
@@ -38,6 +40,7 @@ def read_MP4_file(mp4_path, output_file):
     # reading a file
     video.audio.write_audiofile(output_file)  # Here output_file is the name of the audio file with type e.g "Shrek.wav"
 
+    return video.audio.to_soundarray()
 
 def play_WAV_audio(fs, data):
     '''
@@ -46,7 +49,23 @@ def play_WAV_audio(fs, data):
     :param data (1d array): aduio data in 1d form
     :return None: plays audio
     '''
-    Audio(data, rate=fs)    #plays the audio
+    return Audio(data, rate=fs)    #plays the audio
+
+# From https://github.com/jiaaro/pydub/blob/master/API.markdown
+def read_audio(file, extension):
+    '''
+    reads media files into audio and returns numpy array and frame rate
+    :param file : file path to the media file
+    :param extension: extension of the file to be read. Example, to read mp4 files, provide "mp4" to the extension. 
+    return numpy array and frame rate (sampling frequency in hz)
+    '''
+    sound = AudioSegment.from_file(file, format=extension)
+    channel_sounds = sound.split_to_mono()
+    samples = [s.get_array_of_samples() for s in channel_sounds]
+
+    fp_arr = np.array(samples).T.astype(np.float32)
+    fp_arr /= np.iinfo(samples[0].typecode).max
+    return sound.frame_rate, fp_arr
 
 
 def write_WAV_audio(fs, data, file_name):
@@ -84,9 +103,13 @@ def get_wav(language_num):
     :return (numpy array): Down-sampled wav file
     '''
     y, sr = librosa.load('./{}.wav'.format(language_num)) #Make sure to have audio file in your desktop or you may change the path as per your need
-    return(librosa.core.resample(y=y,orig_sr=sr,target_sr=RATE, scale=True))
+    return resample_audio(data=y, sampling_rate=sr)
 
-def to_mfcc(wav):
+def resample_audio(data, sampling_rate, target_rate=RATE):
+    return(librosa.core.resample(y=data,orig_sr=sampling_rate,target_sr=RATE, scale=True))
+
+
+def to_mfcc(wav, target_rate=RATE, n_mfcc=N_MFCC):
     '''
     Converts wav file to Mel Frequency Ceptral Coefficients
     :param wav (numpy array): Wav form
@@ -96,7 +119,7 @@ def to_mfcc(wav):
 ###############################################################################################
 
 ###########################Multiple Files in local dir folder##################################
-def preprocess(list_of_audio_filenames):
+def preprocess_files(list_of_audio_filenames):
     '''
     Does preprocessing steps for multiple files
     :param list_of_audio_filenames (list): list of JUST names of files ("Shrek" not "Shrek.wav")
@@ -115,10 +138,17 @@ def preprocess(list_of_audio_filenames):
         a = open(file_name, 'r')
 
     # Press the green button in the gutter to run the script.
+
+def preprocess(fs, data, target_rate=RATE, n_mfcc= N_MFCC):
+    audio = resample_audio(data=data,sampling_rate=fs, target_rate=target_rate)
+    audio = to_mfcc(audio, target_rate, n_mfcc)
+    # return audio.reshape((audio.shape[0],audio.shape[1]))
+    return audio
+
 if __name__ == '__main__':
     list_of_files = list()
     list_of_files.append("Shrek")
-    preprocess(list_of_files)
+    preprocess_files(list_of_files)
     print("Done!")
 
     ##EXAMPLES######################################
