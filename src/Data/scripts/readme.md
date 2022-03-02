@@ -21,7 +21,7 @@ Use the scripts to download the datasets (on any machine, Google Cloud, DICE, et
 make the files executable `chmod 700 script_name.sh`, and then run `./script_name.sh`. You might need to log into the mlp clusters first `ssh mlp1` for DICE machines
 
 ## DICE Machines
-_These steps are optional. However, in case you need to leave (log out - or you want to leave your DICE machine idle), you can run the longjob commands on DICE to not worry about logging out_.
+_These steps are optional. However, in case you need to leave (log out - or you want to leave your DICE machine idle), you can run the longjob commands on DICE to not worry about logging out_. You might not need to use these, so these steps are just extra.
 
 Once you are logged into the mlp clusters (`ssh mlp1`), go to the git repository and find the scripts folder under Data folder. 
 1) `ssh mlp1`
