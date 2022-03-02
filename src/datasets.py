@@ -135,13 +135,13 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
 
 class MultiLingualSpokenWordsEnglish():
     MLCOMMONS_FOLDER_NAME = "Multilingual_Spoken_Words"
-    AUDIO_DIR_NAME="en"
+    AUDIO_DIR_NAME="audio"
     SPLITS_DIR_NAME="splits"
     ALIGNMENTS_DIR_NAME="alignments"
 
  
 
-    def raise_directory_error():
+    def raise_directory_error(self):
         raise RuntimeError(
             f"Please configure the path to the Spoken Keywords Dataset, with the directory name \"{self.MLCOMMONS_FOLDER_NAME}\", containing the three subfolders:" \
             + "\n" + \
@@ -205,7 +205,7 @@ class MultiLingualSpokenWordsEnglish():
     def __getitem__(self, MSWC_AudioID) -> Dict:
         """Retrieves sample data from file given Audio ID
         """
-        path_to_audio = os.path.join(self._path, "en", "clips", MSWC_AudioID)
+        path_to_audio = os.path.join(self._path,self.AUDIO_DIR_NAME ,"en", "clips", MSWC_AudioID)
         waveform, sample_rate= self._load_audio(path_to_audio)
         results_dict = {
             "waveform": waveform,
