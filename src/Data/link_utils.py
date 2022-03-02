@@ -1,5 +1,6 @@
 import csv 
 import regex as re
+from num2words import num2words
 """
 Utility functions to help in generating keywords from MSWC dataset
 """
@@ -81,7 +82,7 @@ def log_ids_in_csv(filename,list_of_ids):
 #### ------------ Extra ------------ #########
 
 def append_freq(word, id, dict_word_to_audio_id):
-    if dict_word_to_audio_id[word] == None:
+    if dict_word_to_audio_id.get(word) == None:
         dict_word_to_audio_id[word] = []
     dict_word_to_audio_id[word].append(id)
     return dict_word_to_audio_id

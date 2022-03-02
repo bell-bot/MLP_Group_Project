@@ -240,6 +240,7 @@ if __name__== "__main__":
     os.chdir(os.path.abspath(os.path.dirname(__file__))) 
     #Prepare KeywordsLink class
     linkerEngine = KeywordsLink()
+    
 
     #Generate keywords csv
     linkerEngine.create_keywords_csv()
