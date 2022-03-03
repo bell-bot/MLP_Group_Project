@@ -128,7 +128,7 @@ class KeywordsLink:
                 if not self.queue.empty():
                 
                     i,row, not_found, error_words, error_types, sample_with_no_link = self.queue.get()
-                    print("QUEUE", i)
+                    # print("QUEUE", i)
                     if (i%1000==0):
                         print(f"----- Sample {i} out of {number_of_items}-----")
 
