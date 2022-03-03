@@ -282,7 +282,7 @@ class CTRLF_DatasetWrapper:
             return TED_results_dict, {}
         MSWC_results_dict = None
         if self.single_keywords_labels:
-            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID][0])
+            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID].iloc[0])
 
         #Resample Audio files into same sampling rate
         TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
@@ -298,7 +298,6 @@ class CTRLF_DatasetWrapper:
         MSWC_results_dict["waveform"] = resample_audio(MSWC_results_dict["waveform"], MSWC_results_dict["sample_rate"], target_rate=target_rate)
         MSWC_results_dict["sample_rate"] = target_rate
         return TED_results_dict, MSWC_results_dict
-
 
 
 if __name__== "__main__":
