@@ -105,77 +105,115 @@ class KeywordsLink:
         samples_with_no_links =  []
         error_words = defaultdict(list)
 
-        csv_file =  open(self.KEYWORDS_LINK_FILENAME, self.access_mode)
-        not_found_file =  open("logs/not_found.json", self.access_mode)
-        error_parsing_file =  open("logs/error_parsing.json", self.access_mode)
-        samples_no_links_file =  open("logs/samples_with_no_links.json", self.access_mode)
-        errors_file =  open("logs/errors.json", self.access_mode)
+        # csv_file =  open(self.KEYWORDS_LINK_FILENAME, self.access_mode)
+        # not_found_file =  open("logs/not_found.csv", self.access_mode)
+        # error_parsing_file =  open("logs/error_parsing.csv", self.access_mode)
+        # samples_no_links_file =  open("logs/samples_with_no_links.csv", self.access_mode)
+        # errors_file =  open("logs/errors.csv", self.access_mode)
 
-        w = csv.writer(csv_file)
-        # not_found_w = csv.writer(csv_file_2)
-        # error_w = csv.writer(csv_file_3)
-        # samples_no_links_w = csv.writer(csv_file_4)
+        # w = csv.writer(csv_file)
+        # not_found_w = csv.writer(not_found_file)
+        # error_parsing_w = csv.writer(error_parsing_file)
+        # samples_no_links_w = csv.writer(samples_no_links_file)
+        # errors_w = csv.writer(errors_file)
 
-        w.writerow(CSV_HEADER)
+        # if self.access_mode == "w":
+        #     w.writerow(CSV_HEADER)
         # not_found_w.writerow(["word", "TED_id"])
-        # error_w.writerow(["word", "TED_id"])
-        # samples_no_links_w.writerow(["TED_id"])
+        # error_parsing_w.writerow(["word", "TED_id"])
+        # samples_no_links_w.writerow(["TED_id", "talk_id"])
+        # errors_w.writerow(["TED_talk_id", "Error_type"])
+        with open(self.KEYWORDS_LINK_FILENAME, self.access_mode) as csv_file,\
+             open("logs/not_found.csv", self.access_mode) as not_found_file,\
+             open("logs/error_parsing.csv", self.access_mode) as error_parsing_file,\
+             open("logs/samples_with_no_links.csv", self.access_mode) as samples_no_links_file,\
+             open("logs/errors.csv", self.access_mode) as errors_file:
 
-        self.queue = Queue()
-        number_of_items = self.TEDLIUMCustomDataset.__len__()
-        def consume():
-            while True:
-                if not self.queue.empty():
-                
-                    i,row, not_found, error_words, error_types, sample_with_no_link = self.queue.get()
-                    # print("QUEUE", i)
-                    if (i%1000==0):
-                        print(f"----- Sample {i} out of {number_of_items}-----")
+            w = csv.writer(csv_file)
+            not_found_w = csv.writer(not_found_file)
+            error_parsing_w = csv.writer(error_parsing_file)
+            samples_no_links_w = csv.writer(samples_no_links_file)
+            errors_w = csv.writer(errors_file)
 
-                    #Ensure finals rows are written
-                    if row !=[]:
-                        w.writerow(row)
+            if self.access_mode == "w":
+                w.writerow(CSV_HEADER)
+                not_found_w.writerow(["word", "TED_id"])
+                error_parsing_w.writerow(["word", "TED_id"])
+                samples_no_links_w.writerow(["TED_id", "talk_id"])
+                errors_w.writerow(["TED_talk_id", "Error_type"])
+
+            self.queue = Queue()
+            number_of_items = self.TEDLIUMCustomDataset.__len__()
+            def consume():
+                while True:
+                    if not self.queue.empty():
                     
-                    # for word, ted_id in not_found.items():
-                    if not_found != {}:
-                        json.dump(not_found, not_found_file)
+                        i,row, not_found, error_words, error_types, sample_with_no_link = self.queue.get()
+                        # print("QUEUE", i)
+                        if (i%1000==0):
+                            print(f"----- Sample {i} out of {number_of_items}-----")
 
-                    # for word, ted_id in error_words.items():
-                    #     error_w.writerow([word,ted_id])
-                    if error_words != {}:
-                        json.dump(error_words, error_parsing_file)
-                
-                    if error_types != {}:
-                        json.dump(error_types, errors_file)
+                        #Ensure finals rows are written
+                        if row !=[]:
+                            w.writerow(row)
+                        
+                        # for word, ted_id in not_found.items():
+                        if not_found != {}:
+                            # json.dump(not_found, not_found_file)
+                            for word,ted_id in not_found.items():
+                                for i in ted_id:
+                                    not_found_w.writerow([word,i])
+                        
+                        if error_words != {}:
+                            for word,ted_id in error_words.items():
+                                for i in ted_id:
+                                    error_parsing_w.writerow([word,i])
 
-                    if sample_with_no_link != None:
-                        # samples_no_links_w.writerow([sample_with_no_link])
-                        json.dump({"sample_number": sample_with_no_link}, samples_no_links_file)
+                        if error_types != {}:
+                            for talk_id,type_error in error_words.items():
+                                errors_w.writerow([talk_id,type_error])
+
+                        if sample_with_no_link != {}:
+                            for sample, talk_id in sample_with_no_link.items():
+                                samples_no_links_w.writerow([sample,talk_id ])
 
 
-                    if i == number_of_items-1:
-                        return
+
+                        # # for word, ted_id in error_words.items():
+                        # #     error_w.writerow([word,ted_id])
+                        # if error_words != {}:
+                        #     json.dump(error_words, error_parsing_file)
+                    
+                        # if error_types != {}:
+                        #     json.dump(error_types, errors_file)
+
+                        # if sample_with_no_link != None:
+                        #     # samples_no_links_w.writerow([sample_with_no_link])
+                        #     json.dump({"sample_number": sample_with_no_link}, samples_no_links_file)
+
+
+                        if i == number_of_items-1:
+                            return
+            
+            consumer = Thread(target=consume)
+            consumer.setDaemon(True)
+            consumer.start()
+
+            
+
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                for i in range(self.last_read_sample_id,number_of_items):
+                    executor.submit(self.find_match, i)
+
+
+
         
-        consumer = Thread(target=consume)
-        consumer.setDaemon(True)
-        consumer.start()
-
-        
-
-        with ThreadPoolExecutor(max_workers=6) as executor:
-            for i in range(self.last_read_sample_id,number_of_items):
-                executor.submit(self.find_match, i)
-
-
-
-    
-        consumer.join()
-        csv_file.close()
-        not_found_file.close()
-        error_parsing_file.close()
-        errors_file.close()
-
-        samples_no_links_file.close()
+            consumer.join()
+        # csv_file.close()
+        # not_found_file.close()
+        # error_parsing_file.close()
+        # errors_file.close()
+        # samples_no_links_file.close()
 
     def get_keyword_from_TED_audio_sample(self, sample_num, item_sample, not_found, error_words):
         """
@@ -248,7 +286,7 @@ class KeywordsLink:
                 break
         if dataset_tag == None:
             print(f"NO DATASET TAG!\n transcript: {transcript}\n, talk_id: {talk_id}\n, sample_num: {sample_number}")
-            errors_file[talk_id] = "No Dataset Type Tag Error"
+            errors_file[talk_id] = "No Dataset Tag"
         ####### Ted Audio ID
         ted_sampleid = sample_number
         ####### MSWC Audio ID
@@ -270,7 +308,7 @@ class KeywordsLink:
 
 
     def find_match(self,i):
-        not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, None
+        not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, {}
         item = self.TEDLIUMCustomDataset.__getitem__(i)
         word, not_found, error_words  = self.get_keyword_from_TED_audio_sample(i, item, not_found, error_words)
         row = []
@@ -280,8 +318,11 @@ class KeywordsLink:
         else:
             print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
             transcript = item["transcript"]
+            
             print(f"Transcript: \"{transcript}\" ")
-            sample_with_no_link = i
+            talk_id = item["talk_id"]
+
+            sample_with_no_link[i] = talk_id
         self.queue.put([i,row, not_found, error_words, errors_file, sample_with_no_link]) 
 
 
