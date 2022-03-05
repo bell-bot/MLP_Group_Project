@@ -16,8 +16,8 @@ def has_number(inputString):
 
 
 # #TODO: Fix this,
-# def is_number_only(inputString):
-#     return bool(re.search(r'\b\d+\b', inputString))
+def is_number_only(inputString):
+    return bool(re.search(r'\b\d+\b', inputString))
 
 #Example: 11th , 23rd, etc.
 def is_ordinal(inputString):
@@ -51,8 +51,10 @@ def parse_number_string(word):
         word = num2words(word, to="ordinal")
     elif is_abbreviated_decades(word):
         word = get_abbreviated_number_word_form(word)
-    else:
+    elif is_number_only(word):
         word = num2words(word)
+    else:
+        print(f"Did not match any specific numbering cases: {word}")
     return word
 
 
