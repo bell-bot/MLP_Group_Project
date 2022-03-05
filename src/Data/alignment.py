@@ -164,6 +164,9 @@ class Aligner:
 
             for row in rows:
                 self.queue.put([id, row])
+        except KeyboardInterrupt:
+            print("Aborting")
+            self.stop.set()
         except Exception as e:
             print("Something went wrong when aligning:")
             print(traceback.print_exc())
