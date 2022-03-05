@@ -119,7 +119,7 @@ class Aligner:
         while not self.stop.isSet():
             if not self.queue.empty():
                 i, row = self.queue.get()
-                if (i%1000==0):
+                if (i%100==0):
                     print(f"----- Sample {i}-----")
                 if row != []:
                     self.label_w.writerow(row)
