@@ -244,7 +244,7 @@ class KeywordsLink:
             word = tokens[choice_index]
 
             try:
-                if link_utils.is_number(word):
+                if link_utils.has_number(word):
                     word = link_utils.parse_number_string(word)
                 if word in self.MSWCDataset.keywords:
                     break

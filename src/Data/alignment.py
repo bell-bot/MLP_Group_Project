@@ -1,4 +1,6 @@
 
+#!/usr/bin/env python
+
 # Source code: 
 """
 Forced Alignment with Wav2Vec2
@@ -9,22 +11,28 @@ CTC segmentation algorithm described in:
 Main code Modified from: `https://pytorch.org/tutorials/intermediate/forced_alignment_with_torchaudio_tutorial.html`
 """
 
+from collections import defaultdict
+import csv
 import os
 from dataclasses import dataclass
-
+import subprocess
+import pandas as pd
 import torch
 import torchaudio
+import re
 import requests
 import matplotlib
 import matplotlib.pyplot as plt
-import IPython
-from src.datasets import CTRLF_DatasetWrapper, KEYWORDS_LINK_CSV_PATH
+# import IPython
 
+from src.datasets import CTRLF_DatasetWrapper, KEYWORDS_LINK_CSV_PATH, TEDLIUMCustom, MultiLingualSpokenWordsEnglish, LabelsCSVHeaders, KeywordsCSVHeaders, LABELS_LINK_CSV_PATH
+import link_utils
 
 #Pre-configurations
 matplotlib.rcParams['figure.figsize'] = [16.0, 4.8]
 torch.random.manual_seed(0)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 @dataclass
 class Point:
@@ -32,7 +40,7 @@ class Point:
     time_index: int
     score: float
 
-# Merge the labels
+# Used to Merge the labels
 @dataclass
 class Segment:
     label: str
@@ -47,37 +55,91 @@ class Segment:
     def length(self):
         return self.end - self.start
 
+#TODO: Provide option to find keywords after aligning. 
 class Aligner:
-    PATH_TO_LABELS = "./labels.csv"
+    PATH_TO_LABELS = LABELS_LINK_CSV_PATH
+    PATH_TO_KEYWORDS = KEYWORDS_LINK_CSV_PATH
+    def __init__(self, path_to_keywords=PATH_TO_KEYWORDS, overwrite=False):
+        print("Preparing Ted Dataset...")
+        self.TED = TEDLIUMCustom()
+        print("Preparing MSWC Dataset...")
+        self.MSWC = MultiLingualSpokenWordsEnglish(read_splits_file=False)
+        self.keywords_df =None
+        try:
+            print(f"Reading {KEYWORDS_LINK_CSV_PATH}... ")
+            self.keywords_df = pd.read_csv(self.PATH_TO_KEYWORDS)
+        except FileNotFoundError:
+            print("----- KEYWORDS CSV NOT FOUND ----- ")
+            # print("-- Keywords will be generated amid aligning timestamps --")
 
-    def __init__(self):
-        self.CTRLF = CTRLF_DatasetWrapper()
         #Import necessary packages and the labels (characters + <UNK>)
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_960H
         self.model = self.bundle.get_model().to(device)
         self.char_labels = self.bundle.get_labels()
+        
+    
  
     # ----------------  Main function ------------------- #
 
+    #TODO!: Current function only works with SINGLE KEYWORDS. 
     def align(self):
-        with open(self.PATH_TO_LABELS, "w"):
-            for i in range (0,self.CTRLF.TED.__len__()):
-                TED_sample_dict, MSWC_sample_dict = self.CTRLF.get_data(i)
-                sample_timestamp = self.align_sample(TED_sample_dict)
+        iterator_samples = None
+        if self.keywords_df is not None:
+            iterator_samples = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID]
+        else:
+            iterator_samples = iter(range(0,self.TED.__len__()))
+        with open(self.PATH_TO_LABELS, "w") as label_file:
+            label_w = csv.writer(label_file)
+            label_w.writerow(LabelsCSVHeaders.CSV_header)
+            prev_id = None
+            sample_timestamp, TED_sample_dict = None, None
+            for id in iterator_samples:
+                if prev_id == None or prev_id != id:
+                    prev_id = id
+                    TED_sample_dict = self.TED.__getitem__(id)
+                    sample_timestamp = self.align_current_audio_chunk(TED_sample_dict)
                 
+                if self.keywords_df is not None:
+                    assigned_keywords_rows = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == id]
+                    #TODO! Handle more than a single keyword
+                    for key in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD]:
+                        print(assigned_keywords_rows)
+                        #Find Timestamps
+                        split_words = key.split()
+                        first_word = split_words[0]
+                        last_word = split_words[-1]
+                        timestamp_start = sample_timestamp[first_word][0]["start"]
+                        timestamp_end = sample_timestamp[last_word][-1]["end"]
+                        confidence = sample_timestamp[first_word][0]["confidence"] #TODO! Handle confidence scores of keyphrases (take minimum)
+                        # confidence = 1.0
+                        # for k in split_words:
+                        #     current_word_timestamps = sample_timestamp[k]
+                        #     for stamp in current_word_timestamps:
+                        #
+                        # confidence =  map()
+                        ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
+                        label_w.writerow([key,id, ted_set, mswc_id, timestamp_start, timestamp_end, confidence])
+                else:
+                    #TODO! Align on the go...
+                    pass
 
-    def align_sample(self, TED_sample_dict):
-        transcript = self.tokenise_transcript(TED_sample_dict["transcript"])
+
+
+    def align_current_audio_chunk(self, TED_sample_dict):
+        transcript, words_with_punctuation = self.tokenise_transcript(TED_sample_dict["transcript"])
         emission = self.estimate_frame_wise_label_probability(TED_sample_dict)
         tokens, trellis = self.generate_alignment_probability(emission, transcript)
         path = self.backtrack(trellis=trellis, emission=emission, tokens=tokens)
         segments = self.merge_repeats(path, transcript)
         word_segments = self.merge_words(segments)
-        word_timestamps = []
+        word_timestamps = defaultdict(list)
         for wordS in word_segments:
             timestamp = self.get_timestamp(waveform=torch.from_numpy(TED_sample_dict["waveform"]), Segment_word=wordS, trellis=trellis)
             word = self.revert_tokenisation_process(wordS.label)
-            word_timestamps.append((word,timestamp))
+
+            if word_timestamps.get(word) == None:
+                word_timestamps[word] = []
+            word_timestamps[word].append(timestamp)
         return word_timestamps
 
 
@@ -93,16 +155,28 @@ class Aligner:
         }
         return timestamp
 
+    
+    def pick_keyword():
+        pass
+
     # ----------------  Helper functions ------------------- #
 
+    # ------ Tokenisation ----- #
     #Helper function to turn transcript into tokens of characters for the Wav2Vec2
     def tokenise_transcript(self, transcript_original):
         transcript_preprocessing = transcript_original.upper().replace("<UNK>","<unk>").strip().split() 
         transcript = ["<s>"]
+        words_with_punctuation = set()
         for idx, word in enumerate(transcript_preprocessing):
+            if '\'' in word:
+                words_with_punctuation.add(word)
             if word == "<unk>":
                 transcript.append(word)
             else:
+                
+                word = link_utils.parse_number_string(word)
+                word = word.upper() #ensure word is turned to upper case
+
                 for c in word: 
                     transcript.append(c)
             if idx != len(transcript_preprocessing) -1:
@@ -110,7 +184,7 @@ class Aligner:
             else:
                 transcript.append("</s>")
         print(transcript)
-        return transcript
+        return transcript, words_with_punctuation
 
     def revert_tokenisation_process(self, word):
         if "<s>" in word:
@@ -121,6 +195,23 @@ class Aligner:
             word = word
         
         return word.lower()
+
+    # ------ Miscellaneous ----- #
+
+    #Reads from CSV file the last read sample id, to continue from last time we stopped
+    def retrieve_last_sample_id(self):
+        ted_sample_id_column = 1
+        #NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
+        assert(LabelsCSVHeaders.TED_SAMPLE_ID == LabelsCSVHeaders.CSV_HEADER[ted_sample_id_column])
+        #subprocess requires byte like object to read
+        line = subprocess.check_output(['tail', '-1', bytes(self.KEYWORDS_LINK_FILENAME, encoding="utf-8")])
+        print(line)
+        #Convert from bytes to int 
+        last_read_sample_id = int(str(line.split(b',')[ted_sample_id_column], encoding="utf-8"))
+        last_read_sample_id = last_read_sample_id + 1 #We will start iterating from the sample id after the last one
+        print(f"Side note: The python script assumes that the TED Sample ID column is in {ted_sample_id_column}")
+        print(f"Last TED Sample ID Read: {last_read_sample_id}")
+        return last_read_sample_id
 
 # -------------------------- Generate frame-wise label probability --------------------- #
 
@@ -337,7 +428,17 @@ class Aligner:
         while i1 < len(segments):
             if i2 >= len(segments) or segments[i2].label == separator:
                 if i1 != i2:
-                    segs = segments[i1:i2]
+                    segs= segments[i1:i2]
+                    #IF the next character after the separator (if any) is a punctuation, we will have to merge the entire word that follows after the seperator as a whole
+                    #eg. ["D", "O", "|", "'",  "N", "T"] should become "DON'T" instead of being separated as "DON" and "'T"
+                    if i2 +1 < len(segments) -1 and segments[i2].label == separator and segments[i2+1].label == '\'':
+                        i2 = i2+1
+                        i_punc = i2  
+                        while i2 < len(segments) and segments[i2].label!=separator:
+                            i2+=1
+                            
+                        segs = segs +  segments[i_punc:i2]
+  
                     word = ''.join([seg.label for seg in segs])
                     score = sum(seg.score * seg.length for seg in segs) / sum(seg.length for seg in segs)
                     words.append(Segment(word, segments[i1].start, segments[i2-1].end, score))
@@ -412,12 +513,21 @@ class Aligner:
 ######################################################################
 # 
 
+from link import KeywordLinker
 
 if __name__=="__main__":
     print(torch.__version__)
     print(torchaudio.__version__)
     print(device)
-    x = Aligner()
-    TED_sample_dict, MSWC_sample_dict = x.CTRLF.get_data(0)
-    sample_timestamps = x.align_sample(TED_sample_dict)
-    print(sample_timestamps)
+    #Change working directory to where the script is
+    os.chdir(os.path.abspath(os.path.dirname(__file__))) 
+ 
+    AlignerEngine = Aligner()
+    AlignerEngine.align()
+
+
+    ######### Testing Aligner ############
+    # x = Aligner()
+    # TED_sample_dict = x.TED.__getitem__(17)
+    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    # print(sample_timestamps)
