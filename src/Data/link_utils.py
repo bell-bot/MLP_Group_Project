@@ -5,18 +5,21 @@ from num2words import num2words
 Utility functions to help in generating keywords from MSWC dataset
 """
 
+#TODO: Write unit tests to test functionality of preprocessing text
+
 
 ###### ------- Text Preprocessing and utilities --------- ######
 
 #Edge case: HTML5
-def is_word_with_number(inputString):
+def has_number(inputString):
     return bool(re.search(r'\d+', inputString))
 
 
-def is_number(inputString):
-    return bool(re.search(r'\b\d+\b', inputString))
+# #TODO: Fix this,
+# def is_number_only(inputString):
+#     return bool(re.search(r'\b\d+\b', inputString))
 
-
+#Example: 11th , 23rd, etc.
 def is_ordinal(inputString):
     return bool(re.search(r'(\d+th)', inputString)) or bool(re.search(r'(\d+st)', inputString)) or bool(re.search(r'(\d+nd)', inputString)) or bool(re.search(r'(\d+rd)', inputString))
 
@@ -40,6 +43,9 @@ def get_abbreviated_number_word_form(inputString):
     return numbers_to_words[number]
 
 def parse_number_string(word):
+    word = word.lower() #Preprocess to make sure we always deal with lower case letters (eg. 11th)
+    if not has_number(word):
+        return word
     if is_ordinal(word):
         word = re.sub(r'th', "", word)
         word = num2words(word, to="ordinal")
