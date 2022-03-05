@@ -45,6 +45,7 @@ class KeywordsLink:
             self.last_read_sample_id = self.retrieve_last_sample_id()
 
     #Reads from CSV file the last read sample id, to continue from last time we stopped
+    #TODO: Multithreading mixes order, so might need to start from a more specific spot
     def retrieve_last_sample_id(self):
         ted_sample_id_column = 1
         #NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
@@ -232,11 +233,7 @@ class KeywordsLink:
         transcript = item_sample["transcript"]
 
 
-        example_transcript = link_utils.preprocess_text(transcript)
-        #Handles edge case in transcripts where a word may have a space before an apostrophe.
-        #i.e) "didn' t" to "didn't"
-        # regex = re.compile()
-        string = re.sub(r" (?=(['\"][a-zA-Z0-9_]))", "", example_transcript)
+        string= link_utils.preprocess_text(transcript)
         tokens = string.split(" ")
         token_choice = np.random.permutation(len(tokens))
         word = None
