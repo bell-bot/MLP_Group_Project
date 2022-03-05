@@ -126,7 +126,7 @@ class Aligner:
 
 
     def align_current_audio_chunk(self, TED_sample_dict):
-        transcript, words_with_punctuation = self.tokenise_transcript(TED_sample_dict["transcript"])
+        transcript = self.tokenise_transcript(TED_sample_dict["transcript"])
         emission = self.estimate_frame_wise_label_probability(TED_sample_dict)
         tokens, trellis = self.generate_alignment_probability(emission, transcript)
         path = self.backtrack(trellis=trellis, emission=emission, tokens=tokens)
@@ -164,12 +164,10 @@ class Aligner:
     # ------ Tokenisation ----- #
     #Helper function to turn transcript into tokens of characters for the Wav2Vec2
     def tokenise_transcript(self, transcript_original):
+        transcript_original = link_utils.preprocess_text(transcript_original)
         transcript_preprocessing = transcript_original.upper().replace("<UNK>","<unk>").strip().split() 
         transcript = ["<s>"]
-        words_with_punctuation = set()
         for idx, word in enumerate(transcript_preprocessing):
-            if '\'' in word:
-                words_with_punctuation.add(word)
             if word == "<unk>":
                 transcript.append(word)
             else:
@@ -184,7 +182,7 @@ class Aligner:
             else:
                 transcript.append("</s>")
         print(transcript)
-        return transcript, words_with_punctuation
+        return transcript
 
     def revert_tokenisation_process(self, word):
         if "<s>" in word:
@@ -290,7 +288,7 @@ class Aligner:
 
     def get_tokens(self, transcript):
         dictionary  = {c: i for i, c in enumerate(self.char_labels)}
-
+        print(dictionary)
         tokens = [dictionary[c] for c in transcript]
         # print(list(zip(transcript, tokens)))
         return tokens
