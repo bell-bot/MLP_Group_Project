@@ -12,11 +12,13 @@ Main code Modified from: `https://pytorch.org/tutorials/intermediate/forced_alig
 """
 
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import csv
 import os
 from dataclasses import dataclass
 from queue import Queue
 import subprocess
+from threading import Thread
 import pandas as pd
 import torch
 import torchaudio
@@ -89,6 +91,40 @@ class Aligner:
                 if i == self.last_item_num:
                     return
 
+    def produce(self, id, prev_id):
+        print("omo")
+        if prev_id == None or prev_id != id:
+            prev_id = id
+            TED_sample_dict = self.TED.__getitem__(id)
+            sample_timestamp = self.align_current_audio_chunk(TED_sample_dict)
+
+        if self.keywords_df is not None:
+            assigned_keywords_rows = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == id]
+            #TODO! Handle more than a single keyword
+            for key in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD]:
+                print(assigned_keywords_rows)
+                #Find Timestamps
+                split_words = key.split()
+                first_word = split_words[0]
+                last_word = split_words[-1]
+                timestamp_start = sample_timestamp[first_word][0]["start"] + TED_sample_dict["start_time"]
+                timestamp_end =  TED_sample_dict["start_time"] + sample_timestamp[last_word][-1]["end"]
+                confidence = sample_timestamp[first_word][0]["confidence"] #TODO! Handle confidence scores of keyphrases (take minimum)
+                # confidence = 1.0
+                # for k in split_words:
+                #     current_word_timestamps = sample_timestamp[k]
+                #     for stamp in current_word_timestamps:
+                #
+                # confidence =  map()
+                ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
+                
+                row = [key,id, ted_set,TED_sample_dict["talk_id"], mswc_id, timestamp_start, timestamp_end, confidence]
+                self.queue.put(id,row)
+        else:
+            #TODO! Link on the go...
+            pass
+        
+
     # ----------------  Main function ------------------- #
 
     #TODO!: Current function only works with SINGLE KEYWORDS. 
@@ -96,46 +132,29 @@ class Aligner:
         iterator_samples, self.last_item_num = None, None
         if self.keywords_df is not None:
             iterator_samples = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID]
-            self.last_item_num = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID].iloc[-1].values[0]
+            self.last_item_num = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID].iloc[-1]
         else:
             iterator_samples = iter(range(0,self.TED.__len__()))
             self.last_item_num = self.TED.__len__() - 1
 
         self.queue = Queue()
+
         with open(self.PATH_TO_LABELS, "w") as label_file:
             self.label_w = csv.writer(label_file)
             self.label_w.writerow(LabelsCSVHeaders.CSV_header)
-            prev_id, sample_timestamp, TED_sample_dict = None, None, None
-            for id in iterator_samples:
-                if prev_id == None or prev_id != id:
-                    prev_id = id
-                    TED_sample_dict = self.TED.__getitem__(id)
-                    sample_timestamp = self.align_current_audio_chunk(TED_sample_dict)
+            prev_id = None
+
+            consumer = Thread(target=self.consume)
+            consumer.setDaemon(True)
+            consumer.start()
+            #TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
+            # with ProcessPoolExecutor(max_workers=4) as process_executor:
+
+            with ThreadPoolExecutor(max_workers=8) as executor:
+                for id in iterator_samples:
+                    executor.submit(self.produce, id, prev_id)
+            consumer.join()
                 
-                if self.keywords_df is not None:
-                    assigned_keywords_rows = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == id]
-                    #TODO! Handle more than a single keyword
-                    for key in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD]:
-                        print(assigned_keywords_rows)
-                        #Find Timestamps
-                        split_words = key.split()
-                        first_word = split_words[0]
-                        last_word = split_words[-1]
-                        timestamp_start = sample_timestamp[first_word][0]["start"]
-                        timestamp_end = sample_timestamp[last_word][-1]["end"]
-                        confidence = sample_timestamp[first_word][0]["confidence"] #TODO! Handle confidence scores of keyphrases (take minimum)
-                        # confidence = 1.0
-                        # for k in split_words:
-                        #     current_word_timestamps = sample_timestamp[k]
-                        #     for stamp in current_word_timestamps:
-                        #
-                        # confidence =  map()
-                        ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
-                        
-                        self.label_w.writerow([key,id, ted_set,TED_sample_dict["talk_id"], mswc_id, timestamp_start, timestamp_end, confidence])
-                else:
-                    #TODO! Align on the go...
-                    pass
 
 
 
@@ -169,7 +188,7 @@ class Aligner:
         }
         return timestamp
 
-    
+    #TODO: For linking on the go, if keywords.csv is empty or not to be used.
     def pick_keyword():
         pass
 
