@@ -3,6 +3,7 @@ import os
 from typing import Dict, Tuple
 import sys
 import logging
+import numpy
 import regex as re
 import torchaudio.datasets.tedlium as tedilum 
 import torchaudio
@@ -10,6 +11,7 @@ from torch import Tensor
 import pandas as pd
 
 from src.utils import get_git_root
+from src.Preprocessing.pre_processing import resample_audio
 
 """Specify path to TEDLIUM directory"""
 data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
@@ -71,7 +73,7 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
         """
         return super().__len__()
 
-    def _load_audio(self, path: str, start_time: float, end_time: float, sample_rate: int = 16000) -> [Tensor, int]:
+    def _load_audio(self, path: str, start_time: float, end_time: float, sample_rate: int = 16000, to_numpy=True) -> [Tensor, int]:
         """
         Returns audio data
 
@@ -79,7 +81,8 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
 
         Returns:
         """
-        return super()._load_audio(path, start_time, end_time, sample_rate)
+        waveform, sample_rate =  super()._load_audio(path, start_time, end_time, sample_rate)
+        return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
 
     def __getitem__(self, sampleID: int) -> Dict:
 
@@ -192,14 +195,16 @@ class MultiLingualSpokenWordsEnglish():
             self.keywords = set(self.splits_df["WORD"].unique())
 
 
-    def _load_audio(self, path_to_audio) -> [Tensor, int]:
+    def _load_audio(self, path_to_audio, to_numpy=True):
         """Loads audio data from file given file path
         
         Returns:
-            waveform: Tensor
+            waveform: Tensor / np.array
             sample_rate: int
         """
-        return torchaudio.load(path_to_audio)
+        waveform, sample_rate =  torchaudio.load(path_to_audio)
+        return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
+
 
 
     def __getitem__(self, MSWC_AudioID) -> Dict:
@@ -228,11 +233,11 @@ class CTRLF_DatasetWrapper:
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
         #Initialise keyword dataframe
-        keywords_df = pd.read_csv(path_to_keywords_csv)
+        self.keywords_df = pd.read_csv(path_to_keywords_csv)
         self.audio_keywords_dataset_dict = {
-            "train": keywords_df[keywords_df["TEDLIUM_SET"] == "train"],
-            "dev": keywords_df[keywords_df["TEDLIUM_SET"] == "dev"],
-            "test": keywords_df[keywords_df["TEDLIUM_SET"] == "test"]
+            "train": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "train"],
+            "dev": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "dev"],
+            "test": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "test"]
         }
 
         #Initialise Ted talk dataset
@@ -244,7 +249,7 @@ class CTRLF_DatasetWrapper:
 
     
     #TODO! Ensure retrieving the same sampling rate!!!
-    def get_data(self, TEDSample_id: int, dataset_type: str):
+    def get_data(self, TEDSample_id: int):
         """
         Given Ted Sample ID and the dataset type, return the corresponding data from Ted audio sample and Keyword recording data
         Returns:
@@ -267,9 +272,9 @@ class CTRLF_DatasetWrapper:
         """
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
-        subset_keywords_df = self.audio_keywords_dataset_dict[dataset_type]
+        # subset_keywords_df = self.audio_keywords_dataset_dict[dataset_type]
 
-        MSWC_audio_ids = subset_keywords_df[subset_keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == TEDSample_id]
+        MSWC_audio_ids = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == TEDSample_id]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
             print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
@@ -277,13 +282,23 @@ class CTRLF_DatasetWrapper:
             return TED_results_dict, {}
         MSWC_results_dict = None
         if self.single_keywords_labels:
-            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID][0])
+            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID].iloc[0])
 
+        #Resample Audio files into same sampling rate
+        TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
         return TED_results_dict, MSWC_results_dict
 
     #TODO! Make a Function that returns the entire audio recording given Talk id. 
     def get_specific_audio_file(self, TED_talk_id):
         pass
+
+    def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=22000):
+        TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=target_rate)
+        TED_results_dict["sample_rate"] = target_rate
+        MSWC_results_dict["waveform"] = resample_audio(MSWC_results_dict["waveform"], MSWC_results_dict["sample_rate"], target_rate=target_rate)
+        MSWC_results_dict["sample_rate"] = target_rate
+        return TED_results_dict, MSWC_results_dict
+
 
 if __name__== "__main__":
     ####### Testing CTRLF_DatasetWrapper
@@ -291,7 +306,7 @@ if __name__== "__main__":
     print("CTRL_F Wrapper") 
 
     x= CTRLF_DatasetWrapper(KEYWORDS_LINK_CSV_PATH)
-    Ted_dict, MSWC_dict= x.get_data(0, dataset_type="train")
+    Ted_dict, MSWC_dict= x.get_data(0)
     print(Ted_dict, MSWC_dict)
 
     ####### Testing TEDLIUM

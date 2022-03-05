@@ -1,3 +1,4 @@
+from random import sample
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io.wavfile import read, write
@@ -116,6 +117,15 @@ def to_mfcc(wav, target_rate=RATE, n_mfcc=N_MFCC):
     :return (2d numpy array: MFCC
     '''
     return(librosa.feature.mfcc(y=wav, sr=RATE, n_mfcc=N_MFCC))
+
+def scale_mfcc(mfcc_features):
+    return np.mean(mfcc_features.T, axis=0)
+
+def extract_mfcc_features_from_waveform(audio, sample_rate, num_mfcc=40):
+    mfccs_features = to_mfcc(wav=audio, target_rate=sample_rate, n_mfcc=num_mfcc)
+    mfccs_scaled_features= scale_mfcc(mfcc_features=mfccs_features)
+    return mfccs_scaled_features
+    
 ###############################################################################################
 
 ###########################Multiple Files in local dir folder##################################

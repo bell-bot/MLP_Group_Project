@@ -17,4 +17,5 @@ echo "Unzipping splits folder"
 tar -xf splits.tar.gz -C ../Multilingual_Spoken_Words/splits
 echo "Unzipping audio folder"
 tar -xf audio.tar.gz -C ../Multilingual_Spoken_Words/audio
+echo "Done! (Remove the zip files downloaded in scripts)"
 

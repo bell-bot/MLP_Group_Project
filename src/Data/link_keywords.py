@@ -94,11 +94,7 @@ class KeywordsLink:
         transcript = item_sample["transcript"]
 
 
-        example_transcript = link_utils.preprocess_text(transcript)
-        #Handles edge case in transcripts where a word may have a space before an apostrophe.
-        #i.e) "didn' t" to "didn't"
-        regex = re.compile(r" (?=(['\"][a-zA-Z0-9_]))")
-        string = regex.sub(r"", example_transcript)
+        string = link_utils.preprocess_text(transcript)
         tokens = string.split(" ")
         token_choice = np.random.permutation(len(tokens))
         word = None
@@ -107,7 +103,7 @@ class KeywordsLink:
             print(f"{word} in {sample_num}")
 
             try:
-                if link_utils.is_number(word):
+                if link_utils.has_number(word):
                     word = link_utils.parse_number_string(word)
                 if word in self.MSWCDataset.keywords:
                     break
@@ -167,79 +163,13 @@ class KeywordsLink:
 
 
 
-    # def create_keywords_csv_threaded(self):
-    #     #Initialise dictionaries and list which store log information 
-    #     not_found = defaultdict(list)
-    #     samples_with_no_links =  []
-    #     error_words = defaultdict(list)
-    #     queue = Queue()
-    #     number_of_items = self.TEDLIUMCustomDataset.__len__()
-    #     number_of_items = 10
-
-    #     csv_file =  open(self.KEYWORDS_LINK_FILENAME, "w")
-    #     w = csv.writer(csv_file)
-    #     w.writerow(CSV_HEADER)
-    #     def consume():
-    #         print("Am i called?")
-    #         while True:
-    #             if not queue.empty():
-    #                 if (i%1000==0):
-    #                     print(f"----- Sample {i} out of {number_of_items}-----")
-
-    #                 i, row = queue.get()
-    #                 print("QUEUE", i)
-
-    #                 #Ensure finals rows are written
-    #                 if row !=[]:
-    #                     w.writerow(row)
-
-    #                 print(i)
-    #                 if i == number_of_items-1:
-    #                     return
-
-
-    #     consumer = Thread(target=consume)
-    #     consumer.setDaemon(True)
-    #     consumer.start()
-
-
-    #     def produce(i):
-    #         # Data processing goes here; row goes into queue
-
-    #         # print(i)
-    #         #Get Audio sample
-    #         item = self.TEDLIUMCustomDataset.__getitem__(i)
-    #         word, not_found, error_words = self.get_keyword_from_TED_audio_sample(sample_num=i, item_sample=item, not_found=not_found, error_words= error_words)
-    #         if word in self.MSWCDataset.keywords:
-    #             #Append to the list of rows
-    #             ted_sampleid, dataset_tag, mswc_audioid = self.match(sample_number=i, sample=item, word=word)
-    #             row = [word, ted_sampleid, dataset_tag, mswc_audioid]
-    #             queue.put((i, row))
-    #         else:
-    #             print(f"Sample id {i} contained no word to link to the keyword dataset.")
-    #             # samples_with_no_links.append(i)
-    #             queue.put((i, []))
-
-
-
-    #     with ThreadPoolExecutor(max_workers=2) as executor:
-
-    #         for i in range(0,number_of_items):
-    #             executor.submit(produce, i)
-        
-
-    #     consumer.join()
-    #     csv_file.close()
-
-    #     #Log words that did not make it to the csv file
-    #     # self.create_log_files(not_found, error_words, samples_with_no_links)
-
 
 if __name__== "__main__":
     #Change working directory to where the script is
     os.chdir(os.path.abspath(os.path.dirname(__file__))) 
     #Prepare KeywordsLink class
     linkerEngine = KeywordsLink()
+    
 
     #Generate keywords csv
     linkerEngine.create_keywords_csv()
