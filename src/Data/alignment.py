@@ -15,6 +15,7 @@ from collections import defaultdict
 import csv
 import os
 from dataclasses import dataclass
+from queue import Queue
 import subprocess
 import pandas as pd
 import torch
@@ -78,21 +79,33 @@ class Aligner:
         self.char_labels = self.bundle.get_labels()
         
     
- 
+    
+    # ---------------- Threading ------------------#
+    def consume(self):
+        while True:
+            if not self.queue.empty():
+                i, row = self.queue.get()
+                self.label_w.writerow(row)
+                if i == self.last_item_num:
+                    return
+
     # ----------------  Main function ------------------- #
 
     #TODO!: Current function only works with SINGLE KEYWORDS. 
     def align(self):
-        iterator_samples = None
+        iterator_samples, self.last_item_num = None, None
         if self.keywords_df is not None:
             iterator_samples = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID]
+            self.last_item_num = self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID].iloc[-1].values[0]
         else:
             iterator_samples = iter(range(0,self.TED.__len__()))
+            self.last_item_num = self.TED.__len__() - 1
+
+        self.queue = Queue()
         with open(self.PATH_TO_LABELS, "w") as label_file:
-            label_w = csv.writer(label_file)
-            label_w.writerow(LabelsCSVHeaders.CSV_header)
-            prev_id = None
-            sample_timestamp, TED_sample_dict = None, None
+            self.label_w = csv.writer(label_file)
+            self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+            prev_id, sample_timestamp, TED_sample_dict = None, None, None
             for id in iterator_samples:
                 if prev_id == None or prev_id != id:
                     prev_id = id
@@ -118,7 +131,8 @@ class Aligner:
                         #
                         # confidence =  map()
                         ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
-                        label_w.writerow([key,id, ted_set, mswc_id, timestamp_start, timestamp_end, confidence])
+                        
+                        self.label_w.writerow([key,id, ted_set,TED_sample_dict["talk_id"], mswc_id, timestamp_start, timestamp_end, confidence])
                 else:
                     #TODO! Align on the go...
                     pass
@@ -187,10 +201,8 @@ class Aligner:
     def revert_tokenisation_process(self, word):
         if "<s>" in word:
             word = word.replace("<s>", "")
-        elif "</s>" in word:
+        if "</s>" in word:
             word = word.replace("</s>", "")
-        else:
-            word = word
         
         return word.lower()
 
