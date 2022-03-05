@@ -65,7 +65,20 @@ def handles_identifiers():
     pass
 
 def preprocess_text(string):
-    return string.strip().lower()
+    string=  string.strip().lower()
+    #remove white (duplicate) space
+    regex = re.compile(r'\s+')
+    string = ' '.join(re.split(regex, string))
+    #Handles edge case in transcripts where a word may have a space before an apostrophe.
+    #i.e) "didn' t" to "didn't"
+    regex = re.compile(r" (?=(['\"][a-zA-Z0-9_]))")
+    string = regex.sub(r"", string)
+    #Remove apostrophe if it exists at the end of a word 
+    # i.e) others' to others, shapes' to shapes, etc.)
+    regex = re.compile(r"\'(?=[^\w])")
+    string = regex.sub(r"", string)
+
+    return string
 
 
 ##### ------------- Logging -------------- ######
