@@ -672,11 +672,12 @@ if __name__ == "__main__":
     # Change working directory to where the script is
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
+    ######### Run Forced Alignment ##########
     AlignerEngine = Aligner(threading=False)
     AlignerEngine.align()
 
     ######### Testing Aligner ############
-    # x = Aligner()
-    # TED_sample_dict = x.TED.__getitem__(17)
-    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
-    # print(sample_timestamps)
+    x = Aligner()
+    TED_sample_dict = x.TED.__getitem__(17)
+    sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    print(sample_timestamps)
