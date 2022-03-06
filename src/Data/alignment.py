@@ -168,7 +168,9 @@ class Aligner:
             print("Aborting")
             self.stop.set()
         except Exception as e:
-            print("Something went wrong when aligning:")
+            print(f"Something went wrong when aligning sample id {id}:")
+            transcript = self.TED.__getitem__(id)["transcript"]
+            print(f"Transcript: {transcript}")
             print(traceback.print_exc())
             self.stop.set()
 
