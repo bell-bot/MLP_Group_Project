@@ -18,6 +18,7 @@ data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
 DATASET_TEDLIUM_PATH = data_paths
 DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
+LABELS_LINK_CSV_PATH = os.path.join(data_paths, "labels.csv")
 
 class KeywordsCSVHeaders:
     """
@@ -32,6 +33,28 @@ class KeywordsCSVHeaders:
     TED_SAMPLE_ID= "TEDLIUM_SampleID"
     TED_DATASET_TYPE = "TEDLIUM_SET"
     MSWC_ID = "MSWC_AudioID"
+
+class LabelsCSVHeaders:
+    """
+    Represents the fields labels.csv file
+        KEYWORD: The keyword linking the two audio files (sample of a TED audio file and an MSWC recording of that keyword)
+        TED_SAMPLE_ID: Represents the sample id of an audio. In other words, it is a unique id that maps to a segment of a TED audio file. 
+                    Hence, this is NOT the same as "talk_id", which represents the id of an entire audio file
+        TED_DATASET_TYPE: The type of dataset the sample exists in (Train vs Dev vs Test set) 
+        MSWC_ID: The id of the keyword recording
+    """
+    KEYWORD = "Keyword"
+    # Keyword_id = "Keyword_id"
+    TED_SAMPLE_ID= "TEDLIUM_SampleID"
+    TED_DATASET_TYPE = "TEDLIUM_SET"
+    TED_TALK_ID = "TED_TALK_ID" 
+
+    MSWC_ID = "MSWC_AudioID"
+    START_TIMESTAMP = "start_time"
+    END_TIMESTAMP = "end_time"
+    CONFIDENCE = "confidence"
+    
+    CSV_header = [KEYWORD, TED_SAMPLE_ID,TED_TALK_ID,  TED_DATASET_TYPE, MSWC_ID, START_TIMESTAMP, END_TIMESTAMP, CONFIDENCE]
 
 
 #TODO! Customise for each subset, in speaker-adaptation. Might require changing the metadata
@@ -96,6 +119,10 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
             tuple: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
             """
         return super().__getitem__(sampleID)
+
+    def get_audio_file(self, sampleID:int):
+        fileid, line = self._filelist[sampleID]
+        return os.path.join(self._path, "stm", fileid)
 
 
 
@@ -228,7 +255,7 @@ class CTRLF_DatasetWrapper:
         single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
             ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
     """
-    def __init__(self,path_to_keywords_csv, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
+    def __init__(self,path_to_keywords_csv=KEYWORDS_LINK_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
@@ -272,9 +299,8 @@ class CTRLF_DatasetWrapper:
         """
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
-        # subset_keywords_df = self.audio_keywords_dataset_dict[dataset_type]
-
-        MSWC_audio_ids = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == TEDSample_id]
+        TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
+        MSWC_audio_ids = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == str(TEDSample_id)]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
             print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
@@ -292,7 +318,7 @@ class CTRLF_DatasetWrapper:
     def get_specific_audio_file(self, TED_talk_id):
         pass
 
-    def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=22000):
+    def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=16000):
         TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=target_rate)
         TED_results_dict["sample_rate"] = target_rate
         MSWC_results_dict["waveform"] = resample_audio(MSWC_results_dict["waveform"], MSWC_results_dict["sample_rate"], target_rate=target_rate)
@@ -305,7 +331,7 @@ if __name__== "__main__":
     print("-"*20)  
     print("CTRL_F Wrapper") 
 
-    x= CTRLF_DatasetWrapper(KEYWORDS_LINK_CSV_PATH)
+    x= CTRLF_DatasetWrapper()
     Ted_dict, MSWC_dict= x.get_data(0)
     print(Ted_dict, MSWC_dict)
 
