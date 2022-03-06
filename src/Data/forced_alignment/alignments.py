@@ -299,6 +299,8 @@ class Aligner:
     # Reads from CSV file the last read sample id, to continue from last time we stopped
     # TODO: Multithreading mixes order, so might need to start from a more specific spot
     def retrieve_last_sample_id(self):
+        if not os.path.exists(self.PATH_TO_LABELS):
+            return 0
         ted_sample_id_column = 1
         # NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
         assert(LabelsCSVHeaders.TED_SAMPLE_ID ==
