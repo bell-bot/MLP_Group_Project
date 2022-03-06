@@ -124,6 +124,8 @@ def preprocess_text(string):
     regex = re.compile(r"\'(?=[^\w])")
     string = regex.sub(r"", string)
 
+    string = string.replace("[", " ")
+    string = string.replace("]", " ")
 
     return string
 
