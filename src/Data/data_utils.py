@@ -11,6 +11,10 @@ Utility functions to help in generating keywords from MSWC dataset
 ###### ------- Text Preprocessing and utilities --------- ######
 
 #Edge case: HTML5
+def split_num_from_word(inputString):
+    return re.sub(r"([0-9]+(\.[0-9]+)?)", r" \1 ", inputString).strip()
+
+
 def has_number(inputString):
     return bool(re.search(r'\d+', inputString))
 
@@ -27,7 +31,6 @@ def is_abbreviated_decades(inputString):
     return bool(re.search(r'(\')?\d+\'?s', inputString))
 
 
-#TODO: Parse years. Current implementation does not take care of edge case of 1980 (i.e split the year, into nineteen "80"s, then choose one of the keywords)
 def get_abbreviated_number_word_form(inputString):
     numbers_to_words = {
         10: "tens",
@@ -40,8 +43,15 @@ def get_abbreviated_number_word_form(inputString):
         80: "eighties" ,
         90: "nineties" ,
     }
-    number = int(re.findall(r"\d+", inputString)[0])
-    return numbers_to_words[number]
+    
+    inputString = re.sub("s","", inputString).strip()
+    if len(inputString) != 4:
+        return numbers_to_words[int(inputString)]
+    else:
+        first_num_string = inputString[0:2]
+        second_num_string = inputString[2:4]
+        word_form = num2words(first_num_string) + " " + numbers_to_words[second_num_string]
+        return word_form
 
 def parse_number_string(word):
     word = word.lower() #Preprocess to make sure we always deal with lower case letters (eg. 11th)
@@ -60,10 +70,14 @@ def parse_number_string(word):
         word = num2words(word)
         word = word.replace("-", " ")
     else:
-        is_parsed =  False
-
-        print(f"Did not match any specific numbering cases: {word}")
-    
+        try:
+            word  = split_num_from_word(word)
+            tokens = [num2words(token) if is_number_only(token) else token for token in word.split()]
+            word = ' '.join(tokens)
+        except:
+            is_parsed =  False
+            print(f"Did not match any specific numbering cases: {word}")
+        
     if is_parsed_flag:
         word = word.replace("-", " ") #Example: 25th : twenty-fifth becomes twenty fifth
 
