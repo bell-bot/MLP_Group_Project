@@ -323,9 +323,10 @@ class CTRLF_DatasetWrapper:
     
     #TODO! Remove sorting. Better to Sort beforehand,  instead of here... for faster iteration
     #Retrieve all the available "samples" of one specific audio file
-    def get_samples_given_talk_id(self, TED_talk_id):
+    def get_samples_given_talk_id(self, TED_talk_id, sort=False):
         samples_df = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_TALK_ID] == int(TED_talk_id)]
-        samples_df.sort_values(by=['col1'], inplace=True)
+        if sort:
+            samples_df.sort_values(by=['col1'], inplace=True)
         return samples_df
 
 if __name__== "__main__":
