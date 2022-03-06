@@ -119,16 +119,12 @@ class Aligner:
 
     # ---------------- Threading ------------------#
 
-    def consume(self):
-        while not self.stop.isSet():
-            if not self.queue.empty():
-                i, row = self.queue.get()
+    def consume(self,i, rows):
                 if (i%1==0):
                     print(f"----- Sample {i}-----")
-                if row != []:
-                    self.label_w.writerow(row)
-                if i == self.final_sample_iterate:
-                    return
+
+                    if rows != []:
+                        self.label_w.writerows(rows)
 
     def produce(self, id, prev_id):
         try:
@@ -166,8 +162,7 @@ class Aligner:
                 # TODO! Link on the go...
                 pass
 
-            for row in rows:
-                self.queue.put([id, row])
+            return rows
         except KeyboardInterrupt:
             print("Aborting")
             self.stop.set()
@@ -201,15 +196,12 @@ class Aligner:
             prev_id = None
             self.stop = threading.Event()
 
-            consumer = Thread(target=self.consume)
-            consumer.setDaemon(True)
-            consumer.start()
             # TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
             # with ProcessPoolExecutor(max_workers=4) as process_executor:
             try:
-                with ThreadPoolExecutor(max_workers=2) as executor:
-                    for id in self.iterator_samples:
-                        executor.submit(self.produce, id, prev_id)
+                for id in self.iterator_samples:
+                    rows = self.produce(id, prev_id)
+                    self.consume(id, rows)
             except (KeyboardInterrupt, SystemExit):
                 self.stop.set()
                 print("Stopping the process... Please wait...")
@@ -218,7 +210,7 @@ class Aligner:
                 print("Something went wrong:")
                 print(traceback.print_exc())
 
-            consumer.join()
+            
             print("Exiting.")
             return
 
