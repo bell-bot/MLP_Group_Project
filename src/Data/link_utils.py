@@ -50,6 +50,9 @@ def parse_number_string(word):
     is_parsed_flag = True
     if is_ordinal(word):
         word = re.sub(r'th', "", word)
+        word = re.sub(r'st', "", word)
+        word = re.sub(r'nd', "", word)
+        word = re.sub(r'rd', "", word)
         word = num2words(word, to="ordinal")
     elif is_abbreviated_decades(word):
         word = get_abbreviated_number_word_form(word)
@@ -71,6 +74,9 @@ def parse_number_string(word):
 def handle_apostrophes_in_words(regex, string):
     pass
 
+def handle_acronyms_edge_cases():
+    pass
+    #Example: at & t's -> AT&T's
 
 #NOTE: Edge case to deal with pronouncing certain symbols. However, it introduces errors (= can be pronounced as equals or equal). 
 #TODO: See if there is a library that handles, check nltk
@@ -80,6 +86,7 @@ def handle_pronouncing_symbols(string):
     # string=  string.replace("<"," less than ")
     # string=  string.replace(">"," greater than ")
     string=  string.replace("$"," dollars ")
+    string=  string.replace("&"," and ")
 
     return string
 

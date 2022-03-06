@@ -305,22 +305,26 @@ class KeywordsLink:
 
 
     def find_match(self,i):
-        not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, {}
-        item = self.TEDLIUMCustomDataset.__getitem__(i)
-        word, not_found, error_words  = self.get_keyword_from_TED_audio_sample(i, item, not_found, error_words)
-        row = []
-        if word in self.MSWCDataset.keywords:
-            ted_sampleid, dataset_tag, mswc_audioid, errors_file= self.match(i, item, word)
-            row = [word, ted_sampleid, dataset_tag, mswc_audioid]
-        else:
-            print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
-            transcript = item["transcript"]
-            
-            print(f"Transcript: \"{transcript}\" ")
-            talk_id = item["talk_id"]
+        try:
+            not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, {}
+            item = self.TEDLIUMCustomDataset.__getitem__(i)
+            word, not_found, error_words  = self.get_keyword_from_TED_audio_sample(i, item, not_found, error_words)
+            row = []
+            if word in self.MSWCDataset.keywords:
+                ted_sampleid, dataset_tag, mswc_audioid, errors_file= self.match(i, item, word)
+                row = [word, ted_sampleid, dataset_tag, mswc_audioid]
+            else:
+                print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
+                transcript = item["transcript"]
+                
+                print(f"Transcript: \"{transcript}\" ")
+                talk_id = item["talk_id"]
 
-            sample_with_no_link[i] = talk_id
-        self.queue.put([i,row, not_found, error_words, errors_file, sample_with_no_link]) 
+                sample_with_no_link[i] = talk_id
+            self.queue.put([i,row, not_found, error_words, errors_file, sample_with_no_link]) 
+        except:
+            print(traceback.print_exc())
+            sys.exit(-1)
 
 
 

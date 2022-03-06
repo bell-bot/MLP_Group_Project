@@ -185,7 +185,7 @@ class Aligner:
     def align(self):
 
         self.queue = Queue()
-
+        #TODO! Organise logs into different directories
         with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
              open("logs/id-no-alignment.txt", "a") as no_alignment_log_file:
             self.label_w = csv.writer(label_file)
@@ -263,14 +263,15 @@ class Aligner:
         transcript_original = link_utils.preprocess_text(transcript_original)
 
         transcript_preprocessing = transcript_original.upper().strip().replace(
-            "<UNK>", " <unk> ").split()
+            "<UNK>", " <unk> ").strip().split()
         transcript = ["<s>"]
         for idx, word in enumerate(transcript_preprocessing):
-            if "<unk>" in word:
+            if word == "<unk>":
                 transcript.append(word)
             else:
 
                 word = link_utils.parse_number_string(word)
+                word = word.replace(" ","|")
                 word = word.upper()  # ensure word is turned to upper case
 
                 for c in word:
