@@ -186,7 +186,8 @@ class Aligner:
 
         with open(self.PATH_TO_LABELS, self.access_mode) as label_file:
             self.label_w = csv.writer(label_file)
-            self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+            if self.access_mode == "w":
+                self.label_w.writerow(LabelsCSVHeaders.CSV_header)
             prev_id = None
             self.stop = threading.Event()
 
