@@ -27,6 +27,7 @@ def is_abbreviated_decades(inputString):
     return bool(re.search(r'(\')?\d+\'?s', inputString))
 
 
+#TODO: Parse years. Current implementation does not take care of edge case of 1980 (i.e split the year, into nineteen "80"s, then choose one of the keywords)
 def get_abbreviated_number_word_form(inputString):
     numbers_to_words = {
         10: "tens",
@@ -62,12 +63,26 @@ def parse_number_string(word):
 def handle_apostrophes_in_words(regex, string):
     pass
 
+
+#NOTE: Edge case to deal with pronouncing certain symbols. However, it introduces errors (= can be pronounced as equals or equal). 
+#TODO: See if there is a library that handles, check nltk
+def handle_pronouncing_symbols(string):
+    string=  string.replace("="," equal ")
+    string=  string.replace("-"," minus ")
+    string=  string.replace("<"," less than ")
+    string=  string.replace(">"," greater than ")
+    string=  string.replace("$"," dollars ")
+
+    return string
+
+
 def handles_identifiers():
     list_of_identifiers = ["<unk>"]
     pass
 
 def preprocess_text(string):
     string=  string.strip().lower()
+    string = handle_pronouncing_symbols(string)
     #remove white (duplicate) space
     regex = re.compile(r'\s+')
     string = ' '.join(re.split(regex, string))
@@ -79,6 +94,7 @@ def preprocess_text(string):
     # i.e) others' to others, shapes' to shapes, etc.)
     regex = re.compile(r"\'(?=[^\w])")
     string = regex.sub(r"", string)
+
 
     return string
 
