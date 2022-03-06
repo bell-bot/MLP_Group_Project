@@ -68,7 +68,7 @@ def handle_apostrophes_in_words(regex, string):
 #TODO: See if there is a library that handles, check nltk
 def handle_pronouncing_symbols(string):
     string=  string.replace("="," equal ")
-    string=  string.replace("-"," minus ")
+    # string=  string.replace("-"," minus ")
     string=  string.replace("<"," less than ")
     string=  string.replace(">"," greater than ")
     string=  string.replace("$"," dollars ")

@@ -172,7 +172,8 @@ class Aligner:
             transcript = self.TED.__getitem__(id)["transcript"]
             print(f"Transcript: {transcript}")
             print(traceback.print_exc())
-            self.stop.set()
+            with open("logs/id-no-alignment.txt", "a") as f:
+                f.write(f"{id}\n")
 
 
     # ----------------  Main function ------------------- #
