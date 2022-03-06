@@ -27,6 +27,7 @@ def is_abbreviated_decades(inputString):
     return bool(re.search(r'(\')?\d+\'?s', inputString))
 
 
+#TODO: Parse years. Current implementation does not take care of edge case of 1980 (i.e split the year, into nineteen "80"s, then choose one of the keywords)
 def get_abbreviated_number_word_form(inputString):
     numbers_to_words = {
         10: "tens",
@@ -46,15 +47,26 @@ def parse_number_string(word):
     word = word.lower() #Preprocess to make sure we always deal with lower case letters (eg. 11th)
     if not has_number(word):
         return word
+    is_parsed_flag = True
     if is_ordinal(word):
         word = re.sub(r'th', "", word)
+        word = re.sub(r'st', "", word)
+        word = re.sub(r'nd', "", word)
+        word = re.sub(r'rd', "", word)
         word = num2words(word, to="ordinal")
     elif is_abbreviated_decades(word):
         word = get_abbreviated_number_word_form(word)
     elif is_number_only(word):
         word = num2words(word)
+        word = word.replace("-", " ")
     else:
+        is_parsed =  False
+
         print(f"Did not match any specific numbering cases: {word}")
+    
+    if is_parsed_flag:
+        word = word.replace("-", " ") #Example: 25th : twenty-fifth becomes twenty fifth
+
     return word
 
 
@@ -62,12 +74,30 @@ def parse_number_string(word):
 def handle_apostrophes_in_words(regex, string):
     pass
 
+def handle_acronyms_edge_cases():
+    pass
+    #Example: at & t's -> AT&T's
+
+#NOTE: Edge case to deal with pronouncing certain symbols. However, it introduces errors (= can be pronounced as equals or equal). 
+#TODO: See if there is a library that handles, check nltk
+def handle_pronouncing_symbols(string):
+    string=  string.replace("="," equal ")
+    # string=  string.replace("-"," minus ")
+    # string=  string.replace("<"," less than ")
+    # string=  string.replace(">"," greater than ")
+    string=  string.replace("$"," dollars ")
+    string=  string.replace("&"," and ")
+
+    return string
+
+
 def handles_identifiers():
     list_of_identifiers = ["<unk>"]
     pass
 
 def preprocess_text(string):
     string=  string.strip().lower()
+    string = handle_pronouncing_symbols(string)
     #remove white (duplicate) space
     regex = re.compile(r'\s+')
     string = ' '.join(re.split(regex, string))
@@ -79,6 +109,7 @@ def preprocess_text(string):
     # i.e) others' to others, shapes' to shapes, etc.)
     regex = re.compile(r"\'(?=[^\w])")
     string = regex.sub(r"", string)
+
 
     return string
 

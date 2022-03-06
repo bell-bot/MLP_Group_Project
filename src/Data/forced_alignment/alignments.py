@@ -31,7 +31,7 @@ import IPython
 import traceback
 
 from src.datasets import CTRLF_DatasetWrapper, KEYWORDS_LINK_CSV_PATH, TEDLIUMCustom, MultiLingualSpokenWordsEnglish, LabelsCSVHeaders, KeywordsCSVHeaders, LABELS_LINK_CSV_PATH
-import link_utils
+import src.Data.data_utils as data_utils
 
 # Pre-configurations
 matplotlib.rcParams['figure.figsize'] = [16.0, 4.8]
@@ -68,6 +68,8 @@ class Segment:
 class Aligner:
     PATH_TO_LABELS = LABELS_LINK_CSV_PATH
     PATH_TO_KEYWORDS = KEYWORDS_LINK_CSV_PATH
+
+    PATH_TO_LOGS = "../logs/"
 
     def __init__(self, path_to_keywords=PATH_TO_KEYWORDS, overwrite=False):
         print("Preparing Ted Dataset...")
@@ -112,6 +114,8 @@ class Aligner:
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_960H
         self.model = self.bundle.get_model().to(device)
         self.char_labels = self.bundle.get_labels()
+        self.dictionary = {c: i for i, c in enumerate(self.char_labels)}
+
 
     # ---------------- Threading ------------------#
 
@@ -168,9 +172,14 @@ class Aligner:
             print("Aborting")
             self.stop.set()
         except Exception as e:
-            print("Something went wrong when aligning:")
+            print(f"ERROR: Something went wrong when aligning sample id {id}")
+            transcript = self.TED.__getitem__(id)["transcript"]
+            talk_id = self.TED.__getitem__(id)["talk_id"]
+
+            print(f"Transcript: {transcript}")
             print(traceback.print_exc())
-            self.stop.set()
+            self.no_alignment_csv_w.writerow([id,talk_id])
+            print("************************")
 
 
     # ----------------  Main function ------------------- #
@@ -180,10 +189,15 @@ class Aligner:
     def align(self):
 
         self.queue = Queue()
-
-        with open(self.PATH_TO_LABELS, self.access_mode) as label_file:
+        #TODO! Organise logs into different directories
+        with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
+             open(self.PATH_TO_LOGS + "id-no-alignment.csv", self.access_mode) as no_alignment_log_file:
             self.label_w = csv.writer(label_file)
-            self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+            self.no_alignment_csv_w =  csv.writer(no_alignment_log_file)
+            if self.access_mode == "w":
+                self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+                self.no_alignment_csv_w.writerow([LabelsCSVHeaders.TED_SAMPLE_ID, LabelsCSVHeaders.TED_TALK_ID])
+            
             prev_id = None
             self.stop = threading.Event()
 
@@ -210,6 +224,7 @@ class Aligner:
 
     def align_current_audio_chunk(self, TED_sample_dict):
         transcript = self.tokenise_transcript(TED_sample_dict["transcript"])
+
         emission = self.estimate_frame_wise_label_probability(TED_sample_dict)
         tokens, trellis = self.generate_alignment_probability(
             emission, transcript)
@@ -249,16 +264,18 @@ class Aligner:
     # ------ Tokenisation ----- #
     # Helper function to turn transcript into tokens of characters for the Wav2Vec2
     def tokenise_transcript(self, transcript_original):
-        transcript_original = link_utils.preprocess_text(transcript_original)
-        transcript_preprocessing = transcript_original.upper().replace(
-            "<UNK>", "<unk>").strip().split()
+        transcript_original = data_utils.preprocess_text(transcript_original)
+
+        transcript_preprocessing = transcript_original.upper().strip().replace(
+            "<UNK>", " <unk> ").strip().split()
         transcript = ["<s>"]
         for idx, word in enumerate(transcript_preprocessing):
             if word == "<unk>":
                 transcript.append(word)
             else:
 
-                word = link_utils.parse_number_string(word)
+                word = data_utils.parse_number_string(word)
+                word = word.replace(" ","|")
                 word = word.upper()  # ensure word is turned to upper case
 
                 for c in word:
@@ -288,7 +305,7 @@ class Aligner:
                LabelsCSVHeaders.CSV_header[ted_sample_id_column])
         # subprocess requires byte like object to read
         line = subprocess.check_output(
-            ['tail', '-1', bytes(LABELS_LINK_CSV_PATH, encoding="utf-8")])
+            ['tail', '-1', bytes(self.PATH_TO_LABELS, encoding="utf-8")])
         if len(line) == 0 or str(line, encoding='utf-8').strip() == ','.join(LabelsCSVHeaders.CSV_header):
             return 0
         print("Resuming from: ")
@@ -378,10 +395,13 @@ class Aligner:
         return tokens, trellis
 
     def get_tokens(self, transcript):
-        dictionary = {c: i for i, c in enumerate(self.char_labels)}
-        tokens = [dictionary[c] for c in transcript]
-        # print(list(zip(transcript, tokens)))
-        return tokens
+        try:
+            tokens = [self.dictionary[c] for c in transcript]
+            return tokens
+        except Exception as e:
+            print(f"Processed Transcript: {transcript}")
+            raise Exception(e)
+
 
     def get_trellis(self, emission, tokens, blank_id=0):
         num_frame = emission.size(0)
