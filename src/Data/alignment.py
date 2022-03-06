@@ -112,6 +112,8 @@ class Aligner:
         self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_960H
         self.model = self.bundle.get_model().to(device)
         self.char_labels = self.bundle.get_labels()
+        self.dictionary = {c: i for i, c in enumerate(self.char_labels)}
+
 
     # ---------------- Threading ------------------#
 
@@ -168,12 +170,13 @@ class Aligner:
             print("Aborting")
             self.stop.set()
         except Exception as e:
-            print(f"Something went wrong when aligning sample id {id}:")
+            print(f"ERROR: Something went wrong when aligning sample id {id}")
             transcript = self.TED.__getitem__(id)["transcript"]
             print(f"Transcript: {transcript}")
             print(traceback.print_exc())
             with open("logs/id-no-alignment.txt", "a") as f:
                 f.write(f"{id}\n")
+            print("************************")
 
 
     # ----------------  Main function ------------------- #
@@ -214,6 +217,7 @@ class Aligner:
 
     def align_current_audio_chunk(self, TED_sample_dict):
         transcript = self.tokenise_transcript(TED_sample_dict["transcript"])
+
         emission = self.estimate_frame_wise_label_probability(TED_sample_dict)
         tokens, trellis = self.generate_alignment_probability(
             emission, transcript)
@@ -382,8 +386,8 @@ class Aligner:
         return tokens, trellis
 
     def get_tokens(self, transcript):
-        dictionary = {c: i for i, c in enumerate(self.char_labels)}
-        tokens = [dictionary[c] for c in transcript]
+        print(f"Processed Transcript: {transcript}")
+        tokens = [self.dictionary[c] for c in transcript]
         # print(list(zip(transcript, tokens)))
         return tokens
 
