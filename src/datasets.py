@@ -203,7 +203,7 @@ class MultiLingualSpokenWordsEnglish():
 
 
         
-        #Retrieve the splits csv file
+        #Retrieve the splits csv file from MSWC folder
         if read_splits_file:
             self._path_to_splits = os.path.join(self._path, self._subfolder_names_dict["splits"])
             self.splits_df = pd.read_csv(os.path.join(self._path_to_splits, "en_splits.csv"))
@@ -245,7 +245,6 @@ class MultiLingualSpokenWordsEnglish():
         }
         return results_dict
 
-#TODO! Ensure same sampling rate
 #TODO! Create mapping between talk ids and datatype set (i.e not just sample mapping). Use the defined train_audio_sets, dev_audio_sets, test_audio_sets to help. Might be better to implement this in the TEDLIUMCustom instead of here.
 class CTRLF_DatasetWrapper:
     """
@@ -275,8 +274,7 @@ class CTRLF_DatasetWrapper:
 
 
     
-    #TODO! Ensure retrieving the same sampling rate!!!
-    def get_data(self, TEDSample_id: int):
+    def get(self, TEDSample_id: int):
         """
         Given Ted Sample ID and the dataset type, return the corresponding data from Ted audio sample and Keyword recording data
         Returns:
@@ -315,7 +313,7 @@ class CTRLF_DatasetWrapper:
         TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
         return TED_results_dict, MSWC_results_dict
 
-  
+    # Helper function: Preprocessing step to ensure both audio files are on the same sampling rate
     def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=16000):
         TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=target_rate)
         TED_results_dict["sample_rate"] = target_rate
@@ -323,12 +321,12 @@ class CTRLF_DatasetWrapper:
         MSWC_results_dict["sample_rate"] = target_rate
         return TED_results_dict, MSWC_results_dict
     
-    
-    
-    #TODO! Make a Function that returns the entire samples given Talk id. 
-    def find_all_samples_given_talk_id(self, TED_talk_id):
-        pass
-
+    #TODO! Remove sorting. Better to Sort beforehand,  instead of here... for faster iteration
+    #Retrieve all the available "samples" of one specific audio file
+    def get_samples_given_talk_id(self, TED_talk_id):
+        samples_df = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_TALK_ID] == int(TED_talk_id)]
+        samples_df.sort_values(by=['col1'], inplace=True)
+        return samples_df
 
 if __name__== "__main__":
     ####### Testing CTRLF_DatasetWrapper
@@ -336,7 +334,7 @@ if __name__== "__main__":
     print("CTRL_F Wrapper") 
 
     x= CTRLF_DatasetWrapper()
-    Ted_dict, MSWC_dict= x.get_data(0)
+    Ted_dict, MSWC_dict= x.get(0)
     print(Ted_dict, MSWC_dict)
 
     ####### Testing TEDLIUM
