@@ -122,7 +122,7 @@ class TEDLIUMCustom(tedilum.TEDLIUM):
 
     def get_audio_file(self, sampleID:int):
         fileid, line = self._filelist[sampleID]
-        return os.path.join(self._path, "stm", fileid)
+        return os.path.join(self._path, "sph", fileid)
 
 
 
@@ -255,16 +255,16 @@ class CTRLF_DatasetWrapper:
         single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
             ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
     """
-    def __init__(self,path_to_keywords_csv=KEYWORDS_LINK_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
+    def __init__(self,path_to_labels_csv=LABELS_LINK_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
         #Initialise keyword dataframe
-        self.keywords_df = pd.read_csv(path_to_keywords_csv)
+        self.labels_df = pd.read_csv(path_to_labels_csv)
         self.audio_keywords_dataset_dict = {
-            "train": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "train"],
-            "dev": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "dev"],
-            "test": self.keywords_df[self.keywords_df["TEDLIUM_SET"] == "test"]
+            "train": self.labels_df[self.labels_df["TEDLIUM_SET"] == "train"],
+            "dev": self.labels_df[self.labels_df["TEDLIUM_SET"] == "dev"],
+            "test": self.labels_df[self.labels_df["TEDLIUM_SET"] == "test"]
         }
 
         #Initialise Ted talk dataset
@@ -300,30 +300,34 @@ class CTRLF_DatasetWrapper:
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
-        MSWC_audio_ids = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == str(TEDSample_id)]
+        MSWC_audio_ids = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
             print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
+            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int)")
             print("*" * 80)
             return TED_results_dict, {}
         MSWC_results_dict = None
         if self.single_keywords_labels:
-            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[KeywordsCSVHeaders.MSWC_ID].iloc[0])
+            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[LabelsCSVHeaders.MSWC_ID].iloc[0])
 
         #Resample Audio files into same sampling rate
         TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
         return TED_results_dict, MSWC_results_dict
 
-    #TODO! Make a Function that returns the entire audio recording given Talk id. 
-    def get_specific_audio_file(self, TED_talk_id):
-        pass
-
+  
     def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=16000):
         TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=target_rate)
         TED_results_dict["sample_rate"] = target_rate
         MSWC_results_dict["waveform"] = resample_audio(MSWC_results_dict["waveform"], MSWC_results_dict["sample_rate"], target_rate=target_rate)
         MSWC_results_dict["sample_rate"] = target_rate
         return TED_results_dict, MSWC_results_dict
+    
+    
+    
+    #TODO! Make a Function that returns the entire samples given Talk id. 
+    def find_all_samples_given_talk_id(self, TED_talk_id):
+        pass
 
 
 if __name__== "__main__":
