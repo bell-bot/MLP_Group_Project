@@ -174,8 +174,7 @@ class Aligner:
             transcript = self.TED.__getitem__(id)["transcript"]
             print(f"Transcript: {transcript}")
             print(traceback.print_exc())
-            with open("logs/id-no-alignment.txt", "a") as f:
-                f.write(f"{id}\n")
+            self.no_alignment_csv_w.writerow(f"{id}\n")
             print("************************")
 
 
@@ -187,10 +186,14 @@ class Aligner:
 
         self.queue = Queue()
 
-        with open(self.PATH_TO_LABELS, self.access_mode) as label_file:
+        with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
+             open("logs/id-no-alignment.txt", "a") as no_alignment_log_file:
             self.label_w = csv.writer(label_file)
+            self.no_alignment_csv_w =  csv.writer(no_alignment_log_file)
             if self.access_mode == "w":
                 self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+                self.no_alignment_csv_w.writerow([LabelsCSVHeaders.TED_SAMPLE_ID, LabelsCSVHeaders.TED_TALK_ID])
+
             prev_id = None
             self.stop = threading.Event()
 
@@ -258,11 +261,12 @@ class Aligner:
     # Helper function to turn transcript into tokens of characters for the Wav2Vec2
     def tokenise_transcript(self, transcript_original):
         transcript_original = link_utils.preprocess_text(transcript_original)
-        transcript_preprocessing = transcript_original.upper().replace(
-            "<UNK>", "<unk>").strip().split()
+
+        transcript_preprocessing = transcript_original.upper().strip().replace(
+            "<UNK>", " <unk> ").split()
         transcript = ["<s>"]
         for idx, word in enumerate(transcript_preprocessing):
-            if word == "<unk>":
+            if "<unk>" in word:
                 transcript.append(word)
             else:
 
@@ -386,10 +390,13 @@ class Aligner:
         return tokens, trellis
 
     def get_tokens(self, transcript):
-        print(f"Processed Transcript: {transcript}")
-        tokens = [self.dictionary[c] for c in transcript]
-        # print(list(zip(transcript, tokens)))
-        return tokens
+        try:
+            tokens = [self.dictionary[c] for c in transcript]
+            return tokens
+        except Exception as e:
+            print(f"Processed Transcript: {transcript}")
+            raise Exception(e)
+
 
     def get_trellis(self, emission, tokens, blank_id=0):
         num_frame = emission.size(0)

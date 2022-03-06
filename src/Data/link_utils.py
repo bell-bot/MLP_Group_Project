@@ -47,6 +47,7 @@ def parse_number_string(word):
     word = word.lower() #Preprocess to make sure we always deal with lower case letters (eg. 11th)
     if not has_number(word):
         return word
+    is_parsed_flag = True
     if is_ordinal(word):
         word = re.sub(r'th', "", word)
         word = num2words(word, to="ordinal")
@@ -54,8 +55,15 @@ def parse_number_string(word):
         word = get_abbreviated_number_word_form(word)
     elif is_number_only(word):
         word = num2words(word)
+        word = word.replace("-", " ")
     else:
+        is_parsed =  False
+
         print(f"Did not match any specific numbering cases: {word}")
+    
+    if is_parsed_flag:
+        word = word.replace("-", " ") #Example: 25th : twenty-fifth becomes twenty fifth
+
     return word
 
 
