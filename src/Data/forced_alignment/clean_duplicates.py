@@ -1,1 +1,0 @@
-#TODO! Remove duplicates and sort labels

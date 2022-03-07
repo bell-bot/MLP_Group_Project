@@ -254,7 +254,8 @@ class Aligner:
         try:
             for id in self.iterator_samples:
                 rows, prev_id = self.produce(id, prev_id)
-                self.save_rows.append(rows)
+                if rows!= []:
+                    self.save_rows.append(rows)
                 self.consume_non_thread(id)
         except (KeyboardInterrupt, SystemExit):
             print("Stopping the process... Please wait...")
