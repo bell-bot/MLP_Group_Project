@@ -237,20 +237,23 @@ class Aligner:
     # ------------------ NON-THREADING ----------------- #
 
     def consume_non_thread(self,i, rows):
-        if (i%10==0):
+        if (i%100==0):
             print(f"----- Sample {i}-----")
 
-            if rows != []:
-                self.label_w.writerows(rows)
+            if self.save_rows != []:
+                self.label_w.writerows(self.save_rows)
+                self.save_rows = []
 
 
 
     def align_non_thread(self):
         prev_id = None
+        self.save_rows = []
         try:
             for id in self.iterator_samples:
                 rows, prev_id = self.produce(id, prev_id)
-                self.consume_non_thread(id, rows)
+                self.save_rows.append(rows)
+                self.consume_non_thread(id)
         except (KeyboardInterrupt, SystemExit):
             print("Stopping the process... Please wait...")
             return
