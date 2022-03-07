@@ -186,6 +186,8 @@ class Aligner:
             talk_id = self.TED.__getitem__(id)["talk_id"]
 
             print(f"Transcript: {transcript}")
+            print(f"Talk_id: {talk_id}")
+
             print(traceback.print_exc())
             self.no_alignment_csv_w.writerow([id,talk_id])
             print("************************")
