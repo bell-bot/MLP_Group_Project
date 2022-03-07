@@ -39,6 +39,8 @@ torch.random.manual_seed(0)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
+#TODO!!!!! Fix threading issue with prev_id (Fine for now, but not fine for keyphrases)
+
 @dataclass
 class Point:
     token_index: int
@@ -46,8 +48,6 @@ class Point:
     score: float
 
 # Used to Merge the labels
-
-
 @dataclass
 class Segment:
     label: str
@@ -71,7 +71,7 @@ class Aligner:
 
     PATH_TO_LOGS = "../logs/"
 
-    def __init__(self, path_to_keywords=PATH_TO_KEYWORDS, overwrite=False):
+    def __init__(self, path_to_keywords=PATH_TO_KEYWORDS, threading=False, overwrite=False):
         print("Preparing Ted Dataset...")
         self.TED = TEDLIUMCustom()
         print("Preparing MSWC Dataset...")
@@ -116,19 +116,27 @@ class Aligner:
         self.char_labels = self.bundle.get_labels()
         self.dictionary = {c: i for i, c in enumerate(self.char_labels)}
 
+        self.threading_flag = threading
 
-    # ---------------- Threading ------------------#
+    # ----------------  Main function ------------------- #
 
-    def consume(self):
-        while not self.stop.isSet():
-            if not self.queue.empty():
-                i, row = self.queue.get()
-                if (i%100==0):
-                    print(f"----- Sample {i}-----")
-                if row != []:
-                    self.label_w.writerow(row)
-                if i == self.final_sample_iterate:
-                    return
+    # TODO!: Current function only works with SINGLE KEYWORDS.
+
+    def align(self):
+        self.queue = Queue() #To be used for threading if flag is set to true
+        #TODO! Organise logs into different directories
+        with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
+             open(self.PATH_TO_LOGS + "id-no-alignment.csv", self.access_mode) as no_alignment_log_file:
+            self.label_w = csv.writer(label_file)
+            self.no_alignment_csv_w =  csv.writer(no_alignment_log_file)
+            if self.access_mode == "w":
+                self.label_w.writerow(LabelsCSVHeaders.CSV_header)
+                self.no_alignment_csv_w.writerow([LabelsCSVHeaders.TED_SAMPLE_ID, LabelsCSVHeaders.TED_TALK_ID])
+            
+            if self.threading_flag:
+                self.align_thread_start()
+            else:
+                self.align_non_thread()
 
     def produce(self, id, prev_id):
         try:
@@ -165,9 +173,10 @@ class Aligner:
             else:
                 # TODO! Link on the go...
                 pass
-
-            for row in rows:
-                self.queue.put([id, row])
+            if self.threading_flag:
+                for row in rows:
+                    self.queue.put([id, row])
+            return rows, prev_id
         except KeyboardInterrupt:
             print("Aborting")
             self.stop.set()
@@ -177,51 +186,91 @@ class Aligner:
             talk_id = self.TED.__getitem__(id)["talk_id"]
 
             print(f"Transcript: {transcript}")
+            print(f"Talk_id: {talk_id}")
+
             print(traceback.print_exc())
             self.no_alignment_csv_w.writerow([id,talk_id])
             print("************************")
 
 
-    # ----------------  Main function ------------------- #
+    # ---------------- Threading  ------------------#
 
-    # TODO!: Current function only works with SINGLE KEYWORDS.
+    def consume(self):
+        while not self.stop.isSet():
+            if not self.queue.empty():
+                i, row = self.queue.get()
+                if (i%1==0):
+                    print(f"----- Sample {i}-----")
+                if row != []:
+                    self.label_w.writerow(row)
+                if i == self.final_sample_iterate:
+                    return
 
-    def align(self):
+  
+    #TODO!!!!!!!!: Fix prev_id issue with threading
+    def align_thread_start(self):
+        prev_id = None
+        self.stop = threading.Event()
+        consumer = Thread(target=self.consume)
+        consumer.setDaemon(True)
+        consumer.start()
+        # TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
+        # with ProcessPoolExecutor(max_workers=4) as process_executor:
+        try:
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                for id in self.iterator_samples:
+                    executor.submit(self.produce, id, prev_id)
+        except (KeyboardInterrupt, SystemExit):
+            self.stop.set()
+            print("Stopping the process... Please wait...")
+            return
+        except (Exception) as e:
+            print("Something went wrong:")
+            print(traceback.print_exc())
+  
+        consumer.join()
+        print("Exiting.")
+        return
 
-        self.queue = Queue()
-        #TODO! Organise logs into different directories
-        with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
-             open(self.PATH_TO_LOGS + "id-no-alignment.csv", self.access_mode) as no_alignment_log_file:
-            self.label_w = csv.writer(label_file)
-            self.no_alignment_csv_w =  csv.writer(no_alignment_log_file)
-            if self.access_mode == "w":
-                self.label_w.writerow(LabelsCSVHeaders.CSV_header)
-                self.no_alignment_csv_w.writerow([LabelsCSVHeaders.TED_SAMPLE_ID, LabelsCSVHeaders.TED_TALK_ID])
-            
-            prev_id = None
-            self.stop = threading.Event()
 
-            consumer = Thread(target=self.consume)
-            consumer.setDaemon(True)
-            consumer.start()
-            # TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
-            # with ProcessPoolExecutor(max_workers=4) as process_executor:
+             
+
+ 
+    # ------------------ NON-THREADING ----------------- #
+
+    def consume_non_thread(self,i):
+        if (i%100==0):
+            print(f"----- Sample {i}-----")
+
+            if self.save_rows != []:
+                self.label_w.writerows(self.save_rows)
+                self.save_rows = []
+
+
+
+    def align_non_thread(self):
+        prev_id = None
+        self.stop = threading.Event()
+
+        self.save_rows = []
+        for id in self.iterator_samples:
             try:
-                with ThreadPoolExecutor(max_workers=4) as executor:
-                    for id in self.iterator_samples:
-                        executor.submit(self.produce, id, prev_id)
+                rows, prev_id = self.produce(id, prev_id)
+                if rows!= []:
+                    self.save_rows.append(rows)
+                self.consume_non_thread(id)
             except (KeyboardInterrupt, SystemExit):
-                self.stop.set()
                 print("Stopping the process... Please wait...")
                 return
             except (Exception) as e:
                 print("Something went wrong:")
                 print(traceback.print_exc())
 
-            consumer.join()
-            print("Exiting.")
-            return
+            
+        print("Exiting.")
+        return
 
+    # ----------- Processing --------- #
     def align_current_audio_chunk(self, TED_sample_dict):
         transcript = self.tokenise_transcript(TED_sample_dict["transcript"])
 
@@ -299,6 +348,8 @@ class Aligner:
     # Reads from CSV file the last read sample id, to continue from last time we stopped
     # TODO: Multithreading mixes order, so might need to start from a more specific spot
     def retrieve_last_sample_id(self):
+        if not os.path.exists(self.PATH_TO_LABELS):
+            return 0
         ted_sample_id_column = 1
         # NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
         assert(LabelsCSVHeaders.TED_SAMPLE_ID ==
@@ -629,11 +680,12 @@ if __name__ == "__main__":
     # Change working directory to where the script is
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
-    AlignerEngine = Aligner()
+    ######### Run Forced Alignment ##########
+    AlignerEngine = Aligner(threading=False)
     AlignerEngine.align()
 
     ######### Testing Aligner ############
-    # x = Aligner()
-    # TED_sample_dict = x.TED.__getitem__(17)
+    # x = Aligner()a
+    # TED_sample_dict = x.TED.__getitem__(2933)
     # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
     # print(sample_timestamps)
