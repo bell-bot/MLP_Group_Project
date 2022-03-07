@@ -251,18 +251,18 @@ class Aligner:
     def align_non_thread(self):
         prev_id = None
         self.save_rows = []
-        try:
-            for id in self.iterator_samples:
+        for id in self.iterator_samples:
+            try:
                 rows, prev_id = self.produce(id, prev_id)
                 if rows!= []:
                     self.save_rows.append(rows)
                 self.consume_non_thread(id)
-        except (KeyboardInterrupt, SystemExit):
-            print("Stopping the process... Please wait...")
-            return
-        except (Exception) as e:
-            print("Something went wrong:")
-            print(traceback.print_exc())
+            except (KeyboardInterrupt, SystemExit):
+                print("Stopping the process... Please wait...")
+                return
+            except (Exception) as e:
+                print("Something went wrong:")
+                print(traceback.print_exc())
 
             
         print("Exiting.")
@@ -679,11 +679,11 @@ if __name__ == "__main__":
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
     ######### Run Forced Alignment ##########
-    AlignerEngine = Aligner(threading=False)
-    AlignerEngine.align()
+    # AlignerEngine = Aligner(threading=False)
+    # AlignerEngine.align()
 
     ######### Testing Aligner ############
-    # x = Aligner()
-    # TED_sample_dict = x.TED.__getitem__(17)
-    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
-    # print(sample_timestamps)
+    x = Aligner()
+    TED_sample_dict = x.TED.__getitem__(2933)
+    sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    print(sample_timestamps)

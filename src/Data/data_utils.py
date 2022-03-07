@@ -103,8 +103,13 @@ def handle_pronouncing_symbols(string):
     string=  string.replace("$"," dollars ")
     string=  string.replace("&"," and ")
 
-    #Finds "^" after a number i.e) 2^5. Replaces to the appropriate format 
-    string = re.sub(r"(?<=\d)[\^]", " to the power of ", string)
+    #Finds "^" after a number i.e) 2^5, or two ^ 5. Expands the symbol as text.
+    #TODO: Better handling of this
+    matches = re.findall(r"[\w]*( ?)[\^]", string)
+    for match in matches:
+        if w2n.word_to_num(match.replace("^", "")).isnumeric():
+            re.sub(r"\^"," to the power of", string)
+
 
 
     return string
