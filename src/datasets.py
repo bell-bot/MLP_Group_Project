@@ -20,6 +20,8 @@ DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
 LABELS_LINK_CSV_PATH = os.path.join(data_paths, "labels.csv")
 
+
+#TODO! Might be better to have a header called keyword_id, in order to take into account the different varations of keywords and phrases inside the same sample
 class KeywordsCSVHeaders:
     """
     Represents the fields keywords.csv file
@@ -335,6 +337,7 @@ if __name__== "__main__":
     print("CTRL_F Wrapper") 
 
     x= CTRLF_DatasetWrapper()
+    print(x.labels_df.iloc[0])
     Ted_dict, MSWC_dict= x.get(0)
     print(Ted_dict, MSWC_dict)
 
