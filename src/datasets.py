@@ -1,5 +1,6 @@
 
 import os
+from re import L
 from typing import Dict, Tuple
 import sys
 import logging
@@ -296,6 +297,11 @@ class CTRLF_DatasetWrapper:
                     "waveform": audio data of the keyword recording
                     "sample_rate": sample rate of the keyword recording
                 }
+            label_dict = {
+                "keyword": keyword,
+                "start_time": estimated start time stamp of the label,
+                "end_time": estimated end time stamp of the label, 
+            }
         """
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
@@ -310,10 +316,17 @@ class CTRLF_DatasetWrapper:
         MSWC_results_dict = None
         if self.single_keywords_labels:
             MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[LabelsCSVHeaders.MSWC_ID].iloc[0])
+        
 
         #Resample Audio files into same sampling rate
         TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
-        return TED_results_dict, MSWC_results_dict
+        row = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
+        label_dict = {
+            "keyword": row[LabelsCSVHeaders.KEYWORD].iloc[0],
+            "start_time": row[LabelsCSVHeaders.START_TIMESTAMP].iloc[0],
+            "end_time": row[LabelsCSVHeaders.END_TIMESTAMP].iloc[0], 
+        }
+        return TED_results_dict, MSWC_results_dict, label_dict 
 
     # Helper function: Preprocessing step to ensure both audio files are on the same sampling rate
     def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=16000):
@@ -338,8 +351,10 @@ if __name__== "__main__":
 
     x= CTRLF_DatasetWrapper()
     print(x.labels_df.iloc[0])
-    Ted_dict, MSWC_dict= x.get(0)
-    print(Ted_dict, MSWC_dict)
+    Ted_dict, MSWC_dict, label_dict= x.get(0)
+    print(Ted_dict)
+    print(MSWC_dict)
+    print(label_dict)
 
     ####### Testing TEDLIUM
     print("-"*20)  
