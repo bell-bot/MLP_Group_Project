@@ -1,6 +1,7 @@
 import csv 
 import regex as re
 from num2words import num2words
+from word2number import w2n
 """
 Utility functions to help in generating keywords from MSWC dataset
 """
@@ -98,11 +99,13 @@ def handle_acronyms_edge_cases():
 #TODO: See if there is a library that handles, check nltk
 def handle_pronouncing_symbols(string):
     string=  string.replace("="," equal ")
-    # string=  string.replace("-"," minus ")
-    # string=  string.replace("<"," less than ")
-    # string=  string.replace(">"," greater than ")
+
     string=  string.replace("$"," dollars ")
     string=  string.replace("&"," and ")
+
+    #Finds "^" after a number i.e) 2^5. Replaces to the appropriate format 
+    string = re.sub(r"(?<=\d)[\^]", " to the power of ", string)
+
 
     return string
 
