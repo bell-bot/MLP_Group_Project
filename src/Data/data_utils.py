@@ -33,6 +33,7 @@ def is_abbreviated_decades(inputString):
 
 def get_abbreviated_number_word_form(inputString):
     numbers_to_words = {
+        00: "hundreds",
         10: "tens",
         20: "twenties",
         30: "thirties",
@@ -50,8 +51,9 @@ def get_abbreviated_number_word_form(inputString):
     else:
         first_num_string = inputString[0:2]
         second_num_string = inputString[2:4]
-        word_form = num2words(first_num_string) + " " + numbers_to_words[second_num_string]
+        word_form = num2words(first_num_string) + " " + numbers_to_words[int(second_num_string)]
         return word_form
+
 
 def parse_number_string(word):
     word = word.lower() #Preprocess to make sure we always deal with lower case letters (eg. 11th)
