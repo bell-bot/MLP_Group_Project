@@ -250,6 +250,8 @@ class Aligner:
 
     def align_non_thread(self):
         prev_id = None
+        self.stop = threading.Event()
+
         self.save_rows = []
         for id in self.iterator_samples:
             try:
