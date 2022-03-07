@@ -681,11 +681,11 @@ if __name__ == "__main__":
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
     ######### Run Forced Alignment ##########
-    # AlignerEngine = Aligner(threading=False)
-    # AlignerEngine.align()
+    AlignerEngine = Aligner(threading=False)
+    AlignerEngine.align()
 
     ######### Testing Aligner ############
-    x = Aligner()
-    TED_sample_dict = x.TED.__getitem__(2933)
-    sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
-    print(sample_timestamps)
+    # x = Aligner()a
+    # TED_sample_dict = x.TED.__getitem__(2933)
+    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    # print(sample_timestamps)
