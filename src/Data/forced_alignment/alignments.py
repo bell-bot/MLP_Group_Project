@@ -236,7 +236,7 @@ class Aligner:
  
     # ------------------ NON-THREADING ----------------- #
 
-    def consume_non_thread(self,i, rows):
+    def consume_non_thread(self,i):
         if (i%100==0):
             print(f"----- Sample {i}-----")
 
@@ -680,7 +680,7 @@ if __name__ == "__main__":
     AlignerEngine.align()
 
     ######### Testing Aligner ############
-    x = Aligner()
-    TED_sample_dict = x.TED.__getitem__(17)
-    sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
-    print(sample_timestamps)
+    # x = Aligner()
+    # TED_sample_dict = x.TED.__getitem__(17)
+    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    # print(sample_timestamps)
