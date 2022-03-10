@@ -11,7 +11,8 @@ from torch.utils.data import Dataset
 # )
 
 """"" 
-TEDLIUM Class from Pytorch
+TEDLIUM Class from Pytorch Source Code 
+`https://pytorch.org/audio/stable/_modules/torchaudio/datasets/tedlium.html`
 """""
 
 
