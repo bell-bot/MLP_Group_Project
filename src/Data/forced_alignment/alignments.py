@@ -685,7 +685,7 @@ if __name__ == "__main__":
     AlignerEngine.align()
 
     ######### Testing Aligner ############
-    # x = Aligner()a
+    # x = Aligner()
     # TED_sample_dict = x.TED.__getitem__(2933)
     # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
     # print(sample_timestamps)

@@ -51,6 +51,7 @@ class KeywordsLink:
 
     #Reads from CSV file the last read sample id, to continue from last time we stopped
     #TODO: Multithreading mixes order, so might need to start from a more specific spot
+    #TODO: add error handling similar to alignments.py
     def retrieve_last_sample_id(self):
         ted_sample_id_column = 1
         #NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
