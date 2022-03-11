@@ -3,6 +3,7 @@ import os
 from typing import Tuple
 import sys
 import logging
+from src.datasets import KeyphrasesCSVHeaders
 from numpy import number
 import regex as re
 from num2words import num2words
@@ -24,7 +25,6 @@ from random import randint
 import numpy as np
 from src.datasets import TEDLIUMCustom, MultiLingualSpokenWordsEnglish, DATASET_MLCOMMONS_PATH, DATASET_TEDLIUM_PATH, KeywordsCSVHeaders, KEYWORDS_LINK_CSV_PATH, KEYPHRASES_LINK_CSV_PATH
 import src.Data.data_utils  as data_utils
-CSV_HEADER = [KeywordsCSVHeaders.KEYWORD, KeywordsCSVHeaders.TED_SAMPLE_ID, KeywordsCSVHeaders.TED_DATASET_TYPE, KeywordsCSVHeaders.MSWC_ID]
 
 
 #TODO See if all edge cases were handled
@@ -59,13 +59,16 @@ class KeywordsLink:
             self.access_mode = "a" #Access mode to append to csv
             self.last_read_sample_id = self.retrieve_last_sample_id()
 
+        self.keyword_id = 0
+
+
     #Reads from CSV file the last read sample id, to continue from last time we stopped
     #TODO: Multithreading mixes order, so might need to start from a more specific spot
     #TODO: add error handling similar to alignments.py
     def retrieve_last_sample_id(self):
         ted_sample_id_column = 1
         #NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
-        assert(KeywordsCSVHeaders.TED_SAMPLE_ID == CSV_HEADER[ted_sample_id_column])
+        assert(KeywordsCSVHeaders.TED_SAMPLE_ID == KeyphrasesCSVHeaders.CSV_header[ted_sample_id_column])
         #subprocess requires byte like object to read
         line = subprocess.check_output(['tail', '-1', bytes(self.path_to_save_csv, encoding="utf-8")])
         print(line)
@@ -96,7 +99,11 @@ class KeywordsLink:
             errors_w = csv.writer(errors_file)
 
             if self.access_mode == "w":
-                w.writerow(CSV_HEADER)
+                if self.keyphrase_flag:
+                    w.writerow(KeyphrasesCSVHeaders.CSV_header)
+                else:
+                    w.writerow(KeywordsCSVHeaders.CSV_header)
+
                 not_found_w.writerow(["word", "TED_id"])
                 error_parsing_w.writerow(["word", "TED_id"])
                 samples_no_links_w.writerow(["TED_id", "talk_id"])
@@ -115,8 +122,7 @@ class KeywordsLink:
 
                         #Ensure finals rows are written
                         if rows !=[]:
-                            for row in rows:
-                                w.writerow(row)
+                            w.writerows(rows)
                         
                         # for word, ted_id in not_found.items():
                         if not_found != {}:
@@ -148,7 +154,7 @@ class KeywordsLink:
 
             
 
-            with ThreadPoolExecutor(max_workers=1) as executor:
+            with ThreadPoolExecutor(max_workers=4) as executor:
                 for i in range(self.last_read_sample_id,number_of_items):
                     executor.submit(self.find_match, i)
 
@@ -175,7 +181,11 @@ class KeywordsLink:
             for word in words:
                 if word in self.MSWCDataset.keywords:
                     ted_sampleid, dataset_tag, mswc_audioid, errors_file= self.match(i, item, word)
-                    rows.append([word, ted_sampleid, dataset_tag, mswc_audioid])
+                    if self.keyphrase_flag:
+                        self.keyword_id +=1
+                        rows.append([word, ted_sampleid, dataset_tag, mswc_audioid, self.keyword_id])
+                    else:
+                        rows.append([word, ted_sampleid, dataset_tag, mswc_audioid])
                 else:
                     print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
                     transcript = item["transcript"]
@@ -249,17 +259,15 @@ class KeywordsLink:
         """
         transcript = item_sample["transcript"]
 
-
         string= data_utils.preprocess_text(transcript)
-        tokens = string.split(" ")
+        tokens = string.split()
         words = []
         for word in tokens:
             try:
                 if data_utils.has_number(word):
                     word = data_utils.parse_number_string(word)
-                    words.append(word)
                 if word in self.MSWCDataset.keywords:
-                    break
+                    words.append(word)
                 else:
                     not_found = data_utils.append_freq(word, sample_num, not_found)
             except Exception as e:
@@ -267,7 +275,6 @@ class KeywordsLink:
                 print(traceback.print_exc())
                 print(f"Sample {sample_num} for word {word}: Choosing another keyword for now")
                 error_words = data_utils.append_freq(word, sample_num, error_words)
-
         return words, not_found, error_words
 
     def match(self,sample_number, sample, word):
