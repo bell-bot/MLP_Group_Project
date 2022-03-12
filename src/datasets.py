@@ -20,6 +20,7 @@ data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
 DATASET_TEDLIUM_PATH = data_paths
 DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
+KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "keyphrases.csv")
 LABELS_LINK_CSV_PATH = os.path.join(data_paths, "labels.csv")
 
 
@@ -37,6 +38,16 @@ class KeywordsCSVHeaders:
     TED_SAMPLE_ID= "TEDLIUM_SampleID"
     TED_DATASET_TYPE = "TEDLIUM_SET"
     MSWC_ID = "MSWC_AudioID"
+    CSV_header = [KEYWORD, TED_SAMPLE_ID, TED_DATASET_TYPE, MSWC_ID]
+
+
+class KeyphrasesCSVHeaders:
+    KEYWORD = "Keyword"
+    TED_SAMPLE_ID= "TEDLIUM_SampleID"
+    TED_DATASET_TYPE = "TEDLIUM_SET"
+    MSWC_ID = "MSWC_AudioID"
+    KEYWORD_ID = "Word_ID"
+    CSV_header = [KEYWORD, TED_SAMPLE_ID, TED_DATASET_TYPE, MSWC_ID, KEYWORD_ID]
 
 class LabelsCSVHeaders:
     """
