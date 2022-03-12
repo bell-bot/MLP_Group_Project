@@ -7,6 +7,8 @@ import logging
 import numpy
 import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
+import librosa
+
 from src.Data import tedlium_local as tedlium
 import torchaudio
 from torch import Tensor
@@ -188,9 +190,9 @@ class MultiLingualSpokenWordsEnglish():
 
     def raise_directory_error(self):
         raise RuntimeError(
-            f"Please configure the path to the Spoken Keywords Dataset, with the directory name \"{self.MLCOMMONS_FOLDER_NAME}\", containing the three subfolders:" \
+            "Please configure the path to the Spoken Keywords Dataset, with the directory name \"{}\", containing the three subfolders:".format(self.MLCOMMONS_FOLDER_NAME) \
             + "\n" + \
-            f"\"{self.AUDIO_DIR_NAME}\" for audio, \"{self.SPLITS_DIR_NAME}\" for splits directory, and \"{self.ALIGNMENTS_DIR_NAME}\" for alignemnts directory"
+            "\"{}\" for audio, \"{}\" for splits directory, and \"{}\" for alignemnts directory".format(self.AUDIO_DIR_NAME,self.SPLITS_DIR_NAME,self.ALIGNMENTS_DIR_NAME)
         )
 
     #TODO! Accept 4 kinds of values: Train vs test vs Dev vs "all"
@@ -244,9 +246,11 @@ class MultiLingualSpokenWordsEnglish():
             waveform: Tensor / np.array
             sample_rate: int
         """
-        waveform, sample_rate =  torchaudio.load(path_to_audio)
-        return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
+        # waveform, sample_rate =  torchaudio.load(path_to_audio)
+        # return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
+        waveform, sample_rate = librosa.load(path_to_audio)
 
+        return (waveform, sample_rate) if to_numpy else (waveform , sample_rate)
 
 
     def __getitem__(self, MSWC_AudioID) -> Dict:
@@ -321,7 +325,7 @@ class CTRLF_DatasetWrapper:
         MSWC_audio_ids = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
-            print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
+            print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
             print("If you think it should exist, please check the data types you are comparing with (i.e str vs int)")
             print("*" * 80)
             return TED_results_dict, {}
