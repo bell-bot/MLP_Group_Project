@@ -20,26 +20,27 @@ Please check the scripts folder for more information
 # File Descriptions
 
 ## Labels.csv 
-Contains keywords 
-- Keyword: str
+Contains rows of keyword labels with the timestamps of when it was mentioned in the TED dataset (done by force alignment) along with reference to a keyword audio recording in the MSWC dataset. 
+
+- `Keyword`: str
   -   The keyword linking the two audio files (sample of a TED audio file and an MSWC recording of that keyword)
-- TEDLIUM_SampleID: int 
+- `TEDLIUM_SampleID`: int 
   - Represents the id of the audio segment in TED talk. In other words, it is a unique id that maps to a segment of a TED audio file. 
                     This is NOT the same as "TED_TALK_ID", which represents the id of an entire audio file. 
-- TED_TALK_ID: str
+- `TED_TALK_ID`: str
   - A unique id of a TED audio file. Added in order to make referencing the current audio segment/sample to the original TED audio file more accessible
-- TEDLIUM_SET: str
+- `TEDLIUM_SET`: str
   - The type of dataset the audio sample/segment (or more specifically the audio file) exists in
   - It can be one of the four values: Train vs Dev vs Test vs None
   - Currently, it is not used as it is not possible to work with all the TED data. Working with our subset, we will ensure we work on Train and Dev data (ideally), split up into our own train, valid, test split.
-- MSWC_AudioID: str
+- `MSWC_AudioID`: str
   - The audio id of the keyword recording from MSWC chosen to link with a TED audio segment. 
   - It is be used to load the audio from MSWC dataset.  
-- start_time: float
+- `start_time`: float
   - The starting of the interval time of when the current keyword was said in the audio segment.
-- end_time: float
+- `end_time`: float
   - The end of the interval time of when the current keyword was said in the audio segment.
-- confidence: float
+- `confidence`: float
   - The average probabilty score of the forced alignment model on generating the keyword timestamp. Represents the model's frame-wise probability from emission matrix (frame-wise label probability distribution). 
   - https://pytorch.org/tutorials/intermediate/forced_alignment_with_torchaudio_tutorial.html
  
