@@ -13,13 +13,15 @@
 |   +-- ...
 ```
 
+Log files are also made during the process of force aligning and linking keywords between the two datasets for potential analysis and book-keeping.
+
 # Downloading Datasets
 Please check the scripts folder for more information
 
 
 # File Descriptions
 
-## Labels.csv 
+## labels.csv 
 Contains rows of keyword labels with the timestamps of when it was mentioned in the TED dataset (done by force alignment) along with reference to a keyword audio recording in the MSWC dataset. 
 
 - `Keyword`: str
@@ -48,11 +50,13 @@ Contains rows of keyword labels with the timestamps of when it was mentioned in 
  
 
 
-## Keywords.csv/ Keyphrases.csv
+## keywords.csv/ keyphrases.csv
 This is used as an intermediate step to create labels.csv. These contain the same headers as labels.csv, but before force alignment is applied to them (to generate timestamps).
 
 - Side notes:
    keyphrases.csv is very similar to keywords.csv with exact same formatting (one word per one line). There is an additional header that is used which is keyword id (although that is not used at all right now).  
    However, the intention behind creating two separate file names was to disambiguate the fact that keywords.csv was first made to take one random keyword per audio segment for all TED audio files and llink to MSWC dataset, and the other tries to get and link all keywords per audio segment to MSWC dataset.
 
-  To avoid ambiguity, the naming of the file keyphrases.csv may change
+  To avoid ambiguity, the naming of the file keyphrases.csv may change.
+  
+
