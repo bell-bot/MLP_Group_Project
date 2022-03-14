@@ -46,7 +46,6 @@ Contains rows of keyword labels with the timestamps of when it was mentioned in 
  
  
  
- Model used to generate timestamps is WAV2VEC2_ASR_BASE_960H (https://pytorch.org/audio/main/pipelines.html).
 
 
 ## Keywords.csv/ Keyphrases.csv
