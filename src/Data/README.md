@@ -18,15 +18,23 @@ Log files are also made during the process of force aligning and linking keyword
 # Downloading Datasets
 Please check the scripts folder for more information
 
-
-# File Descriptions
-
 ### Installing Git-lfs
 Note: Due to the huge size of the csv file, you'll need to install git-lfs. Please download git-lfs here: https://git-lfs.github.com/
 When you download git-lfs, run the following:
 1. `git lfs install`
 2. `git add .gitattributes`
  
+# File Descriptions
+
++-- Data/
+|   +-- KeywordPerSample/
+|       +-- labels.csv
+|       +-- keywords.csv
+|   +-- Keyphrases/
+|       +-- labels.csv
+|       +-- keyphrases.csv
+|       +-- alignments
+|   +-- ...
 
 ## labels.csv 
 Contains rows of keyword labels with the timestamps of when it was mentioned in the TED dataset (done by force alignment) along with reference to a keyword audio recording in the MSWC dataset. 
