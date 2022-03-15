@@ -63,7 +63,7 @@ Contains rows of keyword labels with the timestamps of when it was mentioned in 
 - `end_time`: float
   - The end of the interval time of when the current keyword was said in the audio segment.
 - `confidence`: float
-  - The average probabilty score of the forced alignment model on generating the keyword timestamp. Represents the model's frame-wise probability from emission matrix (frame-wise label probability distribution). 
+  - The average probabilty score of the forced alignment model on generating the keyword timestamp. Represents the model's frame-wise probability from emission matrix. Emission matrix is frame-wise label probability distribution 
   - https://pytorch.org/tutorials/intermediate/forced_alignment_with_torchaudio_tutorial.html
  
  
