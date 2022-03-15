@@ -104,7 +104,6 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
 
 
 
-
     def __len__(self) -> int:
         """Get number of items.
     
@@ -133,9 +132,11 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
             AudioFileID (int): The index of the sample to be loaded, which is also termed as the unique ID
 
         Returns:
-            tuple: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
+            Dictionary: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
+            
             """
-        return super().__getitem__(sampleID)
+        fileid, line = self._filelist[sampleID]
+        return self._load_tedlium_item(fileid, line, self._path)
 
     def get_audio_file(self, sampleID:int):
         fileid, line = self._filelist[sampleID]
@@ -303,8 +304,8 @@ class CTRLF_DatasetWrapper:
                     "sample_rate": sample rate as type int ,
                     "transcript": transcript string as type str, 
                     "talk_id": talk id (of the entire audio file) as str,
-                    "speaker_id":speaker id as str ,
-                    "identifier": identifier ,
+                    "speaker_id": speaker id as str (Not needed),
+                    "identifier": (Not needed),
                     "start_time": start time of the audio sample in seconds,
                     "end_time": end time of the audio sample in seconds, 
                 }
@@ -326,11 +327,10 @@ class CTRLF_DatasetWrapper:
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
             print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
-            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int)")
+            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int) and the csv file itself")
             print("*" * 80)
-            return TED_results_dict, {}
         MSWC_results_dict = None
-        if self.single_keywords_labels:
+        if self.single_keywords_labels and len(MSWC_audio_ids) != 0:
             MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[LabelsCSVHeaders.MSWC_ID].iloc[0])
         
 
