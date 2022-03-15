@@ -3,6 +3,7 @@ import os
 from typing import Tuple
 import sys
 import logging
+from src.datasets import KeyphrasesCSVHeaders
 from numpy import number
 import regex as re
 from num2words import num2words
@@ -22,25 +23,34 @@ import subprocess
 import pandas as pd
 from random import randint
 import numpy as np
-from src.datasets import TEDLIUMCustom, MultiLingualSpokenWordsEnglish, DATASET_MLCOMMONS_PATH, DATASET_TEDLIUM_PATH, KeywordsCSVHeaders, KEYWORDS_LINK_CSV_PATH
+from src.datasets import TEDLIUMCustom, MultiLingualSpokenWordsEnglish, DATASET_MLCOMMONS_PATH, DATASET_TEDLIUM_PATH, KeywordsCSVHeaders, KEYWORDS_LINK_CSV_PATH, KEYPHRASES_LINK_CSV_PATH
 import src.Data.data_utils  as data_utils
-CSV_HEADER = [KeywordsCSVHeaders.KEYWORD, KeywordsCSVHeaders.TED_SAMPLE_ID, KeywordsCSVHeaders.TED_DATASET_TYPE, KeywordsCSVHeaders.MSWC_ID]
 
 
 #TODO See if all edge cases were handled
 class KeywordsLink:
     KEYWORDS_LINK_FILENAME = KEYWORDS_LINK_CSV_PATH
+    KEYPHRASES_LINK_FILENAME = KEYPHRASES_LINK_CSV_PATH
     PATH_TO_LOGS = "../logs"
     NOT_FOUND_LOG = os.path.join(PATH_TO_LOGS, "not_found.csv")
     ERROR_PARSING_LOG = os.path.join(PATH_TO_LOGS, "error_parsing.csv")
     SAMPLE_NO_SUITABLE_LINKS_LOG = os.path.join(PATH_TO_LOGS, "samples_with_no_links.csv")
     EXECUTION_ERROR_LOG = os.path.join(PATH_TO_LOGS, "errors.csv")
 
-    def __init__(self, overwrite=False):
+    def __init__(self, overwrite=False, keyphrases=False):
         print("Preparing Ted Dataset...")
         self.TEDLIUMCustomDataset = TEDLIUMCustom(root=DATASET_TEDLIUM_PATH,release="release3")
         print("Preparing MSWC Dataset...")
         self.MSWCDataset = MultiLingualSpokenWordsEnglish(root=DATASET_MLCOMMONS_PATH, read_splits_file=True, subset="train")
+
+        
+        if keyphrases:
+            self.keyphrase_flag = True
+            self.path_to_save_csv = self.KEYPHRASES_LINK_FILENAME
+        else:
+            self.keyphrase_flag = False
+            self.path_to_save_csv = self.KEYWORDS_LINK_FILENAME
+
 
         if overwrite:
             self.access_mode = "w" #Access mode set to create a new file (overwrites file if it exists)
@@ -49,15 +59,18 @@ class KeywordsLink:
             self.access_mode = "a" #Access mode to append to csv
             self.last_read_sample_id = self.retrieve_last_sample_id()
 
+        self.keyword_id = 0
+
+
     #Reads from CSV file the last read sample id, to continue from last time we stopped
     #TODO: Multithreading mixes order, so might need to start from a more specific spot
     #TODO: add error handling similar to alignments.py
     def retrieve_last_sample_id(self):
         ted_sample_id_column = 1
         #NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
-        assert(KeywordsCSVHeaders.TED_SAMPLE_ID == CSV_HEADER[ted_sample_id_column])
+        assert(KeywordsCSVHeaders.TED_SAMPLE_ID == KeyphrasesCSVHeaders.CSV_header[ted_sample_id_column])
         #subprocess requires byte like object to read
-        line = subprocess.check_output(['tail', '-1', bytes(self.KEYWORDS_LINK_FILENAME, encoding="utf-8")])
+        line = subprocess.check_output(['tail', '-1', bytes(self.path_to_save_csv, encoding="utf-8")])
         print(line)
         #Convert from bytes to int 
         last_read_sample_id = int(str(line.split(b',')[ted_sample_id_column], encoding="utf-8"))
@@ -69,21 +82,11 @@ class KeywordsLink:
     ### ----------- Linking Datasets Functions ------------ ###
 
 
-    ## ---- Keyphrases ---- ##
-    def create_keyphrases_csv(self):
-        pass
-
-
-    ## ---- Keywords ---- ##
    
 
+    # ---- Main function  ---- #
     def create_keywords_csv(self):
-        not_found = defaultdict(list)
-        samples_with_no_links =  []
-        error_words = defaultdict(list)
-
-   
-        with open(self.KEYWORDS_LINK_FILENAME, self.access_mode) as csv_file,\
+        with open(self.path_to_save_csv, self.access_mode) as csv_file,\
              open(self.NOT_FOUND_LOG, self.access_mode) as not_found_file,\
              open(self.ERROR_PARSING_LOG, self.access_mode) as error_parsing_file,\
              open(self.SAMPLE_NO_SUITABLE_LINKS_LOG, self.access_mode) as samples_no_links_file,\
@@ -96,7 +99,11 @@ class KeywordsLink:
             errors_w = csv.writer(errors_file)
 
             if self.access_mode == "w":
-                w.writerow(CSV_HEADER)
+                if self.keyphrase_flag:
+                    w.writerow(KeyphrasesCSVHeaders.CSV_header)
+                else:
+                    w.writerow(KeywordsCSVHeaders.CSV_header)
+
                 not_found_w.writerow(["word", "TED_id"])
                 error_parsing_w.writerow(["word", "TED_id"])
                 samples_no_links_w.writerow(["TED_id", "talk_id"])
@@ -108,14 +115,14 @@ class KeywordsLink:
                 while True:
                     if not self.queue.empty():
                     
-                        i,row, not_found, error_words, error_types, sample_with_no_link = self.queue.get()
+                        i,rows, not_found, error_words, error_types, sample_with_no_link = self.queue.get()
                         # print("QUEUE", i)
-                        if (i%1000==0):
+                        if (i%1==0):
                             print(f"----- Sample {i} out of {number_of_items}-----")
 
                         #Ensure finals rows are written
-                        if row !=[]:
-                            w.writerow(row)
+                        if rows !=[]:
+                            w.writerows(rows)
                         
                         # for word, ted_id in not_found.items():
                         if not_found != {}:
@@ -147,7 +154,7 @@ class KeywordsLink:
 
             
 
-            with ThreadPoolExecutor(max_workers=1) as executor:
+            with ThreadPoolExecutor(max_workers=4) as executor:
                 for i in range(self.last_read_sample_id,number_of_items):
                     executor.submit(self.find_match, i)
 
@@ -156,7 +163,44 @@ class KeywordsLink:
         
             consumer.join()
 
+    
 
+
+
+    def find_match(self,i):
+        try:
+            words = []
+            not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, {}
+            item = self.TEDLIUMCustomDataset.__getitem__(i)
+            if self.keyphrase_flag:
+                words, not_found, error_words = self.get_keyphrases_from_TED_audio_sample(i, item, not_found, error_words)
+            else:
+                words, not_found, error_words  = self.get_keyword_from_TED_audio_sample(i, item, not_found, error_words)
+
+            rows = []
+            for word in words:
+                if word in self.MSWCDataset.keywords:
+                    ted_sampleid, dataset_tag, mswc_audioid, errors_file= self.match(i, item, word)
+                    if self.keyphrase_flag:
+                        self.keyword_id +=1
+                        rows.append([word, ted_sampleid, dataset_tag, mswc_audioid, self.keyword_id])
+                    else:
+                        rows.append([word, ted_sampleid, dataset_tag, mswc_audioid])
+                else:
+                    print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
+                    transcript = item["transcript"]
+                    
+                    print(f"Transcript: \"{transcript}\" ")
+                    talk_id = item["talk_id"]
+
+                    sample_with_no_link[i] = talk_id
+            self.queue.put([i,rows, not_found, error_words, errors_file, sample_with_no_link]) 
+        except:
+            print(traceback.print_exc())
+            sys.exit(-1)
+
+
+    # ----- Keyword ----- #
     def get_keyword_from_TED_audio_sample(self, sample_num, item_sample, not_found, error_words):
         """
         Helper Function that returns a random keyword from a TED Talk audio sample
@@ -195,8 +239,43 @@ class KeywordsLink:
                 print(traceback.print_exc())
                 print(f"Sample {sample_num} for word {word}: Choosing another keyword for now")
                 error_words = data_utils.append_freq(word, sample_num, error_words)
+        words = [word]
+        return words, not_found, error_words
+    ## ---- Keyphrases ---- ##
 
-        return word, not_found, error_words
+    def get_keyphrases_from_TED_audio_sample(self, sample_num, item_sample, not_found, error_words):
+        """
+        Helper Function that returns a random keyword from a TED Talk audio sample
+        Args:
+            sample_num: The sample number of the audio file, also used as the TED_AudioFileId for our purposes
+            item_sample: The sample of the audio file, containing access to metadata like timestamp and the transcript of that sample
+            not_found: Dictionary maintained while retrieving words that are not found in the Keyword Dataset
+            error_words: Words that recieved an error while linking to the Keyword dataset, mostly due to parsing issues.
+
+        Returns:
+            word: a random keyword from the audio sample
+            not_found
+            error_words
+        """
+        transcript = item_sample["transcript"]
+
+        string= data_utils.preprocess_text(transcript)
+        tokens = string.split()
+        words = []
+        for word in tokens:
+            try:
+                if data_utils.has_number(word):
+                    word = data_utils.parse_number_string(word)
+                if word in self.MSWCDataset.keywords:
+                    words.append(word)
+                else:
+                    not_found = data_utils.append_freq(word, sample_num, not_found)
+            except Exception as e:
+                print("Something went wrong:")
+                print(traceback.print_exc())
+                print(f"Sample {sample_num} for word {word}: Choosing another keyword for now")
+                error_words = data_utils.append_freq(word, sample_num, error_words)
+        return words, not_found, error_words
 
     def match(self,sample_number, sample, word):
         """
@@ -244,36 +323,11 @@ class KeywordsLink:
 
 
 
-
-    def find_match(self,i):
-        try:
-            not_found, error_words, errors_file, sample_with_no_link = {} , {}, {}, {}
-            item = self.TEDLIUMCustomDataset.__getitem__(i)
-            word, not_found, error_words  = self.get_keyword_from_TED_audio_sample(i, item, not_found, error_words)
-            row = []
-            if word in self.MSWCDataset.keywords:
-                ted_sampleid, dataset_tag, mswc_audioid, errors_file= self.match(i, item, word)
-                row = [word, ted_sampleid, dataset_tag, mswc_audioid]
-            else:
-                print(f"--- Sample id {i} contained no word to link to the keyword dataset.")
-                transcript = item["transcript"]
-                
-                print(f"Transcript: \"{transcript}\" ")
-                talk_id = item["talk_id"]
-
-                sample_with_no_link[i] = talk_id
-            self.queue.put([i,row, not_found, error_words, errors_file, sample_with_no_link]) 
-        except:
-            print(traceback.print_exc())
-            sys.exit(-1)
-
-
-
 if __name__== "__main__":
     #Change working directory to where the script is
     os.chdir(os.path.abspath(os.path.dirname(__file__))) 
     #Prepare KeywordsLink class
-    linkerEngine = KeywordsLink(overwrite=False)
+    linkerEngine = KeywordsLink(overwrite=True, keyphrases=True)
     linkerEngine.create_keywords_csv()
 
   

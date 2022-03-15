@@ -7,6 +7,8 @@ import logging
 import numpy
 import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
+import librosa
+
 from src.Data import tedlium_local as tedlium
 import torchaudio
 from torch import Tensor
@@ -19,8 +21,11 @@ from src.Preprocessing.pre_processing import resample_audio
 data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
 DATASET_TEDLIUM_PATH = data_paths
 DATASET_MLCOMMONS_PATH = data_paths
-KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
-LABELS_LINK_CSV_PATH = os.path.join(data_paths, "labels.csv")
+KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "KeywordPerSample", "keywords.csv")
+KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "keyphrases.csv")
+
+
+LABELS_KEYPHRASES_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "labels.csv")
 
 
 #TODO! Might be better to have a header called keyword_id, in order to take into account the different varations of keywords and phrases inside the same sample
@@ -37,6 +42,16 @@ class KeywordsCSVHeaders:
     TED_SAMPLE_ID= "TEDLIUM_SampleID"
     TED_DATASET_TYPE = "TEDLIUM_SET"
     MSWC_ID = "MSWC_AudioID"
+    CSV_header = [KEYWORD, TED_SAMPLE_ID, TED_DATASET_TYPE, MSWC_ID]
+
+
+class KeyphrasesCSVHeaders:
+    KEYWORD = "Keyword"
+    TED_SAMPLE_ID= "TEDLIUM_SampleID"
+    TED_DATASET_TYPE = "TEDLIUM_SET"
+    MSWC_ID = "MSWC_AudioID"
+    KEYWORD_ID = "Word_ID"
+    CSV_header = [KEYWORD, TED_SAMPLE_ID, TED_DATASET_TYPE, MSWC_ID, KEYWORD_ID]
 
 class LabelsCSVHeaders:
     """
@@ -91,7 +106,6 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
 
 
 
-
     def __len__(self) -> int:
         """Get number of items.
     
@@ -120,9 +134,11 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
             AudioFileID (int): The index of the sample to be loaded, which is also termed as the unique ID
 
         Returns:
-            tuple: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
+            Dictionary: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
+            
             """
-        return super().__getitem__(sampleID)
+        fileid, line = self._filelist[sampleID]
+        return self._load_tedlium_item(fileid, line, self._path)
 
     def get_audio_file(self, sampleID:int):
         fileid, line = self._filelist[sampleID]
@@ -160,8 +176,8 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
             "talk_id": talk_id,
             "speaker_id":speaker_id ,
             "identifier": identifier ,
-            "start_time": start_time,
-            "end_time": end_time, 
+            "start_time": float(start_time),
+            "end_time": float(end_time), 
         }
         return results_dict
 
@@ -177,9 +193,9 @@ class MultiLingualSpokenWordsEnglish():
 
     def raise_directory_error(self):
         raise RuntimeError(
-            f"Please configure the path to the Spoken Keywords Dataset, with the directory name \"{self.MLCOMMONS_FOLDER_NAME}\", containing the three subfolders:" \
+            "Please configure the path to the Spoken Keywords Dataset, with the directory name \"{}\", containing the three subfolders:".format(self.MLCOMMONS_FOLDER_NAME) \
             + "\n" + \
-            f"\"{self.AUDIO_DIR_NAME}\" for audio, \"{self.SPLITS_DIR_NAME}\" for splits directory, and \"{self.ALIGNMENTS_DIR_NAME}\" for alignemnts directory"
+            "\"{}\" for audio, \"{}\" for splits directory, and \"{}\" for alignemnts directory".format(self.AUDIO_DIR_NAME,self.SPLITS_DIR_NAME,self.ALIGNMENTS_DIR_NAME)
         )
 
     #TODO! Accept 4 kinds of values: Train vs test vs Dev vs "all"
@@ -233,9 +249,11 @@ class MultiLingualSpokenWordsEnglish():
             waveform: Tensor / np.array
             sample_rate: int
         """
-        waveform, sample_rate =  torchaudio.load(path_to_audio)
-        return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
+        # waveform, sample_rate =  torchaudio.load(path_to_audio)
+        # return (waveform.numpy(), sample_rate) if to_numpy else (waveform , sample_rate)
+        waveform, sample_rate = librosa.load(path_to_audio)
 
+        return (waveform, sample_rate) if to_numpy else (waveform , sample_rate)
 
 
     def __getitem__(self, MSWC_AudioID) -> Dict:
@@ -258,7 +276,7 @@ class CTRLF_DatasetWrapper:
         single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
             ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
     """
-    def __init__(self,path_to_labels_csv=LABELS_LINK_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
+    def __init__(self,path_to_labels_csv=LABELS_KEYPHRASES_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
@@ -288,8 +306,8 @@ class CTRLF_DatasetWrapper:
                     "sample_rate": sample rate as type int ,
                     "transcript": transcript string as type str, 
                     "talk_id": talk id (of the entire audio file) as str,
-                    "speaker_id":speaker id as str ,
-                    "identifier": identifier ,
+                    "speaker_id": speaker id as str (Not needed),
+                    "identifier": (Not needed),
                     "start_time": start time of the audio sample in seconds,
                     "end_time": end time of the audio sample in seconds, 
                 }
@@ -310,12 +328,11 @@ class CTRLF_DatasetWrapper:
         MSWC_audio_ids = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
         if len(MSWC_audio_ids) == 0:
             print("*" * 80)
-            print(f"NOT FOUND: \nSample TED Audio ID {TEDSample_id} does not exist in the csv file")
-            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int)")
+            print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
+            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int) and the csv file itself")
             print("*" * 80)
-            return TED_results_dict, {}
         MSWC_results_dict = None
-        if self.single_keywords_labels:
+        if self.single_keywords_labels and len(MSWC_audio_ids) != 0:
             MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[LabelsCSVHeaders.MSWC_ID].iloc[0])
         
 
