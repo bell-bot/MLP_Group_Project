@@ -1,5 +1,5 @@
 import pandas as pd
-from src.datasets import LABELS_LINK_CSV_PATH, KEYWORDS_LINK_CSV_PATH, LabelsCSVHeaders, KeywordsCSVHeaders
+from src.datasets import LABELS_LINK_CSV_PATH, KEYPHRASES_LINK_CSV_PATH, KEYWORDS_LINK_CSV_PATH, LabelsCSVHeaders, KeywordsCSVHeaders, KeyphrasesCSVHeaders
 
 import csv
 
@@ -15,7 +15,7 @@ class QuickPostprocessCSV:
         if fix_quotation_marks:
             self.fix_csv_quotation_marks_issue()
         self.df = pd.read_csv(self.path)
-        self.col_sort_by = LabelsCSVHeaders.TED_SAMPLE_ID
+        self.col_sort_by = sort_by
 
 
     #In case csv file is wrapped as "keyword, id, etc..." in quotation marks, make sure it is saved as csv type
@@ -61,7 +61,7 @@ class QuickPostprocessCSV:
         print(f"Saved to {path_csv_file_to_save}")
 
 if __name__ == "__main__":
-    cleaner = QuickPostprocessCSV(root=LABELS_LINK_CSV_PATH, sort_by= LabelsCSVHeaders.TED_SAMPLE_ID, fix_quotation_marks=True)
+    cleaner = QuickPostprocessCSV(root=KEYPHRASES_LINK_CSV_PATH, sort_by= KeyphrasesCSVHeaders.TED_SAMPLE_ID, fix_quotation_marks=False)
 
     cleaner.sort_by_sample_id()
     print("Sorted!")

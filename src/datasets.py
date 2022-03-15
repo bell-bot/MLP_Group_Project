@@ -21,9 +21,11 @@ from src.Preprocessing.pre_processing import resample_audio
 data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
 DATASET_TEDLIUM_PATH = data_paths
 DATASET_MLCOMMONS_PATH = data_paths
-KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "keywords.csv")
-KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "keyphrases.csv")
-LABELS_LINK_CSV_PATH = os.path.join(data_paths, "labels.csv")
+KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "KeywordPerSample", "keywords.csv")
+KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "keyphrases.csv")
+
+
+LABELS_KEYPHRASES_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "labels.csv")
 
 
 #TODO! Might be better to have a header called keyword_id, in order to take into account the different varations of keywords and phrases inside the same sample
@@ -174,8 +176,8 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
             "talk_id": talk_id,
             "speaker_id":speaker_id ,
             "identifier": identifier ,
-            "start_time": start_time,
-            "end_time": end_time, 
+            "start_time": float(start_time),
+            "end_time": float(end_time), 
         }
         return results_dict
 
@@ -274,7 +276,7 @@ class CTRLF_DatasetWrapper:
         single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
             ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
     """
-    def __init__(self,path_to_labels_csv=LABELS_LINK_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
+    def __init__(self,path_to_labels_csv=LABELS_KEYPHRASES_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels

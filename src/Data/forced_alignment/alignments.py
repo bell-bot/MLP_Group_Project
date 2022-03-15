@@ -21,6 +21,7 @@ import subprocess
 from threading import Thread
 import threading
 import pandas as pd
+from pyparsing import Word
 import torch
 import torchaudio
 import re
@@ -30,7 +31,7 @@ import matplotlib.pyplot as plt
 import IPython
 import traceback
 
-from src.datasets import CTRLF_DatasetWrapper, KEYWORDS_LINK_CSV_PATH, TEDLIUMCustom, MultiLingualSpokenWordsEnglish, LabelsCSVHeaders, KeywordsCSVHeaders, LABELS_LINK_CSV_PATH
+from src.datasets import CTRLF_DatasetWrapper, KEYWORDS_LINK_CSV_PATH, KEYPHRASES_LINK_CSV_PATH,TEDLIUMCustom, MultiLingualSpokenWordsEnglish, LabelsCSVHeaders, KeywordsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
 import src.Data.data_utils as data_utils
 
 # Pre-configurations
@@ -66,20 +67,21 @@ class Segment:
 
 
 class Aligner:
-    PATH_TO_LABELS = LABELS_LINK_CSV_PATH
+    PATH_TO_LABELS_TO_WRITE = LABELS_KEYPHRASES_CSV_PATH
     PATH_TO_KEYWORDS = KEYWORDS_LINK_CSV_PATH
 
-    PATH_TO_LOGS = "../logs/"
+    PATH_TO_LOGS = os.path.join(os.path.dirname(os.path.abspath(PATH_TO_LABELS_TO_WRITE)), "logs/")
 
     def __init__(self, path_to_keywords=PATH_TO_KEYWORDS, threading=False, overwrite=False):
+        self.path_to_keywords= path_to_keywords
         print("Preparing Ted Dataset...")
         self.TED = TEDLIUMCustom()
         print("Preparing MSWC Dataset...")
         self.MSWC = MultiLingualSpokenWordsEnglish(read_splits_file=False)
         self.keywords_df = None
         try:
-            print(f"Reading {KEYWORDS_LINK_CSV_PATH}")
-            self.keywords_df = pd.read_csv(self.PATH_TO_KEYWORDS)
+            print(f"Reading {self.path_to_keywords}")
+            self.keywords_df = pd.read_csv(self.path_to_keywords)
         except FileNotFoundError:
             print("----- KEYWORDS CSV NOT FOUND ----- ")
 
@@ -103,7 +105,7 @@ class Aligner:
         if self.keywords_df is not None:
             first_idx = self.keywords_df[self.keywords_df[LabelsCSVHeaders.TED_SAMPLE_ID] == self.first_sample_id].index.tolist()[
                 0]
-            self.iterator_samples = self.keywords_df[LabelsCSVHeaders.TED_SAMPLE_ID].iloc[first_idx:]
+            self.iterator_samples = self.keywords_df[LabelsCSVHeaders.TED_SAMPLE_ID].iloc[first_idx:].unique()
             self.final_sample_iterate = self.keywords_df[LabelsCSVHeaders.TED_SAMPLE_ID].iloc[-1]
         else:
             self.iterator_samples = iter(
@@ -111,7 +113,7 @@ class Aligner:
             self.final_sample_iterate = self.TED.__len__() - 1
 
         # Import necessary packages and the labels (characters + <UNK>)
-        self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_960H
+        self.bundle = torchaudio.pipelines.WAV2VEC2_ASR_LARGE_LV60K_960H
         self.model = self.bundle.get_model().to(device)
         self.char_labels = self.bundle.get_labels()
         self.dictionary = {c: i for i, c in enumerate(self.char_labels)}
@@ -125,7 +127,7 @@ class Aligner:
     def align(self):
         self.queue = Queue() #To be used for threading if flag is set to true
         #TODO! Organise logs into different directories
-        with open(self.PATH_TO_LABELS, self.access_mode) as label_file, \
+        with open(self.PATH_TO_LABELS_TO_WRITE, self.access_mode) as label_file, \
              open(self.PATH_TO_LOGS + "id-no-alignment.csv", self.access_mode) as no_alignment_log_file:
             self.label_w = csv.writer(label_file)
             self.no_alignment_csv_w =  csv.writer(no_alignment_log_file)
@@ -139,44 +141,38 @@ class Aligner:
                 self.align_non_thread()
 
     def produce(self, id, prev_id):
+        rows = []
         try:
             TED_sample_dict, sample_timestamp = None, None
             if prev_id == None or prev_id != id:
 
                 prev_id = id
                 TED_sample_dict = self.TED.__getitem__(id)
-                sample_timestamp = self.align_current_audio_chunk(TED_sample_dict)
-            rows = []
+                sample_timestamp , _ , _= self.align_current_audio_chunk(TED_sample_dict)
             if self.keywords_df is not None:
                 assigned_keywords_rows = self.keywords_df[self.keywords_df[KeywordsCSVHeaders.TED_SAMPLE_ID] == id]
                 # TODO! Handle more than a single keyword
-                for key in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD]:
-                    # Find Timestamps
-                    split_words = key.split()
-                    first_word = split_words[0]
-                    last_word = split_words[-1]
-                    timestamp_start = sample_timestamp[first_word][0]["start"] + float(TED_sample_dict["start_time"])
-                    timestamp_end = float(TED_sample_dict["start_time"]) + sample_timestamp[last_word][-1]["end"]
-                    # TODO! Handle confidence scores of keyphrases (take minimum)
-                    confidence = sample_timestamp[first_word][0]["confidence"]
-                    # confidence = 1.0
-                    # for k in split_words:
-                    #     current_word_timestamps = sample_timestamp[k]
-                    #     for stamp in current_word_timestamps:
-                    #
-                    # confidence =  map()
-                    ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[
-                        0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
-                    row = [key, id, ted_set, TED_sample_dict["talk_id"],
-                        mswc_id, timestamp_start, timestamp_end, confidence]
-                    rows.append(row)
+
+                for word, timestamp_dict in sample_timestamp:
+                    if word in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD].values:
+                        # Find Timestamps
+                        timestamp_start = timestamp_dict["start"] + TED_sample_dict["start_time"]
+                        timestamp_end = timestamp_dict["end"] + TED_sample_dict["end_time"]
+
+
+                        confidence = timestamp_dict["confidence"]
+                        
+                        ted_set, mswc_id = assigned_keywords_rows[KeywordsCSVHeaders.TED_DATASET_TYPE].values[
+                            0],  assigned_keywords_rows[KeywordsCSVHeaders.MSWC_ID].values[0]
+                        row = [word, id, ted_set, TED_sample_dict["talk_id"],
+                            mswc_id, timestamp_start, timestamp_end, confidence]
+                        rows.append(row)
             else:
                 # TODO! Link on the go...
                 pass
             if self.threading_flag:
                 for row in rows:
                     self.queue.put([id, row])
-            return rows, prev_id
         except KeyboardInterrupt:
             print("Aborting")
             self.stop.set()
@@ -188,49 +184,52 @@ class Aligner:
             print(f"Transcript: {transcript}")
             print(f"Talk_id: {talk_id}")
 
-            print(traceback.print_exc())
+            print(e)
             self.no_alignment_csv_w.writerow([id,talk_id])
             print("************************")
+            prev_id = id
+        return rows, prev_id
+
 
 
     # ---------------- Threading  ------------------#
 
-    def consume(self):
-        while not self.stop.isSet():
-            if not self.queue.empty():
-                i, row = self.queue.get()
-                if (i%1==0):
-                    print(f"----- Sample {i}-----")
-                if row != []:
-                    self.label_w.writerow(row)
-                if i == self.final_sample_iterate:
-                    return
+    # def consume(self):
+    #     while not self.stop.isSet():
+    #         if not self.queue.empty():
+    #             i, row = self.queue.get()
+    #             if (i%1==0):
+    #                 print(f"----- Sample {i}-----")
+    #             if row != []:
+    #                 self.label_w.writerow(row)
+    #             if i == self.final_sample_iterate:
+    #                 return
 
   
-    #TODO!!!!!!!!: Fix prev_id issue with threading
-    def align_thread_start(self):
-        prev_id = None
-        self.stop = threading.Event()
-        consumer = Thread(target=self.consume)
-        consumer.setDaemon(True)
-        consumer.start()
-        # TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
-        # with ProcessPoolExecutor(max_workers=4) as process_executor:
-        try:
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                for id in self.iterator_samples:
-                    executor.submit(self.produce, id, prev_id)
-        except (KeyboardInterrupt, SystemExit):
-            self.stop.set()
-            print("Stopping the process... Please wait...")
-            return
-        except (Exception) as e:
-            print("Something went wrong:")
-            print(traceback.print_exc())
+    # #TODO!!!!!!!!: Fix prev_id issue with threading
+    # def align_thread_start(self):
+    #     prev_id = None
+    #     self.stop = threading.Event()
+    #     consumer = Thread(target=self.consume)
+    #     consumer.setDaemon(True)
+    #     consumer.start()
+    #     # TODO! Process pool would be helpful for linking on the go (one processor force aligns keywords, one is to generate keywords for our labels, before connecting the two)
+    #     # with ProcessPoolExecutor(max_workers=4) as process_executor:
+    #     try:
+    #         with ThreadPoolExecutor(max_workers=2) as executor:
+    #             for id in self.iterator_samples:
+    #                 executor.submit(self.produce, id, prev_id)
+    #     except (KeyboardInterrupt, SystemExit):
+    #         self.stop.set()
+    #         print("Stopping the process... Please wait...")
+    #         return
+    #     except (Exception) as e:
+    #         print("Something went wrong:")
+    #         print(traceback.print_exc())
   
-        consumer.join()
-        print("Exiting.")
-        return
+    #     consumer.join()
+    #     print("Exiting.")
+    #     return
 
 
              
@@ -239,7 +238,7 @@ class Aligner:
     # ------------------ NON-THREADING ----------------- #
 
     def consume_non_thread(self,i):
-        if (i%100==0):
+        if (i%1==0):
             print(f"----- Sample {i}-----")
 
             if self.save_rows != []:
@@ -257,13 +256,13 @@ class Aligner:
             try:
                 rows, prev_id = self.produce(id, prev_id)
                 if rows!= []:
-                    self.save_rows.append(rows)
+                    self.save_rows.extend(rows)
                 self.consume_non_thread(id)
             except (KeyboardInterrupt, SystemExit):
                 print("Stopping the process... Please wait...")
                 return
             except (Exception) as e:
-                print("Something went wrong:")
+                print(f"Skipping sample id {id} as something went wrong:")
                 print(traceback.print_exc())
 
             
@@ -281,16 +280,15 @@ class Aligner:
             trellis=trellis, emission=emission, tokens=tokens)
         segments = self.merge_repeats(path, transcript)
         word_segments = self.merge_words(segments)
-        word_timestamps = defaultdict(list)
+        word_timestamps = []
         for wordS in word_segments:
             timestamp = self.get_timestamp(waveform=torch.from_numpy(
                 TED_sample_dict["waveform"]), Segment_word=wordS, trellis=trellis)
             word = self.revert_tokenisation_process(wordS.label)
 
-            if word_timestamps.get(word) == None:
-                word_timestamps[word] = []
-            word_timestamps[word].append(timestamp)
-        return word_timestamps
+            word_timestamps.append((word,timestamp))
+
+        return word_timestamps, trellis, word_segments
 
     def get_timestamp(self, waveform, Segment_word, trellis):
         ratio = waveform.size(1) / (trellis.size(0) - 1)
@@ -348,7 +346,7 @@ class Aligner:
     # Reads from CSV file the last read sample id, to continue from last time we stopped
     # TODO: Multithreading mixes order, so might need to start from a more specific spot
     def retrieve_last_sample_id(self):
-        if not os.path.exists(self.PATH_TO_LABELS):
+        if not os.path.exists(self.PATH_TO_LABELS_TO_WRITE):
             return 0
         ted_sample_id_column = 1
         # NOTE: Assert that the order is the same, though not a robust solution, it was done. The additional assertion check is done to make sure we are not reading from another column
@@ -356,20 +354,21 @@ class Aligner:
                LabelsCSVHeaders.CSV_header[ted_sample_id_column])
         # subprocess requires byte like object to read
         line = subprocess.check_output(
-            ['tail', '-1', bytes(self.PATH_TO_LABELS, encoding="utf-8")])
+            ['tail', '-1', bytes(self.PATH_TO_LABELS_TO_WRITE, encoding="utf-8")])
         if len(line) == 0 or str(line, encoding='utf-8').strip() == ','.join(LabelsCSVHeaders.CSV_header):
             return 0
-        print("Resuming from: ")
-        print(line)
         # Convert from bytes to int
         last_read_sample_id = int(
             str(line.split(b',')[ted_sample_id_column], encoding="utf-8"))
-        # We will start iterating from the sample id after the last one
-        last_read_sample_id = last_read_sample_id + 1
         print(
             f"Side note: The python script assumes that the TED Sample ID column is in {ted_sample_id_column}")
         print(f"Last TED Sample ID Read: {last_read_sample_id}")
+        print(line)
+
         print("----")
+        # We will start iterating from the sample id after the last one
+        last_read_sample_id = last_read_sample_id + 1
+
         return last_read_sample_id
 
 # -------------------------- Generate frame-wise label probability --------------------- #
@@ -681,11 +680,14 @@ if __name__ == "__main__":
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
     ######### Run Forced Alignment ##########
-    AlignerEngine = Aligner(threading=False)
+    ## NOTE: Threading is not supported (unstable)
+    AlignerEngine = Aligner(path_to_keywords=KEYPHRASES_LINK_CSV_PATH,threading=False)
     AlignerEngine.align()
 
     ######### Testing Aligner ############
     # x = Aligner()
-    # TED_sample_dict = x.TED.__getitem__(2933)
-    # sample_timestamps = x.align_current_audio_chunk(TED_sample_dict)
+    # TED_sample_dict = x.TED.__getitem__(2)
+    # sample_timestamps, trellis, word_segments = x.align_current_audio_chunk(TED_sample_dict)
+    # print(trellis)
+    # print(word_segments)
     # print(sample_timestamps)
