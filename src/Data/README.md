@@ -21,13 +21,12 @@ Please check the scripts folder for more information
 ### Installing Git-lfs
 Note: Due to the huge size of the csv file, you'll need to install git-lfs. Please download git-lfs using the following steps:
 - Linux:
-1. curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-2. sudo apt-get install git-lfs
-3. git lfs install
+1. `curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash`
+2. `sudo apt-get install git-lfs`
 
 For other operating systems check this out:  https://github.com/git-lfs/git-lfs/wiki/Installation#ubuntu
 
-When you download git-lfs, run the following:
+When you download git-lfs, go to the MLP repo and run the following:
 1. `git lfs install`
 2. `git add .gitattributes`
  
