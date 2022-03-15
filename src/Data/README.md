@@ -25,7 +25,7 @@ When you download git-lfs, run the following:
 2. `git add .gitattributes`
  
 # File Descriptions
-
+```
 +-- Data/
 |   +-- KeywordPerSample/
 |       +-- labels.csv
@@ -35,7 +35,7 @@ When you download git-lfs, run the following:
 |       +-- keyphrases.csv
 |       +-- alignments
 |   +-- ...
-
+```
 ## labels.csv 
 Contains rows of keyword labels with the timestamps of when it was mentioned in the TED dataset (done by force alignment) along with reference to a keyword audio recording in the MSWC dataset. 
 
@@ -52,7 +52,8 @@ Contains rows of keyword labels with the timestamps of when it was mentioned in 
 - `TEDLIUM_SET`: str
   - The type of dataset the audio sample/segment (or more specifically the audio file) exists in
   - It can be one of the four values: Train vs Dev vs Test vs None
-  - Currently, it is not used as it is not possible to work with all the TED data. Working with our subset, we will ensure we work on Train and Dev data (ideally), split up into our own train, valid, test.
+  - Currently, it is not used as it is not possible to work with all the TED data, but there are samples from train, dev, and test 
+  - TODO: Not sure if it's imbalanced, will need to put up stats on the distribution 
 - `MSWC_AudioID`: str
   - The audio id of the keyword recording from MSWC chosen to link with a TED audio segment. 
   - It is be used to load the audio from MSWC dataset.  
