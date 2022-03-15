@@ -25,8 +25,7 @@ Please check the scripts folder for more information
 Note: Due to the huge size of the csv file, you'll need to install git-lfs. Please download git-lfs here: https://git-lfs.github.com/
 When you download git-lfs, run the following:
 1. `git lfs install`
-2. `git lfs track "keyphrases.csv" "labels.csv"`
-3. `git add .gitattributes`
+2. `git add .gitattributes`
  
 
 ## labels.csv 
