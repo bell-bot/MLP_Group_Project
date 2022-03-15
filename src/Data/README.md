@@ -29,6 +29,7 @@ For other operating systems check this out:  https://github.com/git-lfs/git-lfs/
 When you download git-lfs, go to the MLP repo and run the following:
 1. `git lfs install`
 2. `git add .gitattributes`
+3. `git lfs pull`
  
 # File Descriptions
 ```
