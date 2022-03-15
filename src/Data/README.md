@@ -49,7 +49,8 @@ Contains rows of keyword labels with the timestamps of when it was mentioned in 
                     This is NOT the same as "TED_TALK_ID", which represents the id of an entire audio file. 
 - `TED_TALK_ID`: str
   - A unique id of a TED audio file. Added in order to make referencing the current audio segment/sample to the original TED audio file more accessible
-- `TEDLIUM_SET`: str
+- `TEDLIUM_SET`: str 
+  - Either "train", "dev", or "test"
   - The type of dataset the audio sample/segment (or more specifically the audio file) exists in
   - It can be one of the four values: Train vs Dev vs Test vs None
   - Currently, it is not used as it is not possible to work with all the TED data, but there are samples from train, dev, and test 
