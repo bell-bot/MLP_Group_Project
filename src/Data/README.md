@@ -30,6 +30,11 @@ When you download git-lfs, go to the MLP repo and run the following:
 1. `git lfs install`
 2. `git add .gitattributes`
 3. `git lfs pull`
+
+---- 
+### Large files detected
+The labels files from Keyphrase folder is huge. Please transfer the labels through other means (eg. gcloud scp): https://cloud.google.com/compute/docs/instances/transfer-files#:~:text=In%20the%20list%20of%20virtual,a%20file%20from%20the%20VM.
+- From Google Cloud VM to local machine: `compute scp  mlpractical-1:/path/to/Keyphrases/labels.csv /path/to/local/directory`
  
 # File Descriptions
 ```
