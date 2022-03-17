@@ -17,6 +17,7 @@ import pandas as pd
 from src.utils import get_git_root
 from src.Preprocessing.pre_processing import resample_audio
 
+######### ------------------ PATHING ------------- ############
 """Specify path to TEDLIUM directory"""
 data_paths = os.path.join(get_git_root(os.getcwd()), 'src' ,'Data')
 DATASET_TEDLIUM_PATH = data_paths
@@ -27,6 +28,8 @@ KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "keyphrases.c
 
 LABELS_KEYPHRASES_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "labels.csv")
 
+
+############# ---------CSV HEADERS --------------################
 
 #TODO! Might be better to have a header called keyword_id, in order to take into account the different varations of keywords and phrases inside the same sample
 class KeywordsCSVHeaders:
@@ -75,6 +78,7 @@ class LabelsCSVHeaders:
     
     CSV_header = [KEYWORD, TED_SAMPLE_ID,TED_TALK_ID,  TED_DATASET_TYPE, MSWC_ID, START_TIMESTAMP, END_TIMESTAMP, CONFIDENCE]
 
+############# --------- DATASETS --------------################
 
 #TODO! Customise for each subset, in speaker-adaptation. Might require changing the metadata
 class TEDLIUMCustom(tedlium.TEDLIUM):
@@ -263,12 +267,19 @@ class MultiLingualSpokenWordsEnglish():
         waveform, sample_rate= self._load_audio(path_to_audio)
         results_dict = {
             "waveform": waveform,
-            "sample_rate": sample_rate 
+            "sample_rate": sample_rate ,
+            "MSWC_AudioID": MSWC_AudioID
         }
         return results_dict
 
+
+
+
+
 #TODO! Create mapping between talk ids and datatype set (i.e not just sample mapping). Use the defined train_audio_sets, dev_audio_sets, test_audio_sets to help. Might be better to implement this in the TEDLIUMCustom instead of here.
 class CTRLF_DatasetWrapper:
+    COLS_OUTPUT= ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
+
     """
     Main class wrapper for both TEDLIUM dataset and MSWC dataset. Using the labels csv file, use the functions to retrieve audio samples and their corresponding keywords that was linked to.
         
@@ -282,12 +293,6 @@ class CTRLF_DatasetWrapper:
         self.single_keywords_labels = single_keywords_labels
         #Initialise keyword dataframe
         self.labels_df = pd.read_csv(path_to_labels_csv)
-        self.audio_keywords_dataset_dict = {
-            "train": self.labels_df[self.labels_df["TEDLIUM_SET"] == "train"],
-            "dev": self.labels_df[self.labels_df["TEDLIUM_SET"] == "dev"],
-            "test": self.labels_df[self.labels_df["TEDLIUM_SET"] == "test"]
-        }
-
         #Initialise Ted talk dataset
         self.TED = TEDLIUMCustom(root=path_to_TED,release="release3")
 
@@ -296,55 +301,56 @@ class CTRLF_DatasetWrapper:
 
 
     
-    def get(self, TEDSample_id: int):
+    def get(self, TEDSample_id: int, sampling_rate=16000):
         """
         Given Ted Sample ID and the dataset type, return three separate corresponding dictionaries.
-        Returns:
-            TED_results_dict:
-                { 
-                    "waveform": audio data of the Ted talk sample as type Tensor,
-                    "sample_rate": sample rate as type int ,
-                    "transcript": transcript string as type str, 
-                    "talk_id": talk id (of the entire audio file) as str,
-                    "speaker_id": speaker id as str (Not needed),
-                    "identifier": (Not needed),
-                    "start_time": start time of the audio sample in seconds,
-                    "end_time": end time of the audio sample in seconds, 
-                }
-            MSWC_results_dict:
-                {
-                    "waveform": audio data of the keyword recording
-                    "sample_rate": sample rate of the keyword recording
-                }
-            label_dict = {
-                "keyword": keyword,
-                "start_time": estimated start time stamp of the label,
-                "end_time": estimated end time stamp of the label, 
-            }
+        Returns: DataFrame
+            Headers: 
+            ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
+
         """
+        output_df = pd.DataFrame(columns=self.COLS_VERBOSE)
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
-        MSWC_audio_ids = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
-        if len(MSWC_audio_ids) == 0:
+        label_rows = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)].reset_index()
+        if len(label_rows) == 0:
             print("*" * 80)
             print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
             print("If you think it should exist, please check the data types you are comparing with (i.e str vs int) and the csv file itself")
             print("*" * 80)
-        MSWC_results_dict = None
-        if self.single_keywords_labels and len(MSWC_audio_ids) != 0:
-            MSWC_results_dict =  self.MSWC.__getitem__(MSWC_audio_ids[LabelsCSVHeaders.MSWC_ID].iloc[0])
-        
+        output_rows = []
+        for i in range(0,len(label_rows)):
+            MSWC_results_dict =  self.MSWC.__getitem__(label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i])
+            #Resample Audio files into same sampling rate
+            TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
 
-        #Resample Audio files into same sampling rate
-        TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
-        row = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)]
-        label_dict = {
-            "keyword": row[LabelsCSVHeaders.KEYWORD].iloc[0],
-            "start_time": row[LabelsCSVHeaders.START_TIMESTAMP].iloc[0],
-            "end_time": row[LabelsCSVHeaders.END_TIMESTAMP].iloc[0], 
-        }
-        return TED_results_dict, MSWC_results_dict, label_dict 
+            #Create new row
+            new_row = [  \
+                TED_results_dict["waveform"], \
+                TED_results_dict["sample_rate"],\
+                TED_results_dict["transcript"],\
+                TED_results_dict["talk_id"],\
+                TED_results_dict["start_time"],\
+                TED_results_dict["end_time"],\
+                MSWC_results_dict["waveform"],\
+                MSWC_results_dict["sample_rate"],\
+                label_rows[LabelsCSVHeaders.KEYWORD].iloc[i],\
+                label_rows[LabelsCSVHeaders.START_TIMESTAMP].iloc[i],\
+                label_rows[LabelsCSVHeaders.END_TIMESTAMP].iloc[i], \
+                label_rows[LabelsCSVHeaders.CONFIDENCE].iloc[i], \
+            ]
+
+            output_rows.append(new_row)
+
+
+        output_df = pd.DataFrame(data=output_rows, columns=self.COLS_OUTPUT)
+        return output_df
+
+
+    #TODO: Return more results like speaker_id, etc..
+    def get_verbose(TEDSample_id: int, sampling_rate = 16000):
+        pass
 
     # Helper function: Preprocessing step to ensure both audio files are on the same sampling rate
     def resample_both_audio_files(self, TED_results_dict, MSWC_results_dict, target_rate=16000):
@@ -354,7 +360,6 @@ class CTRLF_DatasetWrapper:
         MSWC_results_dict["sample_rate"] = target_rate
         return TED_results_dict, MSWC_results_dict
     
-    #TODO! Remove sorting. Better to Sort beforehand,  instead of here... for faster iteration
     #Retrieve all the available "samples" of one specific audio file
     def get_samples_given_talk_id(self, TED_talk_id, sort=False):
         samples_df = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_TALK_ID] == int(TED_talk_id)]
@@ -362,16 +367,17 @@ class CTRLF_DatasetWrapper:
             samples_df.sort_values(by=['col1'], inplace=True)
         return samples_df
 
+
+
 if __name__== "__main__":
     ####### Testing CTRLF_DatasetWrapper
     print("-"*20)  
     print("CTRL_F Wrapper") 
 
     x= CTRLF_DatasetWrapper()
-    Ted_dict, MSWC_dict, label_dict= x.get(0)
-    print(Ted_dict)
-    print(MSWC_dict)
-    print(label_dict)
+    output_df = x.get(4)
+    print(output_df)
+
 
     ####### Testing TEDLIUM
     print("-"*20)  

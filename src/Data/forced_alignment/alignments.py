@@ -157,7 +157,7 @@ class Aligner:
                     if word in assigned_keywords_rows[KeywordsCSVHeaders.KEYWORD].values:
                         # Find Timestamps
                         timestamp_start = timestamp_dict["start"] + TED_sample_dict["start_time"]
-                        timestamp_end = timestamp_dict["end"] + TED_sample_dict["end_time"]
+                        timestamp_end = timestamp_dict["end"] + TED_sample_dict["start_time"]
 
 
                         confidence = timestamp_dict["confidence"]
@@ -185,7 +185,7 @@ class Aligner:
             print(f"Talk_id: {talk_id}")
 
             print(e)
-            self.no_alignment_csv_w.writerow([id,talk_id])
+            self.no_alignment_csv_w.writerow([id,talk_id,keyword])
             print("************************")
             prev_id = id
         return rows, prev_id
