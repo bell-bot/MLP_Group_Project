@@ -306,7 +306,7 @@ class CTRLF_DatasetWrapper:
         Given Ted Sample ID and the dataset type, return three separate corresponding dictionaries.
         Returns: DataFrame
             Headers: 
-            ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
+            ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
 
         """
         output_df = pd.DataFrame(columns=self.COLS_VERBOSE)
@@ -335,6 +335,7 @@ class CTRLF_DatasetWrapper:
                 TED_results_dict["end_time"],\
                 MSWC_results_dict["waveform"],\
                 MSWC_results_dict["sample_rate"],\
+                label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i],\
                 label_rows[LabelsCSVHeaders.KEYWORD].iloc[i],\
                 label_rows[LabelsCSVHeaders.START_TIMESTAMP].iloc[i],\
                 label_rows[LabelsCSVHeaders.END_TIMESTAMP].iloc[i], \
