@@ -1,2 +1,0 @@
-malloc(): invalid size (unsorted)
-/var/spool/slurmd/job1378202/slurm_script: line 10: 304370 Aborted                 (core dumped) python3 -u ../link_keywords_threading.py > ../logs/keywords_slurm.log
