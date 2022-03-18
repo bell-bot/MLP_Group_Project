@@ -278,7 +278,7 @@ class MultiLingualSpokenWordsEnglish():
 
 #TODO! Create mapping between talk ids and datatype set (i.e not just sample mapping). Use the defined train_audio_sets, dev_audio_sets, test_audio_sets to help. Might be better to implement this in the TEDLIUMCustom instead of here.
 class CTRLF_DatasetWrapper:
-    COLS_OUTPUT= ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
+    COLS_OUTPUT= ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
 
     """
     Main class wrapper for both TEDLIUM dataset and MSWC dataset. Using the labels csv file, use the functions to retrieve audio samples and their corresponding keywords that was linked to.
@@ -309,7 +309,7 @@ class CTRLF_DatasetWrapper:
             ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
 
         """
-        output_df = pd.DataFrame(columns=self.COLS_VERBOSE)
+        output_df = pd.DataFrame(columns=self.COLS_OUTPUT)
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
@@ -375,7 +375,7 @@ if __name__== "__main__":
     print("-"*20)  
     print("CTRL_F Wrapper") 
 
-    x= CTRLF_DatasetWrapper()
+    x= CTRLF_DatasetWrapper(path_to_labels_csv = './Data/KeywordPerSample/labels_keywords.csv')
     output_df = x.get(4)
     print(output_df)
 
