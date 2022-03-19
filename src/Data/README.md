@@ -18,20 +18,6 @@ Log files are also made during the process of force aligning and linking keyword
 # Downloading Datasets
 Please check the scripts folder for more information
 
-### Installing Git-lfs
-Note: Due to the huge size of the csv file, you'll need to install git-lfs. Please download git-lfs using the following steps:
-- Linux:
-1. `curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash`
-2. `sudo apt-get install git-lfs`
-
-For other operating systems check this out:  https://github.com/git-lfs/git-lfs/wiki/Installation#ubuntu
-
-When you download git-lfs, go to the MLP repo and run the following:
-1. `git lfs install`
-2. `git add .gitattributes`
-3. `git lfs pull`
-
----- 
 ### Large files detected
 The labels files from Keyphrase folder is huge. Please transfer the labels through other means (eg. gcloud scp): https://cloud.google.com/compute/docs/instances/transfer-files#:~:text=In%20the%20list%20of%20virtual,a%20file%20from%20the%20VM.
 - From Google Cloud VM to local machine: `compute scp  mlpractical-1:/path/to/Keyphrases/labels.csv /path/to/local/directory`
