@@ -8,10 +8,10 @@ import numpy as np
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-CONFIG = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium_model/config/ted/asr_example.yaml"
+CONFIG = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
 NAME = "tedlium3"
-LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
-CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
+# LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
+# CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
 
 # Arguments
 parser = argparse.ArgumentParser(description='Training E2E asr.')

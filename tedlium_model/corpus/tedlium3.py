@@ -1,3 +1,5 @@
+import csv
+from tkinter.messagebox import NO
 from tqdm import tqdm
 from pathlib import Path
 from os.path import join, getsize
@@ -27,16 +29,17 @@ def read_text(file):
     idx2 = file.split('/')[-1].split('.')[1]
     #print(idx)
     with open(src_file, 'r') as fp:
-        print("LINES")
+        # print("LINES")
         for line in fp:
+
             #print(line)
             #print("COMPARE")
-            print(line.split('-')[0])
-            print(idx)
-            #print(idx2)
+            # print("FILENAME: {}".format(line.split('-')[0]))
+            # print(idx)
+            # print(idx2)
             #print(line[:-1].split(' ', 1)[1])
-            if idx == line.split(' ')[0]:
-                print("FOUND")
+            if idx == line.split(' ')[0].split("-")[0]:
+                # print("FOUND")
                 return line[:-1].split(' ', 1)[1]
 
 
@@ -46,26 +49,48 @@ class Ted3Dataset(Dataset):
         self.path = path
         self.bucket_size = bucket_size
         # List all wave files
-
+        # print(self.path)
         file_list = []
+        print(split)
         for s in split:
-            split_list = list(Path(join(path, s)).rglob("*.sph"))
-            print(split_list)
+            split_list = list(Path(join(path, s)).rglob("sph/*.sph"))
+            print(len(split_list))
             assert len(split_list) > 0, "No data found @ {}".format(join(path,s))
             file_list += split_list
         # Read text
-        print(file_list)
+        # print(file_list)
         file_test = read_text(str(file_list[0]))
-        print("FILE_TEST")
-        print(file_test)
-        exit()
+        # print("FILE_TEST")
+        # print(file_test)
 
-        text = Parallel(n_jobs=READ_FILE_THREADS)(
+        list_of_texts = Parallel(n_jobs=READ_FILE_THREADS)(
             delayed(read_text)(str(f)) for f in file_list)
         #text = Parallel(n_jobs=-1)(delayed(tokenizer.encode)(txt) for txt in text)
-        print("text")
-        print(text)
-        text = [tokenizer.encode(txt) for txt in text]
+        # print("text")
+
+        # print(text)
+        text = []
+        encoding_file_name = None
+        if split[0] == "train":
+            encoding_file_name = "encoding_errors_train.csv"
+        if split[0] == "dev":
+            encoding_file_name = "encoding_errors_dev.csv"
+        if split[0] == "test":
+            encoding_file_name = "encoding_errors_test.csv"
+        with open(encoding_file_name, "w") as encoding_f:
+            csv_w = csv.writer(encoding_f)
+            csv_w.writerow(["count", "transcript"])
+
+            count = 0
+            for txt in list_of_texts:
+                count+=1
+                try:
+                    text.append(tokenizer.encode(txt))
+                except Exception as e:
+                    print("SOMETHING WENT WRONG ENCODING THIS TRANSCRIPT: {}".format(txt))
+                    print(e)
+                    csv_w.writerow([file_list[count], txt])
+
 
         # Sort dataset by text length
         #file_len = Parallel(n_jobs=READ_FILE_THREADS)(delayed(getsize)(f) for f in file_list)
