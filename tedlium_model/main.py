@@ -8,7 +8,7 @@ import numpy as np
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-CONFIG = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/config/ted/asr_example.yaml"
+CONFIG = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium_model/config/ted/asr_example.yaml"
 NAME = "tedlium3"
 LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
 CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
@@ -35,8 +35,8 @@ parser.add_argument('--reserve-gpu', default=0, type=float,help='Option to reser
 parser.add_argument('--jit', action='store_true',help='Option for enabling jit in pytorch. (feature in development)')
 ###
 
-script = ['--config']
-paras = parser.parse_args()
+script = ['--config', CONFIG, '--name', NAME]
+paras = parser.parse_args(script)
 setattr(paras, 'gpu', not paras.cpu)
 setattr(paras, 'pin_memory', not paras.no_pin)
 setattr(paras, 'verbose', not paras.no_msg)

@@ -10,6 +10,8 @@ HALF_BATCHSIZE_AUDIO_LEN = 800
 # Note: Bucketing may cause random sampling to be biased (less sampled for those length > HALF_BATCHSIZE_AUDIO_LEN )
 HALF_BATCHSIZE_TEXT_LEN = 150
 
+DATA_DIR_PATH ="/home/szy/Documents/code/espnet/egs/tedlium3/asr1/db/TEDLIUM_release-3/legacy"
+
 
 def collect_audio_batch(batch, audio_transform, mode):
     '''Collects a batch, should be list of tuples (audio_path <str>, list of int token <list>) 
@@ -66,9 +68,10 @@ def create_dataset(tokenizer, ascending, name, path, bucketing, batch_size,
     ''' Interface for creating all kinds of dataset'''
 
     # Recognize corpus
+    print(name.lower())
     if name.lower() == "librispeech":
         from corpus.librispeech import LibriDataset as Dataset
-    elif name.lower() == "tedlium3":
+    elif name.lower() == "tedlium":
         from corpus.tedlium3 import Ted3Dataset as Dataset
     else:
         raise NotImplementedError
@@ -136,6 +139,7 @@ def load_dataset(n_jobs, use_gpu, pin_memory, ascending, corpus, audio, text):
     # Text tokenizer
     tokenizer = load_text_encoder(**text)
     # Dataset (in testing mode, tr_set=dv_set, dv_set=tt_set)
+    print(corpus)
     tr_set, dv_set, tr_loader_bs, dv_loader_bs, mode, data_msg = create_dataset(
         tokenizer, ascending, **corpus)
     # Collect function

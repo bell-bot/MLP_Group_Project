@@ -16,12 +16,27 @@ def read_text(file):
     '''Get transcription of target wave file, 
        it's somewhat redundant for accessing each txt multiplt times,
        but it works fine with multi-thread'''
-    src_file = '-'.join(file.split('-')[:-1])+'.trans.txt'
-    idx = file.split('/')[-1].split('.')[0]
+    #print("file")
+    #print(file)
+    #print(file.split('sph')[0])
 
+    #print("srcandidx")
+    src_file = file.split('sph')[0] +'text'
+    #print(src_file)
+    idx = file.split('/')[-1].split('.')[0]
+    idx2 = file.split('/')[-1].split('.')[1]
+    #print(idx)
     with open(src_file, 'r') as fp:
+        print("LINES")
         for line in fp:
+            #print(line)
+            #print("COMPARE")
+            print(line.split('-')[0])
+            print(idx)
+            #print(idx2)
+            #print(line[:-1].split(' ', 1)[1])
             if idx == line.split(' ')[0]:
+                print("FOUND")
                 return line[:-1].split(' ', 1)[1]
 
 
@@ -30,17 +45,26 @@ class Ted3Dataset(Dataset):
         # Setup
         self.path = path
         self.bucket_size = bucket_size
-
         # List all wave files
+
         file_list = []
         for s in split:
-            split_list = list(Path(join(path, s)).rglob("*.flac"))
+            split_list = list(Path(join(path, s)).rglob("*.sph"))
+            print(split_list)
             assert len(split_list) > 0, "No data found @ {}".format(join(path,s))
             file_list += split_list
         # Read text
+        print(file_list)
+        file_test = read_text(str(file_list[0]))
+        print("FILE_TEST")
+        print(file_test)
+        exit()
+
         text = Parallel(n_jobs=READ_FILE_THREADS)(
             delayed(read_text)(str(f)) for f in file_list)
         #text = Parallel(n_jobs=-1)(delayed(tokenizer.encode)(txt) for txt in text)
+        print("text")
+        print(text)
         text = [tokenizer.encode(txt) for txt in text]
 
         # Sort dataset by text length

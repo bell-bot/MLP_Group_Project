@@ -1,7 +1,7 @@
 data:
   corpus:                                 
     name: 'Tedlium'                   # Specify corpus
-    path: '/home/szy/Documents/code/End-to-end-ASR-Pytorch/TEDLIUM_release-3'          # Path to raw Tedlium dataset
+    path: '/home/szy/Documents/code/espnet/egs/tedlium3/asr1/db/TEDLIUM_release-3/legacy'          # Path to raw Tedlium dataset
     train_split: ['train'] # Name of data splits to be used as training set
     dev_split: ['dev']              # Name of data splits to be used as validation set
     bucketing: True                       # Enable/Disable bucketing 
