@@ -8,7 +8,7 @@ import numpy as np
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-CONFIG = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
+CONFIG = "/home/wassim_jabrane/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
 NAME = "tedlium3"
 # LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
 # CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
@@ -23,7 +23,7 @@ parser.add_argument('--outdir', default='result/', type=str,help='Decode output 
 parser.add_argument('--load', default=None, type=str,help='Load pre-trained model (for training only)', required=False)
 parser.add_argument('--seed', default=0, type=int,help='Random seed for reproducable results.', required=False)
 parser.add_argument('--cudnn-ctc', action='store_true',help='Switches CTC backend from torch to cudnn')
-parser.add_argument('--njobs', default=6, type=int,help='Number of threads for dataloader/decoding.', required=False)
+parser.add_argument('--njobs', default=1, type=int,help='Number of threads for dataloader/decoding.', required=False)
 parser.add_argument('--cpu', action='store_true', help='Disable GPU training.')
 parser.add_argument('--no-pin', action='store_true',help='Disable pin-memory for dataloader')
 parser.add_argument('--test', action='store_true', help='Test the model.')

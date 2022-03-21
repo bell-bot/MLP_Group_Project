@@ -54,6 +54,7 @@ class Ted3Dataset(Dataset):
         print(split)
         for s in split:
             split_list = list(Path(join(path, s)).rglob("sph/*.sph"))
+            split_list = split_list[:50] #take the first 50 audio files only
             print(len(split_list))
             assert len(split_list) > 0, "No data found @ {}".format(join(path,s))
             file_list += split_list
