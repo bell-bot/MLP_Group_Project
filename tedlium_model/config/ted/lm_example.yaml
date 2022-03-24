@@ -2,7 +2,10 @@ data:
   corpus: # Pass to dataloader
     # The following depends on corpus
     name: "Tedlium" # Specify corpus
-    path: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy"
+    ##HOME MACHINE##
+    #path: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy"
+    ##ASR NETWORK##
+    path: "/disk/scratch2/s1834237/TEDLIUM_release-3/legacy"
     train_split: ["t3_commoncrawl-9pc.en"] # Official LM src from LibriSpeech
     dev_split: ["dev"]
     bucketing: True

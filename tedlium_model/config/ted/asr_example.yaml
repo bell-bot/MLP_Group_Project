@@ -1,11 +1,14 @@
 data:
   corpus:
     name: "Tedlium" # Specify corpus
-    path: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy" # Path to raw Tedlium dataset
+    ##HOME MACHINE##
+    #path: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy"
+    ##ASR NETWORK##
+    path: "/disk/scratch2/s1834237/TEDLIUM_release-3/legacy"
     train_split: ["train"] # Name of data splits to be used as training set
     dev_split: ["dev"] # Name of data splits to be used as validation set
     bucketing: True # Enable/Disable bucketing
-    batch_size: 2
+    batch_size: 16
   audio: # Attributes of audio feature
     feat_type: "mfcc"
     feat_dim: 13
@@ -20,11 +23,11 @@ data:
     vocab_file: "tests/sample_data/subword-16k.model"
 
 hparas: # Experiment hyper-parameters
-  valid_step: 200
-  max_step: 10001
+  valid_step: 5000
+  max_step: 1000001
   tf_start: 1.0
   tf_end: 1.0
-  tf_step: 500
+  tf_step: 50000
   optimizer: "Adadelta"
   lr: 1.0
   eps: 0.00001 # 1e-5
@@ -37,16 +40,18 @@ model: # Model architecture
     prenet: "vgg" # 'vgg'/'cnn'/''
     # vgg: True                             # 4x reduction on time feature extraction
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
-    bidirection: False
-    dim: [32, 32]
-    dropout: [0, 0]
-    layer_norm: [False, False]
-    proj: [True, True] # Linear projection + Tanh after each rnn layer
-    sample_rate: [1, 1]
+    bidirection: True
+    ##Smaller home machine
+    ##dim: [32, 32]
+    dim: [512,512,512,512,512]
+    dropout: [0,0,0,0,0]
+    layer_norm: [False, False,False,False,False]
+    proj: [True, True,True,True,True] # Linear projection + Tanh after each rnn layer
+    sample_rate: [1, 1,1,1,1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
-    dim: 50
+    dim: 300
     num_head: 1
     v_proj: False # if False and num_head>1, encoder state will be duplicated for each head
     temperature: 0.5 # scaling factor for attention
@@ -54,6 +59,6 @@ model: # Model architecture
     loc_kernel_num: 10 # just for mode=='loc'
   decoder:
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
-    dim: 16
+    dim: 512
     layer: 1
     dropout: 0
