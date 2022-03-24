@@ -4,6 +4,9 @@ import yaml
 import torch
 import argparse
 import numpy as np
+import os
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0,1"
 
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
