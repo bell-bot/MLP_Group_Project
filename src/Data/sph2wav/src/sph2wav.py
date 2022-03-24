@@ -1,10 +1,9 @@
 import os
 from sphfile import SPHFile
 
-# change code to ur tedium dir
-path = '/home/s1837246/mlpractical/MLP_Group_Project/src/Data/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
-# set the path to which you want to save it ti
-out_path = ""
+
+path = '/home/bella/Documents/University/MLP/MLP_Group_Project/src/Data/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
+out_path = '/home/bella/Documents/University/MLP/MLP_Group_Project/src/Data/TEDLIUM_wav'
 folder = os.fsencode(path)
 
 filenames = []
@@ -22,7 +21,7 @@ length = len(filenames)
 for i in range(length):
 	fpath = os.path.join(path+filenames[i])
 	folderpath.append(fpath)
-	outpath = os.path.join(filenames[i][:-4]+".wav")	
+	outpath = os.path.join(filenames[i]+".wav")	
 	outputfile.append(outpath)
 print(folderpath)
 print(outputfile)
