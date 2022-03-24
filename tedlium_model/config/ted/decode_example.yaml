@@ -1,0 +1,17 @@
+# Most of the parameters will be imported from the training config
+src:
+  ckpt: "ckpt/tedlium3/best_att.pth"
+  config: "config/ted/asr_example.yaml"
+data:
+  corpus:
+    name: "Tedlium"
+    dev_split: ["dev"]
+    test_split: ["test"]
+decode:
+  beam_size: 20
+  min_len_ratio: 0.01
+  max_len_ratio: 0.07
+  lm_path: "ckpt/lm_example_sd0/best_ppx.pth"
+  lm_config: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/LM/t3_commoncrawl-9pc.en"
+  lm_weight: 0.5
+  ctc_weight: 0.0
