@@ -78,6 +78,8 @@ def create_dataset(tokenizer, ascending, name, path, bucketing, batch_size,
     else:
         raise NotImplementedError
 
+    
+
     # Create dataset
     if train_split is not None:
         # Training mode
