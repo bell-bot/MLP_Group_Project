@@ -15,7 +15,7 @@ class Solver(BaseSolver):
     def __init__(self, config, paras, mode):
         super().__init__(config, paras, mode)
         # Logger settings
-        device = torch.device("cuda:0,1" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda:1,5" if torch.cuda.is_available() else "cpu")
         self.device = device
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
         # Curriculum learning affects data loader
