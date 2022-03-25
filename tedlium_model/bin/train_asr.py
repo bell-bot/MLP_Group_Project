@@ -7,7 +7,6 @@ from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
 
-
 class Solver(BaseSolver):
     ''' Solver for training'''
 
@@ -21,10 +20,22 @@ class Solver(BaseSolver):
     def fetch_data(self, data):
         ''' Move data to device and compute text seq. length'''
         _, feat, feat_len, txt = data
-        feat = feat.to(self.device)
-        feat_len = feat_len.to(self.device)
-        txt = txt.to(self.device)
         txt_len = torch.sum(txt != 0, dim=-1)
+        gpus = list()
+        num_of_gpus = torch.cuda.device_count()
+        for i in num_of_gpus:
+            gpus.append("cuda:" + str(i))
+        for gpu in gpus:
+            feat = feat.to(gpu)
+            feat_len = feat_len.to(gpu)
+            txt = txt.to(gpu)
+
+
+        #_, feat, feat_len, txt = data
+        #feat = feat.to(self.device)
+        #feat_len = feat_len.to(self.device)
+        #txt = txt.to(self.device)
+        #txt_len = torch.sum(txt != 0, dim=-1)
 
         return feat, feat_len, txt, txt_len
 
@@ -38,9 +49,21 @@ class Solver(BaseSolver):
     def set_model(self):
         ''' Setup ASR model and optimizer '''
         # Model
+        ##ADDDED################################
+        gpus = list()
+        num_of_gpus = torch.cuda.device_count()
+        for i in num_of_gpus:
+            gpus.append("cuda:" + str(i))
+        ##ADDDED################################
+
         init_adadelta = self.config['hparas']['optimizer'] == 'Adadelta'
-        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model']).to(self.device)
+
+        self.model = nn.DataParallel(ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model']))
+        for gpu in gpus:
+            self.model.to(gpu)
+        #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
+        #                 self.config['model']).to(self.device)
+
         self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
 
@@ -55,8 +78,12 @@ class Solver(BaseSolver):
             self.config['emb']['enable'])
         if self.emb_reg:
             from src.plugin import EmbeddingRegularizer
-            self.emb_decoder = EmbeddingRegularizer(
-                self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
+
+            self.emb_decoder = nn.DataParallel(EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']))
+            for gpu in gpus:
+                self.emb_decoder.to(gpu)
+            #self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
+
             model_paras.append({'params': self.emb_decoder.parameters()})
             self.emb_fuse = self.emb_decoder.apply_fuse
             if self.emb_fuse:

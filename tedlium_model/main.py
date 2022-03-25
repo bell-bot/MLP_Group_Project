@@ -52,6 +52,11 @@ torch.manual_seed(paras.seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(paras.seed)
 
+gpus = list()
+num_of_gpus = torch.cuda.device_count()
+for i in num_of_gpus:
+    gpus.append("cuda:"+str(i))
+
 # Hack to preserve GPU ram just incase OOM later on server
 #if paras.gpu and paras.reserve_gpu > 0:
 #    buff = torch.randn(int(paras.reserve_gpu*1e9//4)).cuda()
