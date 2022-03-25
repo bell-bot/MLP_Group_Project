@@ -30,10 +30,10 @@ class ASR(nn.Module):
         # Modules
         self.encoder = Encoder(input_size, **encoder)
         if self.enable_ctc:
-            self.ctc_layer = nn.Linear(self.encoder.out_dim, vocab_size)
+            self.ctc_layer = nn.DataParallel((nn.Linear(self.encoder.out_dim, vocab_size)))
         if self.enable_att:
             self.dec_dim = decoder['dim']
-            self.pre_embed = nn.Embedding(vocab_size, self.dec_dim)
+            self.pre_embed = nn.DataParallel(nn.Embedding(vocab_size, self.dec_dim))
             self.embed_drop = nn.Dropout(emb_drop)
             self.decoder = Decoder(
                 self.encoder.out_dim+self.dec_dim, vocab_size, **decoder)

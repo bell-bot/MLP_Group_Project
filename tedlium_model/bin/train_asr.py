@@ -58,7 +58,7 @@ class Solver(BaseSolver):
 
         init_adadelta = self.config['hparas']['optimizer'] == 'Adadelta'
 
-        self.model = nn.DataParallel(ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model']))
+        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model'])
         for gpu in gpus:
             self.model.to(gpu)
         #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
@@ -79,7 +79,7 @@ class Solver(BaseSolver):
         if self.emb_reg:
             from src.plugin import EmbeddingRegularizer
 
-            self.emb_decoder = nn.DataParallel(EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']))
+            self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb'])
             for gpu in gpus:
                 self.emb_decoder.to(gpu)
             #self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
