@@ -6,7 +6,7 @@ import argparse
 import numpy as np
 import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="2,3"
+os.environ["CUDA_VISIBLE_DEVICES"]="0,1"
 
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
@@ -52,7 +52,7 @@ torch.manual_seed(paras.seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(paras.seed)
 
-devices = 'cuda:2,3'
+devices = 'cuda:0,1'
 
 # Hack to preserve GPU ram just incase OOM later on server
 #if paras.gpu and paras.reserve_gpu > 0:
