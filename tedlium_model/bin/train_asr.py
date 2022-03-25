@@ -65,7 +65,8 @@ class Solver(BaseSolver):
         #for gpu in gpus:
         #    self.model.to(gpu)
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model']).to(self.device)
+                         self.config['model'])
+        self.model.to(self.device)
 
         self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
