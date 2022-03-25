@@ -68,7 +68,7 @@ class Solver(BaseSolver):
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
                          self.config['model'])
         self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model'])
+                         self.config['model']).to(self.device)
         self.model = nn.DataParallel(self.model,device_ids=[0,1])
         self.model.to(self.device)
         #self.model.to(self.device)
