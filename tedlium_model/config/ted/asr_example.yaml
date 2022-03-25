@@ -8,7 +8,7 @@ data:
     train_split: ["train"] # Name of data splits to be used as training set
     dev_split: ["dev"] # Name of data splits to be used as validation set
     bucketing: True # Enable/Disable bucketing
-    batch_size: 8
+    batch_size: 4
   audio: # Attributes of audio feature
     feat_type: "mfcc"
     feat_dim: 13
@@ -23,11 +23,11 @@ data:
     vocab_file: "tests/sample_data/subword-16k.model"
 
 hparas: # Experiment hyper-parameters
-  valid_step: 5000
-  max_step: 1000001
+  valid_step: 500
+  max_step: 100001
   tf_start: 1.0
   tf_end: 1.0
-  tf_step: 50000
+  tf_step: 5000
   optimizer: "Adadelta"
   lr: 1.0
   eps: 0.00001 # 1e-5
@@ -43,15 +43,18 @@ model: # Model architecture
     bidirection: True
     ##Smaller home machine
     ##dim: [32, 32]
-    dim: [512,512,512,512,512]
-    dropout: [0,0,0,0,0]
-    layer_norm: [False, False,False,False,False]
-    proj: [True, True,True,True,True] # Linear projection + Tanh after each rnn layer
-    sample_rate: [1, 1,1,1,1]
+   #STILL TOO BIG
+   #dim: [512,512,512,512,512]
+    dim: [512,512,512,512]
+    dropout: [0,0,0,0]
+    layer_norm: [False, False,False,False]
+    proj: [True, True,True,True] # Linear projection + Tanh after each rnn layer
+    sample_rate: [1, 1,1,1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
-    dim: 300
+    #dim: 300
+    dim: 200
     num_head: 1
     v_proj: False # if False and num_head>1, encoder state will be duplicated for each head
     temperature: 0.5 # scaling factor for attention

@@ -5,6 +5,7 @@ from src.asr import ASR
 from src.optim import Optimizer
 from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
+import torch.nn as nn
 
 
 class Solver(BaseSolver):
@@ -102,8 +103,10 @@ class Solver(BaseSolver):
                 # Forward model
                 # Note: txt should NOT start w/ <sos>
                 ctc_output, encode_len, att_output, att_align, dec_state = \
-                    self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
+                                self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
                                teacher=txt, get_dec_state=self.emb_reg)
+
+
 
                 # Plugins
                 if self.emb_reg:

@@ -57,6 +57,10 @@ if torch.cuda.is_available():
 #    buff = torch.randn(int(paras.reserve_gpu*1e9//4)).cuda()
 #    del buff
 
+##CHECK WE ONLY SEE THE GIVEN DEVICES##
+if torch.cuda.device_count() > 1:
+  print("Let's use", torch.cuda.device_count(), "GPUs!")
+
 if paras.lm:
     # Train RNNLM
     from bin.train_lm import Solver
