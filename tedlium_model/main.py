@@ -84,5 +84,7 @@ else:
 
 solver = Solver(config, paras, mode)
 solver.load_data()
+print("loaded data")
+exit()
 solver.set_model()
 solver.exec()
