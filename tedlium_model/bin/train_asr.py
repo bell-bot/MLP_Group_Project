@@ -23,7 +23,7 @@ class Solver(BaseSolver):
         txt_len = torch.sum(txt != 0, dim=-1)
         gpus = list()
         num_of_gpus = torch.cuda.device_count()
-        for i in num_of_gpus:
+        for i in range(num_of_gpus):
             gpus.append("cuda:" + str(i))
         for gpu in gpus:
             feat = feat.to(gpu)
@@ -52,7 +52,7 @@ class Solver(BaseSolver):
         ##ADDDED################################
         gpus = list()
         num_of_gpus = torch.cuda.device_count()
-        for i in num_of_gpus:
+        for i in range(num_of_gpus):
             gpus.append("cuda:" + str(i))
         ##ADDDED################################
 

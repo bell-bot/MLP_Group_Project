@@ -54,7 +54,7 @@ if torch.cuda.is_available():
 
 gpus = list()
 num_of_gpus = torch.cuda.device_count()
-for i in num_of_gpus:
+for i in range(num_of_gpus):
     gpus.append("cuda:"+str(i))
 
 # Hack to preserve GPU ram just incase OOM later on server
