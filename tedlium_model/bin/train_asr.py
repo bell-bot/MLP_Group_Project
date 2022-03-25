@@ -66,6 +66,7 @@ class Solver(BaseSolver):
         #    self.model.to(gpu)
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
                          self.config['model'])
+        self.model = nn.DataParallel(self,device_ids=[0,1])
         self.model.to(self.device)
 
         self.verbose(self.model.create_msg())
