@@ -8,13 +8,13 @@ from torch.distributions.categorical import Categorical
 from src.util import init_weights, init_gate
 from src.module import VGGExtractor, CNNExtractor, RNNLayer, ScaleDotAttention, LocationAwareAttention
 
-
+devices = 'cuda:2,3'
 class ASR(nn.Module):
     ''' ASR model, including Encoder/Decoder(s)'''
 
     def __init__(self, input_size, vocab_size, init_adadelta, ctc_weight, encoder, attention, decoder, emb_drop=0.0):
         super(ASR, self).__init__()
-
+        self.device = devices
         # Setup
         assert 0 <= ctc_weight <= 1
         self.vocab_size = vocab_size
