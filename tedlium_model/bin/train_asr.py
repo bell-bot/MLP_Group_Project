@@ -139,7 +139,7 @@ class Solver(BaseSolver):
                 # Forward model
                 # Note: txt should NOT start w/ <sos>
                 ctc_output, encode_len, att_output, att_align, dec_state = \
-                                self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
+                                self.asr(feat, feat_len, max(txt_len), tf_rate=tf_rate,
                                teacher=txt, get_dec_state=self.emb_reg)
 
 
