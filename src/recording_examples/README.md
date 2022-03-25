@@ -1,5 +1,7 @@
-# Recording Examples directory
+# DEPRECATED: Recording Examples directory
 Contains folder structure for the manual recordings done to compare with the original Ted Talk ones.  Currently uses absolute path for example scripts too. 
+
+
 
 **IMPORTANT: Please run the python script on a DICE Machine to make it work locally on each machines:**
 - Install the following packages on your machine (feel free to create a local environment): `gitpython`, 
