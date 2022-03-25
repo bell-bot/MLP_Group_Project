@@ -7,12 +7,15 @@ from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
 
+devices = 'cuda:0,1'
+
 class Solver(BaseSolver):
     ''' Solver for training'''
 
     def __init__(self, config, paras, mode):
         super().__init__(config, paras, mode)
         # Logger settings
+        self.device = devices
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
         # Curriculum learning affects data loader
         self.curriculum = self.config['hparas']['curriculum']
