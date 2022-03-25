@@ -47,7 +47,7 @@ model: # Model architecture
     ##Smaller home machine
     ##dim: [32, 32]
    #STILL TOO BIG
-   dim: [512,512,512,512,512]
+    dim: [512,512,512,512,512]
     #dim: [128,128,128]
     #dropout: [0,0,0]
     dropout: [0,0,0,0,0]
