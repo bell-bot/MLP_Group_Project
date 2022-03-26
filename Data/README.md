@@ -1,3 +1,6 @@
+# Note before starting
+Please use the labels.csv in Keyphrases (Since it's a huge file, it's currently placed in the Google Drive)
+
 # Data Structure:
 ```
 +-- Data/
