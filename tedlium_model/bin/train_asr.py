@@ -7,15 +7,15 @@ from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
 
-devices = "cuda:0,1"
-
+gpus = [0,1]
 class Solver(BaseSolver):
     ''' Solver for training'''
 
     def __init__(self, config, paras, mode):
         super().__init__(config, paras, mode)
         # Logger settings
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.gpus = gpus
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.device = device
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
         # Curriculum learning affects data loader
@@ -67,14 +67,14 @@ class Solver(BaseSolver):
         #    self.model.to(gpu)
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
                          self.config['model'])
-        self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model'])
-        self.model = nn.DataParallel(self.model,device_ids=[0,1])
+        #self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
+        #                 self.config['model'])
+        #self.model = nn.DataParallel(self.model,device_ids=self.gpus )
         self.model.to(self.device)
         #self.model.to(self.device)
 
-        self.verbose(self.asr.create_msg())
-        model_paras = [{'params': self.asr.parameters()}]
+        self.verbose(self.model.create_msg())
+        model_paras = [{'params': self.model.parameters()}]
 
         # Losses
         self.seq_loss = torch.nn.CrossEntropyLoss(ignore_index=0)
@@ -138,6 +138,15 @@ class Solver(BaseSolver):
 
                 # Forward model
                 # Note: txt should NOT start w/ <sos>
+                print("Data")
+                print(feat)
+                print(feat_len)
+                print(max(txt_len))
+                print(tf_rate)
+                print(txt)
+                print(self.emb_reg)
+                print(feat.size())
+
                 ctc_output, encode_len, att_output, att_align, dec_state = \
                                 self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
                                teacher=txt, get_dec_state=self.emb_reg)

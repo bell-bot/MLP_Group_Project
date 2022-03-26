@@ -8,13 +8,11 @@ from torch.distributions.categorical import Categorical
 from src.util import init_weights, init_gate
 from src.module import VGGExtractor, CNNExtractor, RNNLayer, ScaleDotAttention, LocationAwareAttention
 
-devices = 'cuda:2,3'
 class ASR(nn.Module):
     ''' ASR model, including Encoder/Decoder(s)'''
 
     def __init__(self, input_size, vocab_size, init_adadelta, ctc_weight, encoder, attention, decoder, emb_drop=0.0):
         super(ASR, self).__init__()
-        self.device = devices
         # Setup
         assert 0 <= ctc_weight <= 1
         self.vocab_size = vocab_size
@@ -27,13 +25,13 @@ class ASR(nn.Module):
         self.encoder = Encoder(input_size, **encoder)
         if self.enable_ctc:
             self.ctc_layer = nn.Linear(self.encoder.out_dim, vocab_size)
-            self.ctc_layer = nn.DataParallel(self.ctc_layer,device_ids=[0,1])
+            self.ctc_layer = nn.DataParallel(self.ctc_layer,device_ids=self.gpus)
         if self.enable_att:
             self.dec_dim = decoder['dim']
             self.pre_embed = nn.Embedding(vocab_size, self.dec_dim)
-            self.pre_embed = nn.DataParallel(self.pre_embed,device_ids=[0,1])
+            self.pre_embed = nn.DataParallel(self.pre_embed,device_ids=self.gpus)
             self.embed_drop = nn.Dropout(emb_drop)
-            self.embed_drop == nn.DataParallel(self.pre_embed,device_ids=[0,1])
+            self.embed_drop == nn.DataParallel(self.pre_embed,device_ids=self.gpus)
             self.decoder = Decoder(
                 self.encoder.out_dim+self.dec_dim, vocab_size, **decoder)
             query_dim = self.dec_dim*self.decoder.layer
@@ -178,9 +176,9 @@ class Decoder(nn.Module):
         self.layers = getattr(nn, module)(
             input_dim, dim, num_layers=layer, dropout=dropout, batch_first=True)
         self.char_trans = nn.Linear(dim, vocab_size)
-        self.char_trans = nn.DataParallel(self.char_trans,device_ids=[0,1])
+        self.char_trans = nn.DataParallel(self.char_trans,device_ids=self.gpus )
         self.final_dropout = nn.Dropout(dropout)
-        self.final_dropout = nn.DataParallel(self.final_dropout,device_ids=[0,1])
+        self.final_dropout = nn.DataParallel(self.final_dropout,device_ids=self.gpus )
 
     def init_state(self, bs):
         ''' Set all hidden states to zeros '''
@@ -248,15 +246,15 @@ class Attention(nn.Module):
 
         # Linear proj. before attention
         self.proj_q = nn.Linear(q_dim, dim*num_head)
-        self.proj_q = nn.DataParallel(self.proj_q,device_ids=[0,1])
+        self.proj_q = nn.DataParallel(self.proj_q,device_ids=self.gpus )
 
         self.proj_k = nn.Linear(v_dim, dim*num_head)
-        self.proj_k = nn.DataParallel(self.proj_k,device_ids=[0,1])
+        self.proj_k = nn.DataParallel(self.proj_k,device_ids=self.gpus )
 
         self.v_proj = v_proj
         if v_proj:
             self.proj_v = nn.Linear(v_dim, v_dim*num_head)
-            self.proj_v = nn.DataParallel(self.proj_v,device_ids=[0,1])
+            self.proj_v = nn.DataParallel(self.proj_v,device_ids=self.gpus)
 
         # Attention
         if self.mode == 'dot':
