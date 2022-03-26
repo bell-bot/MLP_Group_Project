@@ -6,7 +6,8 @@ from src.optim import Optimizer
 from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
-
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
 gpus = [1,2]
 class Solver(BaseSolver):
     ''' Solver for training'''
@@ -15,7 +16,7 @@ class Solver(BaseSolver):
         super().__init__(config, paras, mode)
         # Logger settings
         self.gpus = gpus
-        self.device_list = ["cuda:1","cuda:2"]
+        #self.device_list = ["cuda:1","cuda:2"]
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.device = device
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
