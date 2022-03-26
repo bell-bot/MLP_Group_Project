@@ -2,13 +2,13 @@ data:
   corpus:
     name: "Tedlium" # Specify corpus
     ##HOME MACHINE##
-    path: "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/db/TEDLIUM_release-3/legacy"
+    #path: "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/db/TEDLIUM_release-3/legacy"
     ##ASR NETWORK##
-    #path: "/disk/scratch2/s1834237/TEDLIUM_release-3/legacy"
+    path: "/disk/scratch2/s1834237/TEDLIUM_release-3/legacy"
     train_split: ["train"] # Name of data splits to be used as training set
     dev_split: ["dev"] # Name of data splits to be used as validation set
     bucketing: True # Enable/Disable bucketing
-    batch_size: 8
+    batch_size: 2
   audio: # Attributes of audio feature
     feat_type: "mfcc"
     feat_dim: 13
@@ -24,14 +24,14 @@ data:
     vocab_file: "tests/sample_data/character.vocab"
 
 hparas: # Experiment hyper-parameters
-  valid_step: 500
-  #valid_step: 50
-  max_step: 100001
-  #max_step: 10001
+  #valid_step: 500
+  valid_step: 50
+  #max_step: 100001
+  max_step: 10001
   tf_start: 1.0
   tf_end: 1.0
-  tf_step: 5000
-  #tf_step: 500
+  #tf_step: 5000
+  tf_step: 500
   optimizer: "Adadelta"
   lr: 1.0
   eps: 0.00001 # 1e-5
@@ -46,23 +46,28 @@ model: # Model architecture
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
     bidirection: True
     ##Smaller home machine
-    ##dim: [32, 32]
+    #dim: [32, 32]
    #STILL TOO BIG
     dim: [512,512,512,512,512]
     #dim: [128,128,128]
     #dropout: [0,0,0]
     dropout: [0,0,0,0,0]
+    #dropout: [0,0]
+    #layer_norm: [False, False]
     #layer_norm: [False, False,False]
     layer_norm: [False,False,False,False,False]
     #proj: [True, True,True] # Linear projection + Tanh after each rnn layer
     proj: [True,True,True,True,True]
+    #proj: [True, True] # Linear projection + Tanh after each rnn layer
     #sample_rate: [1, 1,1]
+    #sample_rate: [1, 1]
     sample_rate: [1,1,1,1,1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
     dim: 300
     #dim: 200
+    #dim: 50
     num_head: 1
     v_proj: False # if False and num_head>1, encoder state will be duplicated for each head
     temperature: 0.5 # scaling factor for attention
@@ -72,5 +77,6 @@ model: # Model architecture
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
     #dim: 128
     dim: 512
+    #dim: 32
     layer: 1
     dropout: 0
