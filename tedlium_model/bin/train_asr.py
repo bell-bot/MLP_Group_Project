@@ -7,7 +7,7 @@ from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
 
-gpus = [0,1]
+gpus = [1,2]
 class Solver(BaseSolver):
     ''' Solver for training'''
 
