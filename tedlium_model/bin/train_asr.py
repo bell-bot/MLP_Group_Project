@@ -64,7 +64,8 @@ class Solver(BaseSolver):
         self.verbose(self.model.create_msg())
         print(self.gpus)
         print(os.environ["CUDA_VISIBLE_DEVICES"])
-        self.model == nn.DataParallel(self.model,device_ids=self.gpus)
+        #self.model == nn.DataParallel(self.model,device_ids=self.gpus)
+        self.model == nn.DataParallel(self.model)
         #self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
 
