@@ -13,8 +13,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 ##HOME DIRECTORY
-#CONFIG = "/disk/scratch2/s1834237/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
-CONFIG = "/home/szy/Documents/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example_small.yaml"
+CONFIG = "/disk/scratch2/s1834237/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
+#CONFIG = "/home/szy/Documents/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example_small.yaml"
 NAME = "tedlium3"
 # LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
 # CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
