@@ -23,9 +23,9 @@ class ASR(nn.Module):
         self.enable_att = ctc_weight != 1
         self.lm = None
 
-        torch.cuda.empty_cache()
+        #torch.cuda.empty_cache()
 
-        torch.cuda.memory_summary(device=None, abbreviated=False)
+        #torch.cuda.memory_summary(device=None, abbreviated=False)
 
         # Modules
         self.encoder = Encoder(input_size, **encoder)

@@ -2,14 +2,14 @@ data:
   corpus: # Pass to dataloader
     # The following depends on corpus
     name: "Tedlium" # Specify corpus
-    path: "/home/wassim_jabrane/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy"
-    train_split: ["t3_commoncrawl-9pc.en"] # Official LM src from LibriSpeech
+    path: "/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy"
+    train_split: ["train/sph/t3_commoncrawl-9pc.en"] # Official LM src from LibriSpeech
     dev_split: ["dev"]
     bucketing: True
-    batch_size: 32
+    batch_size: 16
   text:
-    mode: "subword" # 'character'/'word'/'subword'
-    vocab_file: "tests/sample_data/subword-16k.model"
+    mode: "character" # 'character'/'word'/'subword'
+    vocab_file: "tests/sample_data/character.vocab"
 
 hparas: # Experiment hyper-parameters
   valid_step: 10000
@@ -21,8 +21,8 @@ hparas: # Experiment hyper-parameters
 
 model: # Model architecture
   emb_tying: False # https://arxiv.org/pdf/1608.05859.pdf
-  emb_dim: 1024
+  emb_dim: 256
   module: "LSTM" # 'LSTM'/'GRU'
-  dim: 1024
+  dim: 256
   n_layers: 2
-  dropout: 0.5
+  dropout: 0.2
