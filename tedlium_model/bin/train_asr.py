@@ -62,6 +62,8 @@ class Solver(BaseSolver):
         #self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
         #                 self.config['model'])
         self.verbose(self.model.create_msg())
+        print(self.gpus)
+        print(os.environ["CUDA_VISIBLE_DEVICES"])
         self.model == nn.DataParallel(self.model,device_ids=self.gpus)
         #self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
