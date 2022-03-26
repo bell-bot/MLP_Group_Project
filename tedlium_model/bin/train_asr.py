@@ -68,7 +68,7 @@ class Solver(BaseSolver):
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
                          self.config['model'])
         self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model']).to(self.device)
+                         self.config['model'])
         self.model = nn.DataParallel(self.model,device_ids=[0,1])
         self.model.to(self.device)
         #self.model.to(self.device)
@@ -139,7 +139,7 @@ class Solver(BaseSolver):
                 # Forward model
                 # Note: txt should NOT start w/ <sos>
                 ctc_output, encode_len, att_output, att_align, dec_state = \
-                                self.asr(feat, feat_len, max(txt_len), tf_rate=tf_rate,
+                                self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
                                teacher=txt, get_dec_state=self.emb_reg)
 
 
