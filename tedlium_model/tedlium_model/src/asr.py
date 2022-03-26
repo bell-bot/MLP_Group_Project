@@ -8,6 +8,10 @@ from torch.distributions.categorical import Categorical
 from src.util import init_weights, init_gate
 from src.module import VGGExtractor, CNNExtractor, RNNLayer, ScaleDotAttention, LocationAwareAttention
 
+
+
+
+
 class ASR(nn.Module):
     ''' ASR model, including Encoder/Decoder(s)'''
 
@@ -23,15 +27,16 @@ class ASR(nn.Module):
 
         # Modules
         self.encoder = Encoder(input_size, **encoder)
+        #self.encoder = nn.DataParallel(self.encoder,device_ids=self.gpus)
         if self.enable_ctc:
             self.ctc_layer = nn.Linear(self.encoder.out_dim, vocab_size)
-            self.ctc_layer = nn.DataParallel(self.ctc_layer,device_ids=self.gpus)
+            #self.ctc_layer = nn.DataParallel(self.ctc_layer,device_ids=self.gpus)
         if self.enable_att:
             self.dec_dim = decoder['dim']
             self.pre_embed = nn.Embedding(vocab_size, self.dec_dim)
-            self.pre_embed = nn.DataParallel(self.pre_embed,device_ids=self.gpus)
+            #self.pre_embed = nn.DataParallel(self.pre_embed,device_ids=self.gpus)
             self.embed_drop = nn.Dropout(emb_drop)
-            self.embed_drop == nn.DataParallel(self.pre_embed,device_ids=self.gpus)
+            #self.embed_drop == nn.DataParallel(self.pre_embed,device_ids=self.gpus)
             self.decoder = Decoder(
                 self.encoder.out_dim+self.dec_dim, vocab_size, **decoder)
             query_dim = self.dec_dim*self.decoder.layer
@@ -332,6 +337,7 @@ class Encoder(nn.Module):
         # Hyper-parameters checking
         self.vgg = prenet == 'vgg'
         self.cnn = prenet == 'cnn'
+
         self.sample_rate = 1
         assert len(sample_rate) == len(dropout), 'Number of layer mismatch'
         assert len(dropout) == len(dim), 'Number of layer mismatch'
@@ -345,8 +351,9 @@ class Encoder(nn.Module):
         # Prenet on audio feature
         if self.vgg:
             vgg_extractor = VGGExtractor(input_size)
-            module_list.append(vgg_extractor)
             input_dim = vgg_extractor.out_dim
+            vgg_extractor = nn.DataParallel(vgg_extractor)
+            module_list.append(vgg_extractor)
             self.sample_rate = self.sample_rate*4
         if self.cnn:
             cnn_extractor = CNNExtractor(input_size, out_dim=dim[0])

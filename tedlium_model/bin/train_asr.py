@@ -1,7 +1,7 @@
 import torch
 from src.solver import BaseSolver
 
-from src.asr import ASR
+from src.asr import *
 from src.optim import Optimizer
 from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
@@ -15,6 +15,7 @@ class Solver(BaseSolver):
         super().__init__(config, paras, mode)
         # Logger settings
         self.gpus = gpus
+        self.device_list = ["cuda:1","cuda:2"]
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.device = device
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
@@ -23,17 +24,14 @@ class Solver(BaseSolver):
 
     def fetch_data(self, data):
         ''' Move data to device and compute text seq. length'''
-        #_, feat, feat_len, txt = data
-        #txt_len = torch.sum(txt != 0, dim=-1)
+        _, feat, feat_len, txt = data
         #gpus = list()
         #num_of_gpus = torch.cuda.device_count()
-        #for i in range(num_of_gpus):
-        #    gpus.append("cuda:" + str(i))
-        #for gpu in gpus:
-        #    feat = feat.to(gpu)
-        #    feat_len = feat_len.to(gpu)
-        #    txt = txt.to(gpu)
-
+        #for i in self.device_list:
+        #    feat = feat.to(i)
+        #    feat_len = feat_len.to(i)
+        #    txt = txt.to(i)
+        #txt_len = torch.sum(txt != 0, dim=-1)
 
         _, feat, feat_len, txt = data
         feat = feat.to(self.device)
@@ -53,27 +51,18 @@ class Solver(BaseSolver):
     def set_model(self):
         ''' Setup ASR model and optimizer '''
         # Model
-        ##ADDDED################################
-        gpus = list()
-        num_of_gpus = torch.cuda.device_count()
-        for i in range(num_of_gpus):
-            gpus.append("cuda:" + str(i))
-        ##ADDDED################################
-
         init_adadelta = self.config['hparas']['optimizer'] == 'Adadelta'
 
-        #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model'])
+        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model']).to(self.device)
         #for gpu in gpus:
         #    self.model.to(gpu)
-        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model'])
+        #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
+        #                self.config['model'])
         #self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
         #                 self.config['model'])
-        #self.model = nn.DataParallel(self.model,device_ids=self.gpus )
-        self.model.to(self.device)
-        #self.model.to(self.device)
-
         self.verbose(self.model.create_msg())
+        self.model == nn.DataParallel(self.model,device_ids=self.gpus)
+        #self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
 
         # Losses
@@ -85,6 +74,8 @@ class Solver(BaseSolver):
         self.emb_fuse = False
         self.emb_reg = ('emb' in self.config) and (
             self.config['emb']['enable'])
+        print("DO we decode?")
+        print(self.emb_reg)
         if self.emb_reg:
             from src.plugin import EmbeddingRegularizer
 
@@ -92,7 +83,6 @@ class Solver(BaseSolver):
             #for gpu in gpus:
             #    self.emb_decoder.to(gpu)
             self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
-
             model_paras.append({'params': self.emb_decoder.parameters()})
             self.emb_fuse = self.emb_decoder.apply_fuse
             if self.emb_fuse:
@@ -109,7 +99,6 @@ class Solver(BaseSolver):
         # Automatically load pre-trained model if self.paras.load is given
         self.load_ckpt()
 
-        # ToDo: other training methods
 
     def exec(self):
         ''' Training End-to-end ASR system '''
@@ -152,7 +141,7 @@ class Solver(BaseSolver):
                                teacher=txt, get_dec_state=self.emb_reg)
 
 
-
+                print("forward done")
                 # Plugins
                 if self.emb_reg:
                     emb_loss, fuse_output = self.emb_decoder(

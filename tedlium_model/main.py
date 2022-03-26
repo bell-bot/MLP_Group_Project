@@ -13,8 +13,8 @@ os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 ##HOME DIRECTORY
-CONFIG = "/disk/scratch2/s1834237/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
-#CONFIG = "/home/szy/Documents/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
+#CONFIG = "/disk/scratch2/s1834237/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
+CONFIG = "/home/szy/Documents/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example_small.yaml"
 NAME = "tedlium3"
 # LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
 # CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
@@ -52,8 +52,6 @@ np.random.seed(paras.seed)
 torch.manual_seed(paras.seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(paras.seed)
-
-devices = 'cuda:0,1'
 
 # Hack to preserve GPU ram just incase OOM later on server
 #if paras.gpu and paras.reserve_gpu > 0:

@@ -28,8 +28,6 @@ class VGGExtractor(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(2, stride=2)  # Half-time dimension
         )
-        self.extractor = nn.DataParallel(self.extractor,device_ids=[0,1])
-
 
     def check_dim(self, input_dim):
         # Check input dimension, delta feature should be stack over channel.

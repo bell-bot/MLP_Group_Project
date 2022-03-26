@@ -8,7 +8,7 @@ from torch.distributions.categorical import Categorical
 from src.util import init_weights, init_gate
 from src.module import VGGExtractor, CNNExtractor, RNNLayer, ScaleDotAttention, LocationAwareAttention
 
-
+CTC_WEIGHT = 0
 class ASR(nn.Module):
     ''' ASR model, including Encoder/Decoder(s)'''
 
@@ -19,13 +19,10 @@ class ASR(nn.Module):
         assert 0 <= ctc_weight <= 1
         self.vocab_size = vocab_size
         self.ctc_weight = ctc_weight
+        CTC_WEIGHT = ctc_weight
         self.enable_ctc = ctc_weight > 0
         self.enable_att = ctc_weight != 1
         self.lm = None
-
-        torch.cuda.empty_cache()
-
-        torch.cuda.memory_summary(device=None, abbreviated=False)
 
         # Modules
         self.encoder = Encoder(input_size, **encoder)
