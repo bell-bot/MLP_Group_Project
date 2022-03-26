@@ -4,17 +4,11 @@ import yaml
 import torch
 import argparse
 import numpy as np
-import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0,1"
-##NEED TO SET
-##model= nn.DataParallel(model,device_ids = [0, 1])
+
 # For reproducibility, comment these may speed up training
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-##HOME DIRECTORY
-CONFIG = "/disk/scratch2/s1834237/MLP_MULTIPLE_GPU/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
-#CONFIG = "/home/wassim_jabrane/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
+CONFIG = "/home/bella/Documents/University/MLP/MLP_Group_Project/tedlium_model/config/ted/asr_example.yaml"
 NAME = "tedlium3"
 # LOG_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/log/"
 # CHECK_POINT_DIR = "/home/szy/Documents/code/espnet/egs/tedlium3/asr1/tedlium/check_point/"
@@ -52,16 +46,10 @@ torch.manual_seed(paras.seed)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(paras.seed)
 
-devices = 'cuda:0,1'
-
 # Hack to preserve GPU ram just incase OOM later on server
-#if paras.gpu and paras.reserve_gpu > 0:
-#    buff = torch.randn(int(paras.reserve_gpu*1e9//4)).cuda()
-#    del buff
-
-##CHECK WE ONLY SEE THE GIVEN DEVICES##
-if torch.cuda.device_count() > 1:
-  print("Let's use", torch.cuda.device_count(), "GPUs!")
+if paras.gpu and paras.reserve_gpu > 0:
+    buff = torch.randn(int(paras.reserve_gpu*1e9//4)).cuda()
+    del buff
 
 if paras.lm:
     # Train RNNLM

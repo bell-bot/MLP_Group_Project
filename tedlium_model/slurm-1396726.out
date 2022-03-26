@@ -1,40 +1,0 @@
-mkdir: cannot create directory ‘/disk/ted’: Permission denied
-[INFO] Exp. name : asr_example_sd0                                                                         
-[INFO] Loading data... large corpus may took a while.                                                      
-{'name': 'Tedlium', 'path': '/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy', 'train_split': ['train'], 'dev_split': ['dev'], 'bucketing': True, 'batch_size': 2}
-tedlium
-['dev']
-8
-['train']
-50
-[INFO] Data spec. | Corpus = Tedlium (from /home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy)
-[INFO]            | Train sets = ['train']	| Number of utts = 50                                           
-[INFO]            | Dev sets = ['dev']	| Number of utts = 8                                                
-[INFO]            | Batch size = 2		| Bucketing = True                                                     
-[INFO] I/O spec.  | Audio feature = mfcc	| feature dim = 39	| Token type = character	| Vocab size = 32     
-[INFO] Model spec.| Encoder's downsampling rate of time axis is 4.                                         
-[INFO]            | VGG Extractor w/ time downsampling rate = 4 in encoder enabled.                        
-[INFO]            | loc attention decoder enabled ( lambda = 1.0).                                         
-[INFO] Optim.spec.| Algo. = Adadelta	| Lr = 1.0	 (Scheduler = fixed)| Scheduled sampling = False           
-[INFO] Total training steps 100.0K.                                                                        
-/home/s1870697/MLP_Group_Project/tedlium_model/src/module.py:46: UserWarning: __floordiv__ is deprecated, and its behavior will change in a future version of pytorch. It currently rounds toward 0 (like the 'trunc' function NOT 'floor'). This results in incorrect rounding for negative values. To keep the current behavior, use torch.div(a, b, rounding_mode='trunc'), or for actual floor division, use torch.div(a, b, rounding_mode='floor').
-  feat_len = feat_len//4
-[K[1.0 ] Tr stat | Loss - 3.48 | Grad. Norm - 4.26 | 12.061 sec/step (rd 48.0% | fw 21.0% | bw 31.0%)[K[1.0 ] Valid step - 1/4[K[1.0 ] Valid step - 2/4[K[1.0 ] Valid step - 3/4[K[1.0 ] Valid step - 4/4[INFO] Saved checkpoint (step = 1.0 , wer = 2.16) and status @ ckpt/asr_example_sd0/best_att.pth           
-Traceback (most recent call last):
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/main.py", line 73, in <module>
-    solver.exec()
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/bin/train_asr.py", line 105, in exec
-    self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
-  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/asr.py", line 118, in forward
-    attn, context = self.attention(
-  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/asr.py", line 311, in forward
-    context, attn = self.att_layer(query, self.key, self.value)
-  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/module.py", line 253, in forward
-    k+q+loc_context)).squeeze(2)  # BNxTxD -> BNxT
-RuntimeError: CUDA out of memory. Tried to allocate 12.00 MiB (GPU 0; 5.94 GiB total capacity; 5.23 GiB already allocated; 5.19 MiB free; 5.26 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

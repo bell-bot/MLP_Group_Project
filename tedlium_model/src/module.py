@@ -120,7 +120,7 @@ class RNNLayer(nn.Module):
 
         # Additional projection layer
         if self.proj:
-            self.pj = nn.DataParallel(nn.Linear(rnn_out_dim, rnn_out_dim))
+            self.pj = nn.Linear(rnn_out_dim, rnn_out_dim)
 
     def forward(self, input_x, x_len):
         # Forward RNN
