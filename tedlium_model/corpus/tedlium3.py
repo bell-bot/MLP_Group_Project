@@ -7,9 +7,9 @@ from joblib import Parallel, delayed
 from torch.utils.data import Dataset
 
 # Additional (official) text src provided
-OFFICIAL_TXT_SRC = ['TEDLIUM_release-3.tgz']
+OFFICIAL_TXT_SRC = ['train/sph/t3_commoncrawl-9pc.en','..LM/t3_commoncrawl-9pc.en', 't3_commoncrawl-9pc.en', 'train/t3_commoncrawl-9pc.en']
 # Remove longest N sentence in librispeech-lmlibrispeech.py-norm.txt
-REMOVE_TOP_N_TXT = 5000000
+# REMOVE_TOP_N_TXT = 5000000
 # Default num. of threads used for loading LibriSpeech
 READ_FILE_THREADS = 4
 
@@ -121,15 +121,26 @@ class Ted3TextDataset(Dataset):
 
         # List all wave files
         file_list, all_sent = [], []
-
+        print(split)
         for s in split:
             if s in OFFICIAL_TXT_SRC:
                 self.encode_on_fly = True
                 with open(join(path, s), 'r') as f:
                     all_sent += f.readlines()
-            file_list += list(Path(join(path, s)).rglob("*.flac"))
+                print("ph")
+                print(len(all_sent))
+            print(path)
+            if s in OFFICIAL_TXT_SRC:
+                path_points = s.split("/")
+                s = path_points[0] + "/" + path_points[1] + "/"
+            print(s)
+
+            split_list = list(Path(join(path, s)).rglob("*.sph"))
+            split_list = split_list[:50] #take the first 50 audio files only
+            print(len(split_list))
+            file_list += split_list
         assert (len(file_list) > 0) or (len(all_sent)
-                                        > 0), "No data found @ {}".format(path)
+                                       > 0), "No data found @ {}".format(path)
 
         # Read text
         text = Parallel(n_jobs=READ_FILE_THREADS)(
@@ -147,8 +158,8 @@ class Ted3TextDataset(Dataset):
 
         # Read file size and sort dataset by file size (Note: feature len. may be different)
         self.text = sorted(self.text, reverse=True, key=lambda x: len(x))
-        if self.encode_on_fly:
-            del self.text[:REMOVE_TOP_N_TXT]
+        # if self.encode_on_fly:
+        #     del self.text[:REMOVE_TOP_N_TXT]
 
     def __getitem__(self, index):
         if self.bucket_size > 1:

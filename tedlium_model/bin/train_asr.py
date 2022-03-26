@@ -5,7 +5,9 @@ from src.asr import ASR
 from src.optim import Optimizer
 from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
+import torch.nn as nn
 
+devices = "cuda:0,1"
 
 class Solver(BaseSolver):
     ''' Solver for training'''
@@ -13,12 +15,26 @@ class Solver(BaseSolver):
     def __init__(self, config, paras, mode):
         super().__init__(config, paras, mode)
         # Logger settings
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = device
         self.best_wer = {'att': 3.0, 'ctc': 3.0}
         # Curriculum learning affects data loader
         self.curriculum = self.config['hparas']['curriculum']
 
     def fetch_data(self, data):
         ''' Move data to device and compute text seq. length'''
+        #_, feat, feat_len, txt = data
+        #txt_len = torch.sum(txt != 0, dim=-1)
+        #gpus = list()
+        #num_of_gpus = torch.cuda.device_count()
+        #for i in range(num_of_gpus):
+        #    gpus.append("cuda:" + str(i))
+        #for gpu in gpus:
+        #    feat = feat.to(gpu)
+        #    feat_len = feat_len.to(gpu)
+        #    txt = txt.to(gpu)
+
+
         _, feat, feat_len, txt = data
         feat = feat.to(self.device)
         feat_len = feat_len.to(self.device)
@@ -37,11 +53,28 @@ class Solver(BaseSolver):
     def set_model(self):
         ''' Setup ASR model and optimizer '''
         # Model
+        ##ADDDED################################
+        gpus = list()
+        num_of_gpus = torch.cuda.device_count()
+        for i in range(num_of_gpus):
+            gpus.append("cuda:" + str(i))
+        ##ADDDED################################
+
         init_adadelta = self.config['hparas']['optimizer'] == 'Adadelta'
+
+        #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model'])
+        #for gpu in gpus:
+        #    self.model.to(gpu)
         self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
-                         self.config['model']).to(self.device)
-        self.verbose(self.model.create_msg())
-        model_paras = [{'params': self.model.parameters()}]
+                         self.config['model'])
+        self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
+                         self.config['model'])
+        self.model = nn.DataParallel(self.model,device_ids=[0,1])
+        self.model.to(self.device)
+        #self.model.to(self.device)
+
+        self.verbose(self.asr.create_msg())
+        model_paras = [{'params': self.asr.parameters()}]
 
         # Losses
         self.seq_loss = torch.nn.CrossEntropyLoss(ignore_index=0)
@@ -54,8 +87,12 @@ class Solver(BaseSolver):
             self.config['emb']['enable'])
         if self.emb_reg:
             from src.plugin import EmbeddingRegularizer
-            self.emb_decoder = EmbeddingRegularizer(
-                self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
+
+            #self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb'])
+            #for gpu in gpus:
+            #    self.emb_decoder.to(gpu)
+            self.emb_decoder = EmbeddingRegularizer(self.tokenizer, self.model.dec_dim, **self.config['emb']).to(self.device)
+
             model_paras.append({'params': self.emb_decoder.parameters()})
             self.emb_fuse = self.emb_decoder.apply_fuse
             if self.emb_fuse:
@@ -102,8 +139,10 @@ class Solver(BaseSolver):
                 # Forward model
                 # Note: txt should NOT start w/ <sos>
                 ctc_output, encode_len, att_output, att_align, dec_state = \
-                    self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
+                                self.model(feat, feat_len, max(txt_len), tf_rate=tf_rate,
                                teacher=txt, get_dec_state=self.emb_reg)
+
+
 
                 # Plugins
                 if self.emb_reg:

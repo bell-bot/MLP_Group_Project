@@ -1,0 +1,8 @@
+mkdir: cannot create directory ‘/disk/ted’: Permission denied
+[INFO] Exp. name : asr_example_sd0                                                                         
+[INFO] Loading data... large corpus may took a while.                                                      
+{'name': 'Tedlium', 'path': '/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy', 'train_split': ['train'], 'dev_split': ['dev'], 'bucketing': True, 'batch_size': 2}
+tedlium
+['dev']
+8
+slurmstepd-landonia04: error: *** JOB 1396722 ON landonia04 CANCELLED AT 2022-03-26T15:31:52 ***

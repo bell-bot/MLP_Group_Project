@@ -177,7 +177,6 @@ def load_textset(n_jobs, use_gpu, pin_memory, corpus, text):
         tokenizer, **corpus)
     collect_tr = partial(collect_text_batch, mode='train')
     collect_dv = partial(collect_text_batch, mode='dev')
-
     # Dataloader (Text data stored in RAM, no need num_workers)
     tr_set = DataLoader(tr_set, batch_size=tr_loader_bs, shuffle=True, drop_last=True, collate_fn=collect_tr,
                         num_workers=0, pin_memory=use_gpu)
