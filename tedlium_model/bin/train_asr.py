@@ -7,8 +7,8 @@ from src.data import load_dataset
 from src.util import human_format, cal_er, feat_to_fig
 import torch.nn as nn
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
-gpus = [1,2]
+os.environ["CUDA_VISIBLE_DEVICES"]="1,4"
+gpus = [1,4]
 class Solver(BaseSolver):
     ''' Solver for training'''
 

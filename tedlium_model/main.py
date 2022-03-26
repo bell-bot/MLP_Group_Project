@@ -5,8 +5,7 @@ import torch
 import argparse
 import numpy as np
 import os
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="1,2"
+os.environ["CUDA_VISIBLE_DEVICES"]="1,4"
 ##NEED TO SET
 ##model= nn.DataParallel(model,device_ids = [0, 1])
 # For reproducibility, comment these may speed up training
