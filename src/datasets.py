@@ -18,7 +18,7 @@ from src.utils import get_git_root
 from src.Preprocessing.pre_processing import resample_audio
 
 
-from constants import DATASET_TEDLIUM_PATH, DATASET_MLCOMMONS_PATH, LabelsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
+from src.constants import DATASET_TEDLIUM_PATH, DATASET_MLCOMMONS_PATH, LabelsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
 
 ############# --------- DATASETS --------------################
 
