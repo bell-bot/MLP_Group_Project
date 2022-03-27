@@ -8,7 +8,7 @@ data:
     train_split: ["train"] # Name of data splits to be used as training set
     dev_split: ["dev"] # Name of data splits to be used as validation set
     bucketing: True # Enable/Disable bucketing
-    batch_size: 8
+    batch_size: 2
   audio: # Attributes of audio feature
     feat_type: "mfcc"
     feat_dim: 13
@@ -48,20 +48,20 @@ model: # Model architecture
     ##Smaller home machine
     #dim: [32, 32]
    #STILL TOO BIG
-    dim: [512,512,512,512,512]
-    #dim: [128,128,128]
-    #dropout: [0,0,0]
-    dropout: [0,0,0,0,0]
+    #dim: [512,512,512,512,512]
+    dim: [128,128,128]
+    dropout: [0,0,0]
+    #dropout: [0,0,0,0,0]
     #dropout: [0,0]
     #layer_norm: [False, False]
-    #layer_norm: [False, False,False]
-    layer_norm: [False,False,False,False,False]
+    layer_norm: [False, False,False]
+    #layer_norm: [False,False,False,False,False]
     #proj: [True, True,True] # Linear projection + Tanh after each rnn layer
     proj: [True,True,True,True,True]
     #proj: [True, True] # Linear projection + Tanh after each rnn layer
-    #sample_rate: [1, 1,1]
+    sample_rate: [1, 1,1]
     #sample_rate: [1, 1]
-    sample_rate: [1,1,1,1,1]
+    #sample_rate: [1,1,1,1,1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
