@@ -1,0 +1,14 @@
+[INFO] Exp. name : lm_example_sd0                                                                          
+[INFO] Loading data... large corpus may took a while.                                                      
+Traceback (most recent call last):
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/main.py", line 71, in <module>
+    solver.load_data()
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/bin/train_lm.py", line 28, in load_data
+    load_textset(self.paras.njobs, self.paras.gpu,
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/data.py", line 176, in load_textset
+    tr_set, dv_set, tr_loader_bs, dv_loader_bs, data_msg = create_textset(
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/data.py", line 130, in create_textset
+    dv_set = Dataset(path, dev_split, tokenizer, 1)
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/corpus/tedlium3.py", line 131, in __init__
+    assert (len(file_list) > 0) or (len(all_sent)
+AssertionError: No data found @ /home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy

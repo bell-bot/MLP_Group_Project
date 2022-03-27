@@ -1,0 +1,29 @@
+[INFO] Evaluating result of tr. config @ config/ted/asr_example.yaml                                       
+{'name': 'Tedlium', 'dev_split': ['dev'], 'test_split': ['test'], 'path': '/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy', 'bucketing': False, 'batch_size': 1}
+tedlium
+['dev']
+8
+['test']
+11
+[INFO] Data spec. | Corpus = Tedlium (from /home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy)
+[INFO]            | Dev sets = ['dev']	| Number of utts = 8                                                
+[INFO]            | Test sets = ['test']	| Number of utts = 11                                             
+[INFO]            | Batch size = 1		| Bucketing = False                                                    
+[INFO] I/O spec.  | Audio feature = mfcc	| feature dim = 39	| Token type = character	| Vocab size = 32     
+Traceback (most recent call last):
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/main.py", line 72, in <module>
+    solver.set_model()
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/bin/test_asr.py", line 73, in set_model
+    self.load_ckpt()
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/solver.py", line 99, in load_ckpt
+    self.model.load_state_dict(ckpt['model'])
+  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1482, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for ASR:
+	Unexpected key(s) in state_dict: "encoder.layers.2.layer.weight_ih_l0", "encoder.layers.2.layer.weight_hh_l0", "encoder.layers.2.layer.bias_ih_l0", "encoder.layers.2.layer.bias_hh_l0", "encoder.layers.2.pj.weight", "encoder.layers.2.pj.bias", "encoder.layers.3.layer.weight_ih_l0", "encoder.layers.3.layer.weight_hh_l0", "encoder.layers.3.layer.bias_ih_l0", "encoder.layers.3.layer.bias_hh_l0", "encoder.layers.3.pj.weight", "encoder.layers.3.pj.bias". 
+	size mismatch for attention.proj_q.weight: copying a param with shape torch.Size([50, 32]) from checkpoint, the shape in current model is torch.Size([25, 32]).
+	size mismatch for attention.proj_q.bias: copying a param with shape torch.Size([50]) from checkpoint, the shape in current model is torch.Size([25]).
+	size mismatch for attention.proj_k.weight: copying a param with shape torch.Size([50, 32]) from checkpoint, the shape in current model is torch.Size([25, 32]).
+	size mismatch for attention.proj_k.bias: copying a param with shape torch.Size([50]) from checkpoint, the shape in current model is torch.Size([25]).
+	size mismatch for attention.att_layer.loc_proj.weight: copying a param with shape torch.Size([50, 10]) from checkpoint, the shape in current model is torch.Size([25, 10]).
+	size mismatch for attention.att_layer.gen_energy.weight: copying a param with shape torch.Size([1, 50]) from checkpoint, the shape in current model is torch.Size([1, 25]).

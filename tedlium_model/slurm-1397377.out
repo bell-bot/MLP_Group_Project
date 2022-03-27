@@ -1,0 +1,25 @@
+[INFO] Exp. name : lm_example_sd0                                                                          
+[INFO] Loading data... large corpus may took a while.                                                      
+['dev']
+/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy
+dev
+8
+  0%|          | 0/8 [00:00<?, ?it/s]100%|██████████| 8/8 [00:00<00:00, 7351.98it/s]
+['train/sph/t3_commoncrawl-9pc.en']
+ph
+767590
+/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy
+train/sph/
+50
+Traceback (most recent call last):
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/main.py", line 71, in <module>
+    solver.load_data()
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/bin/train_lm.py", line 28, in load_data
+    load_textset(self.paras.njobs, self.paras.gpu,
+  File "/home/s1870697/MLP_Group_Project/tedlium_model/src/data.py", line 182, in load_textset
+    tr_set = DataLoader(tr_set, batch_size=tr_loader_bs, shuffle=True, drop_last=True, collate_fn=collect_tr,
+  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 268, in __init__
+    sampler = RandomSampler(dataset, generator=generator)
+  File "/home/s1870697/miniconda3/envs/ctrlf_project/lib/python3.9/site-packages/torch/utils/data/sampler.py", line 102, in __init__
+    raise ValueError("num_samples should be a positive integer "
+ValueError: num_samples should be a positive integer value, but got num_samples=0

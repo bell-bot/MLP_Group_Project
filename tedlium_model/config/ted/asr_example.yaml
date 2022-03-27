@@ -21,7 +21,7 @@ data:
 
 hparas: # Experiment hyper-parameters
   valid_step: 2000
-  max_step: 100001
+  max_step: 150001
   tf_start: 1.0
   tf_end: 1.0
   tf_step: 500
@@ -37,16 +37,16 @@ model: # Model architecture
     prenet: "vgg" # 'vgg'/'cnn'/''
     # vgg: True                             # 4x reduction on time feature extraction
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
-    bidirection: True
-    dim: [32,32,32]
-    dropout: [0, 0, 0]
-    layer_norm: [False, False, False]
-    proj: [True, True, True] # Linear projection + Tanh after each rnn layer
-    sample_rate: [1, 1, 1]
+    bidirection: False
+    dim: [32]
+    dropout: [0]
+    layer_norm: [False]
+    proj: [True] # Linear projection + Tanh after each rnn layer
+    sample_rate: [1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
-    dim: 100
+    dim: 25
     num_head: 1
     v_proj: False # if False and num_head>1, encoder state will be duplicated for each head
     temperature: 0.5 # scaling factor for attention

@@ -1,0 +1,22 @@
+mkdir: cannot create directory ‘/disk/ted’: Permission denied
+[INFO] Exp. name : asr_example_sd0                                                                         
+[INFO] Loading data... large corpus may took a while.                                                      
+{'name': 'Tedlium', 'path': '/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy', 'train_split': ['train'], 'dev_split': ['dev'], 'bucketing': True, 'batch_size': 2}
+tedlium
+['dev']
+8
+['train']
+50
+[INFO] Data spec. | Corpus = Tedlium (from /home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy)
+[INFO]            | Train sets = ['train']	| Number of utts = 50                                           
+[INFO]            | Dev sets = ['dev']	| Number of utts = 8                                                
+[INFO]            | Batch size = 2		| Bucketing = True                                                     
+[INFO] I/O spec.  | Audio feature = mfcc	| feature dim = 39	| Token type = character	| Vocab size = 32     
+[INFO] Model spec.| Encoder's downsampling rate of time axis is 4.                                         
+[INFO]            | VGG Extractor w/ time downsampling rate = 4 in encoder enabled.                        
+[INFO]            | loc attention decoder enabled ( lambda = 1.0).                                         
+[INFO] Optim.spec.| Algo. = Adadelta	| Lr = 1.0	 (Scheduler = fixed)| Scheduled sampling = False           
+[INFO] Total training steps 150.0K.                                                                        
+/home/s1870697/MLP_Group_Project/tedlium_model/src/module.py:46: UserWarning: __floordiv__ is deprecated, and its behavior will change in a future version of pytorch. It currently rounds toward 0 (like the 'trunc' function NOT 'floor'). This results in incorrect rounding for negative values. To keep the current behavior, use torch.div(a, b, rounding_mode='trunc'), or for actual floor division, use torch.div(a, b, rounding_mode='floor').
+  feat_len = feat_len//4
+[K[1.0 ] Tr stat | Loss - 3.49 | Grad. Norm - 4.80 | 13.250 sec/step (rd 73.5% | fw 11.0% | bw 15.4%)[K[1.0 ] Valid step - 1/4[K[1.0 ] Valid step - 2/4[K[1.0 ] Valid step - 3/4[K[1.0 ] Valid step - 4/4[K[100.0 ] Tr stat | Loss - 0.53 | Grad. Norm - 0.13 | 2.329 sec/step (rd 1.9% | fw 33.2% | bw 65.0%)[K[200.0 ] Tr stat | Loss - 0.51 | Grad. Norm - 0.10 | 2.458 sec/step (rd 6.0% | fw 31.6% | bw 62.4%)[K[300.0 ] Tr stat | Loss - 0.43 | Grad. Norm - 0.20 | 2.372 sec/step (rd 5.3% | fw 31.3% | bw 63.5%)[K[400.0 ] Tr stat | Loss - 0.59 | Grad. Norm - 0.38 | 2.446 sec/step (rd 4.9% | fw 32.7% | bw 62.4%)[K[500.0 ] Tr stat | Loss - 0.53 | Grad. Norm - 0.45 | 2.452 sec/step (rd 6.4% | fw 31.2% | bw 62.4%)[K[600.0 ] Tr stat | Loss - 0.48 | Grad. Norm - 0.52 | 2.422 sec/step (rd 4.8% | fw 32.2% | bw 63.0%)[K[700.0 ] Tr stat | Loss - 0.41 | Grad. Norm - 0.31 | 2.286 sec/step (rd 5.0% | fw 30.5% | bw 64.5%)[K[800.0 ] Tr stat | Loss - 0.57 | Grad. Norm - 1.27 | 2.481 sec/step (rd 6.6% | fw 32.0% | bw 61.3%)[K[900.0 ] Tr stat | Loss - 0.52 | Grad. Norm - 0.52 | 2.428 sec/step (rd 5.1% | fw 32.1% | bw 62.8%)

@@ -1,0 +1,6 @@
+[INFO] Evaluating result of tr. config @ config/ted/asr_example.yaml                                       
+{'name': 'Tedlium', 'dev_split': ['dev'], 'test_split': ['test'], 'path': '/home/s1870697/MLP_Group_Project/src/Data/TEDLIUM_release-3/legacy', 'bucketing': False, 'batch_size': 1}
+tedlium
+['dev']
+8
+slurmstepd-landonia15: error: *** JOB 1397357 ON landonia15 CANCELLED AT 2022-03-27T15:07:56 ***

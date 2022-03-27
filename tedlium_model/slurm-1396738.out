@@ -1,5 +1,0 @@
-mkdir: cannot create directory ‘/disk/ted’: Permission denied
-  File "/home/s1870697/MLP_Group_Project/tedlium_model/main.py", line 7
-    <<<<<<< HEAD
-    ^
-SyntaxError: invalid syntax
