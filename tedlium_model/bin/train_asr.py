@@ -54,18 +54,21 @@ class Solver(BaseSolver):
         # Model
         init_adadelta = self.config['hparas']['optimizer'] == 'Adadelta'
 
-        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model']).to(self.device)
+
         #for gpu in gpus:
         #    self.model.to(gpu)
         #self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
         #                self.config['model'])
         #self.asr = ASR(self.feat_dim, self.vocab_size, init_adadelta, **
         #                 self.config['model'])
+        device = torch.device('cuda')
+        self.model = ASR(self.feat_dim, self.vocab_size, init_adadelta, **self.config['model']).to(self.device)
         self.verbose(self.model.create_msg())
         print(self.gpus)
         print(os.environ["CUDA_VISIBLE_DEVICES"])
-        #self.model == nn.DataParallel(self.model,device_ids=self.gpus)
-        self.model == nn.DataParallel(self.model)
+        
+        self.model == nn.DataParallel(self.model,device_ids=self.gpus)
+        #self.model == nn.DataParallel(self.model)
         #self.verbose(self.model.create_msg())
         model_paras = [{'params': self.model.parameters()}]
 
