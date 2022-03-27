@@ -49,25 +49,25 @@ model: # Model architecture
     #dim: [32, 32]
    #STILL TOO BIG
     #dim: [512,512,512,512,512]
-    dim: [128,128,128]
-    dropout: [0,0,0]
+    dim: [128,128]
+    #dropout: [0,0,0]
     #dropout: [0,0,0,0,0]
-    #dropout: [0,0]
-    #layer_norm: [False, False]
-    layer_norm: [False, False,False]
+    dropout: [0,0]
+    layer_norm: [False, False]
+    #layer_norm: [False, False,False]
     #layer_norm: [False,False,False,False,False]
     #proj: [True, True,True] # Linear projection + Tanh after each rnn layer
-    proj: [True,True,True,True,True]
-    #proj: [True, True] # Linear projection + Tanh after each rnn layer
-    sample_rate: [1, 1,1]
-    #sample_rate: [1, 1]
+    #proj: [True,True,True,True,True]
+    proj: [True, True] # Linear projection + Tanh after each rnn layer
+    #ample_rate: [1, 1,1]
+    sample_rate: [1, 1]
     #sample_rate: [1,1,1,1,1]
     sample_style: "drop" # 'drop'/'concat'
   attention:
     mode: "loc" # 'dot'/'loc'
-    dim: 300
+    #dim: 300
     #dim: 200
-    #dim: 50
+    dim: 50
     num_head: 1
     v_proj: False # if False and num_head>1, encoder state will be duplicated for each head
     temperature: 0.5 # scaling factor for attention
@@ -75,8 +75,8 @@ model: # Model architecture
     loc_kernel_num: 10 # just for mode=='loc'
   decoder:
     module: "LSTM" # 'LSTM'/'GRU'/'Transformer'
-    #dim: 128
-    dim: 512
+    dim: 128
+    #dim: 512
     #dim: 32
     layer: 1
     dropout: 0
