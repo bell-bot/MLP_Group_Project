@@ -8,7 +8,7 @@ data:
     train_split: ["train"] # Name of data splits to be used as training set
     dev_split: ["dev"] # Name of data splits to be used as validation set
     bucketing: True # Enable/Disable bucketing
-    batch_size: 2
+    batch_size: 8
   audio: # Attributes of audio feature
     feat_type: "mfcc"
     feat_dim: 13
@@ -24,14 +24,14 @@ data:
     vocab_file: "tests/sample_data/character.vocab"
 
 hparas: # Experiment hyper-parameters
-  #valid_step: 500
-  valid_step: 50
-  #max_step: 100001
-  max_step: 10001
+  valid_step: 500
+  #valid_step: 50
+  max_step: 100001
+  #max_step: 10001
   tf_start: 1.0
   tf_end: 1.0
-  #tf_step: 5000
-  tf_step: 500
+  tf_step: 5000
+  #tf_step: 500
   optimizer: "Adadelta"
   lr: 1.0
   eps: 0.00001 # 1e-5
