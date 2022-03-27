@@ -1,1 +1,0 @@
-The main folder we will be using, it represents labels done for all keywords in each segment (as much as possible) using forced alignment. The labels.csv file is huge, so will need to be downloaded from the Drive
