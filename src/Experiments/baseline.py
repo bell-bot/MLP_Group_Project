@@ -132,5 +132,6 @@ for idx in range(1000):
         
 
 final_accuracy = np.sum(accuracy)/len(accuracy)
-
-print(final_accuracy)
+acc = open("final_acc.txt", "w")
+acc.write(final_accuracy)
+acc.close()
