@@ -1,0 +1,3781 @@
+Keyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidenceKeyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidence0    organization
+1           human
+2          rights
+3             put
+4           touch
+Name: keyword, dtype: object,adversarial_24,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_24,0    touch/common_voice_en_60499.opus
+1    touch/common_voice_en_60499.opus
+2    touch/common_voice_en_60499.opus
+3    touch/common_voice_en_60499.opus
+4    touch/common_voice_en_60499.opus
+Name: MSWC_ID, dtype: object,0    170.360375
+1    171.545500
+2    171.826750
+3    174.036250
+4    174.518312
+Name: keyword_start_time, dtype: float64,0    170.983062
+1    171.766437
+2    172.128000
+3    174.196937
+4    174.779438
+Name: keyword_end_time, dtype: float64,0    0.971228
+1    0.999253
+2    0.922329
+3    0.895595
+4    0.754369
+Name: confidence, dtype: float640         and
+1         saw
+2     phyllis
+3         and
+4     watched
+5         her
+6         she
+7         was
+8         the
+9        only
+10     mother
+11        the
+12      group
+Name: keyword, dtype: object,adversarial_25,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_25,0     was/common_voice_en_543350.opus
+1     was/common_voice_en_543350.opus
+2     was/common_voice_en_543350.opus
+3     was/common_voice_en_543350.opus
+4     was/common_voice_en_543350.opus
+5     was/common_voice_en_543350.opus
+6     was/common_voice_en_543350.opus
+7     was/common_voice_en_543350.opus
+8     was/common_voice_en_543350.opus
+9     was/common_voice_en_543350.opus
+10    was/common_voice_en_543350.opus
+11    was/common_voice_en_543350.opus
+12    was/common_voice_en_543350.opus
+Name: MSWC_ID, dtype: object,0     189.530250
+1     190.372437
+2     190.673188
+3     191.314812
+4     191.695750
+5     192.136875
+6     194.663312
+7     194.803687
+8     194.964063
+9     195.124500
+10    196.006687
+11    196.808750
+12    196.929062
+Name: keyword_start_time, dtype: float64,0     189.610500
+1     190.593000
+2     191.114313
+3     191.395000
+4     192.056688
+5     192.317375
+6     194.763563
+7     194.923937
+8     195.044250
+9     195.405188
+10    196.367625
+11    196.888937
+12    197.149625
+Name: keyword_end_time, dtype: float64,0     0.932269
+1     0.974110
+2     0.888306
+3     0.976388
+4     0.918403
+5     0.900872
+6     0.838210
+7     0.999741
+8     0.999151
+9     0.999855
+10    0.997629
+11    0.705100
+12    0.803154
+Name: confidence, dtype: float640          and
+1          saw
+2          her
+3         eyes
+4         that
+5          she
+6          was
+7       mother
+8         just
+9         like
+10    suffered
+11         lot
+12      mother
+Name: keyword, dtype: object,adversarial_26,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_26,0     her/common_voice_en_17889295.opus
+1     her/common_voice_en_17889295.opus
+2     her/common_voice_en_17889295.opus
+3     her/common_voice_en_17889295.opus
+4     her/common_voice_en_17889295.opus
+5     her/common_voice_en_17889295.opus
+6     her/common_voice_en_17889295.opus
+7     her/common_voice_en_17889295.opus
+8     her/common_voice_en_17889295.opus
+9     her/common_voice_en_17889295.opus
+10    her/common_voice_en_17889295.opus
+11    her/common_voice_en_17889295.opus
+12    her/common_voice_en_17889295.opus
+Name: MSWC_ID, dtype: object,0     205.840313
+1     206.161063
+2     207.003000
+3     207.243562
+4     207.484125
+5     207.664562
+6     207.804875
+7     208.085500
+8     208.406250
+9     208.606687
+10    209.809500
+11    210.330688
+12    210.571250
+Name: keyword_start_time, dtype: float64,0     205.920500
+1     206.562000
+2     207.083188
+3     207.403938
+4     207.624437
+5     207.764750
+6     207.945188
+7     208.346125
+8     208.566625
+9     208.747062
+10    210.190375
+11    210.450938
+12    210.871938
+Name: keyword_end_time, dtype: float64,0     0.980393
+1     0.931804
+2     0.999624
+3     0.876075
+4     0.951680
+5     0.801563
+6     0.870517
+7     0.992015
+8     0.815914
+9     0.925643
+10    0.457881
+11    0.444438
+12    0.443599
+Name: confidence, dtype: float640         was
+1     married
+2        when
+3         was
+4    fourteen
+5        lost
+6       child
+7        when
+8         was
+9     fifteen
+Name: keyword, dtype: object,adversarial_27,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+7    911Mothers_2010W
+8    911Mothers_2010W
+9    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_27,0    was/common_voice_en_19151943.opus
+1    was/common_voice_en_19151943.opus
+2    was/common_voice_en_19151943.opus
+3    was/common_voice_en_19151943.opus
+4    was/common_voice_en_19151943.opus
+5    was/common_voice_en_19151943.opus
+6    was/common_voice_en_19151943.opus
+7    was/common_voice_en_19151943.opus
+8    was/common_voice_en_19151943.opus
+9    was/common_voice_en_19151943.opus
+Name: MSWC_ID, dtype: object,0    221.244313
+1    221.444562
+2    221.684937
+3    222.165625
+4    222.285750
+5    223.367312
+6    223.687750
+7    224.008250
+8    224.208500
+9    224.388750
+Name: keyword_start_time, dtype: float64,0    221.424563
+1    221.664875
+2    221.985312
+3    222.265750
+4    222.646312
+5    223.547562
+6    223.968187
+7    224.108375
+8    224.328688
+9    224.909500
+Name: keyword_end_time, dtype: float64,0    0.633410
+1    0.487618
+2    0.734524
+3    0.480149
+4    0.589219
+5    0.918943
+6    0.980827
+7    0.989540
+8    0.841251
+9    0.909962
+Name: confidence, dtype: float640        that's
+1           why
+2       decided
+3          tell
+4         story
+5          that
+6     suffering
+7     something
+8      positive
+9           for
+10        other
+11        women
+Name: keyword, dtype: object,adversarial_29,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_29,0     positive/common_voice_en_22306148.opus
+1     positive/common_voice_en_22306148.opus
+2     positive/common_voice_en_22306148.opus
+3     positive/common_voice_en_22306148.opus
+4     positive/common_voice_en_22306148.opus
+5     positive/common_voice_en_22306148.opus
+6     positive/common_voice_en_22306148.opus
+7     positive/common_voice_en_22306148.opus
+8     positive/common_voice_en_22306148.opus
+9     positive/common_voice_en_22306148.opus
+10    positive/common_voice_en_22306148.opus
+11    positive/common_voice_en_22306148.opus
+Name: MSWC_ID, dtype: object,0     275.720625
+1     275.941062
+2     276.241625
+3     276.742625
+4     277.103375
+5     277.664500
+6     278.025188
+7     278.646437
+8     279.067250
+9     279.608312
+10    279.768625
+11    279.949000
+Name: keyword_start_time, dtype: float64,0     275.900937
+1     276.081313
+2     276.602375
+3     276.902937
+4     277.484125
+5     277.804750
+6     278.486125
+7     278.967062
+8     279.568250
+9     279.708563
+10    279.929000
+11    280.229562
+Name: keyword_end_time, dtype: float64,0     0.992408
+1     0.904923
+2     0.947313
+3     0.940324
+4     0.975264
+5     0.859656
+6     0.963604
+7     0.888333
+8     0.992299
+9     0.999538
+10    0.999873
+11    0.927735
+Name: confidence, dtype: float640         it's
+1          not
+2      against
+3        women
+4         it's
+5          for
+6          for
+7        women
+8          for
+9          our
+10    children
+Name: keyword, dtype: object,adversarial_30,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_30,0     not/common_voice_en_127693.opus
+1     not/common_voice_en_127693.opus
+2     not/common_voice_en_127693.opus
+3     not/common_voice_en_127693.opus
+4     not/common_voice_en_127693.opus
+5     not/common_voice_en_127693.opus
+6     not/common_voice_en_127693.opus
+7     not/common_voice_en_127693.opus
+8     not/common_voice_en_127693.opus
+9     not/common_voice_en_127693.opus
+10    not/common_voice_en_127693.opus
+Name: MSWC_ID, dtype: object,0     316.740188
+1     316.940562
+2     317.120875
+3     317.942250
+4     318.463125
+5     318.783625
+6     319.524875
+7     320.025750
+8     320.606750
+9     321.949000
+10    322.089250
+Name: keyword_start_time, dtype: float64,0     316.860438
+1     317.080750
+2     317.581625
+3     318.302813
+4     318.603375
+5     318.943938
+6     319.685188
+7     320.386375
+8     320.947313
+9     322.049188
+10    322.489875
+Name: keyword_end_time, dtype: float64,0     0.912869
+1     0.913949
+2     0.921633
+3     0.957474
+4     0.960627
+5     0.999706
+6     0.999616
+7     0.921247
+8     0.882745
+9     0.991972
+10    0.806312
+Name: confidence, dtype: float640         talk
+1      against
+2     violence
+3      against
+4    terrorism
+5      schools
+6         talk
+7        young
+8       muslim
+Name: keyword, dtype: object,adversarial_31,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+7    911Mothers_2010W
+8    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_31,0    muslim/common_voice_en_20735467.opus
+1    muslim/common_voice_en_20735467.opus
+2    muslim/common_voice_en_20735467.opus
+3    muslim/common_voice_en_20735467.opus
+4    muslim/common_voice_en_20735467.opus
+5    muslim/common_voice_en_20735467.opus
+6    muslim/common_voice_en_20735467.opus
+7    muslim/common_voice_en_20735467.opus
+8    muslim/common_voice_en_20735467.opus
+Name: MSWC_ID, dtype: object,0    332.140562
+1    332.781625
+2    333.262437
+3    333.783250
+4    334.083750
+5    335.065375
+6    335.746500
+7    336.267313
+8    336.848250
+Name: keyword_start_time, dtype: float64,0    332.541250
+1    333.182313
+2    333.723187
+3    334.043687
+4    334.624625
+5    335.546125
+6    335.966813
+7    336.587875
+8    337.349063
+Name: keyword_end_time, dtype: float64,0    0.999729
+1    0.851406
+2    0.965946
+3    0.999818
+4    0.974808
+5    0.829257
+6    0.980023
+7    0.901359
+8    0.873804
+Name: confidence, dtype: float640      girls
+1       they
+2      don't
+3     accept
+4    married
+5    against
+6      their
+7       will
+8       very
+9      young
+Name: keyword, dtype: object,adversarial_32,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+7    911Mothers_2010W
+8    911Mothers_2010W
+9    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_32,0    young/common_voice_en_22175668.opus
+1    young/common_voice_en_22175668.opus
+2    young/common_voice_en_22175668.opus
+3    young/common_voice_en_22175668.opus
+4    young/common_voice_en_22175668.opus
+5    young/common_voice_en_22175668.opus
+6    young/common_voice_en_22175668.opus
+7    young/common_voice_en_22175668.opus
+8    young/common_voice_en_22175668.opus
+9    young/common_voice_en_22175668.opus
+Name: MSWC_ID, dtype: object,0    338.921188
+1    339.722938
+2    340.083687
+3    340.284125
+4    340.905500
+5    341.326375
+6    341.647125
+7    341.847563
+8    342.308562
+9    342.609188
+Name: keyword_start_time, dtype: float64,0    339.462375
+1    340.043625
+2    340.224000
+3    340.564750
+4    341.286313
+5    341.607000
+6    341.787375
+7    342.088063
+8    342.549062
+9    342.849688
+Name: keyword_end_time, dtype: float64,0    0.945653
+1    0.625584
+2    0.857963
+3    0.909826
+4    0.947855
+5    0.887264
+6    0.988012
+7    0.918909
+8    0.999629
+9    0.838900
+Name: confidence, dtype: float640      can
+1     save
+2      one
+3      the
+4    young
+5    girls
+6      and
+Name: keyword, dtype: object,adversarial_33,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_33,0    save/common_voice_en_18096960.opus
+1    save/common_voice_en_18096960.opus
+2    save/common_voice_en_18096960.opus
+3    save/common_voice_en_18096960.opus
+4    save/common_voice_en_18096960.opus
+5    save/common_voice_en_18096960.opus
+6    save/common_voice_en_18096960.opus
+Name: MSWC_ID, dtype: object,0    357.671625
+1    357.973437
+2    358.496500
+3    358.898875
+4    359.180563
+5    359.482375
+6    360.347500
+Name: keyword_start_time, dtype: float64,0    357.852688
+1    358.315437
+2    358.617250
+3    359.039750
+4    359.462250
+5    359.965188
+6    360.770000
+Name: keyword_end_time, dtype: float64,0    0.975500
+1    0.967383
+2    0.983696
+3    0.952235
+4    0.889121
+5    0.937950
+6    0.822387
+Name: confidence, dtype: float640         avoid
+1          that
+2          they
+3           get
+4       married
+5           and
+6        suffer
+7          much
+8           did
+9          well
+10         this
+11    something
+12         good
+Name: keyword, dtype: object,adversarial_34,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_34,0     they/common_voice_en_19021027.opus
+1     they/common_voice_en_19021027.opus
+2     they/common_voice_en_19021027.opus
+3     they/common_voice_en_19021027.opus
+4     they/common_voice_en_19021027.opus
+5     they/common_voice_en_19021027.opus
+6     they/common_voice_en_19021027.opus
+7     they/common_voice_en_19021027.opus
+8     they/common_voice_en_19021027.opus
+9     they/common_voice_en_19021027.opus
+10    they/common_voice_en_19021027.opus
+11    they/common_voice_en_19021027.opus
+12    they/common_voice_en_19021027.opus
+Name: MSWC_ID, dtype: object,0     360.971125
+1     361.432563
+2     361.573000
+3     361.733500
+4     361.894000
+5     362.455688
+6     362.636250
+7     363.077625
+8     363.559125
+9     363.799875
+10    364.020500
+11    364.321438
+12    364.702625
+Name: keyword_start_time, dtype: float64,0     361.392438
+1     361.552937
+2     361.693375
+3     361.853875
+4     362.355375
+5     362.556000
+6     362.917125
+7     363.218062
+8     363.739688
+9     363.980375
+10    364.140875
+11    364.642438
+12    364.943375
+Name: keyword_end_time, dtype: float64,0     0.992962
+1     0.882481
+2     0.975177
+3     0.840556
+4     0.997657
+5     0.766997
+6     0.922404
+7     0.860782
+8     0.837988
+9     0.744111
+10    0.946150
+11    0.936532
+12    0.999814
+Name: confidence, dtype: float640        this
+1         why
+2         i'm
+3        here
+4       front
+5         you
+6       would
+7        like
+8         say
+9        that
+10       have
+11    learned
+12       much
+Name: keyword, dtype: object,adversarial_35,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_35,0     front/common_voice_en_19483554.opus
+1     front/common_voice_en_19483554.opus
+2     front/common_voice_en_19483554.opus
+3     front/common_voice_en_19483554.opus
+4     front/common_voice_en_19483554.opus
+5     front/common_voice_en_19483554.opus
+6     front/common_voice_en_19483554.opus
+7     front/common_voice_en_19483554.opus
+8     front/common_voice_en_19483554.opus
+9     front/common_voice_en_19483554.opus
+10    front/common_voice_en_19483554.opus
+11    front/common_voice_en_19483554.opus
+12    front/common_voice_en_19483554.opus
+Name: MSWC_ID, dtype: object,0     367.440750
+1     367.801312
+2     367.981562
+3     368.161812
+4     368.822812
+5     369.063188
+6     370.545375
+7     370.745625
+8     371.206313
+9     371.526813
+10    371.927375
+11    372.147750
+12    372.768625
+Name: keyword_start_time, dtype: float64,0     367.621062
+1     367.941500
+2     368.101750
+3     368.442250
+4     368.963000
+5     369.223375
+6     370.685563
+7     370.925937
+8     371.446687
+9     371.687063
+10    372.067625
+11    372.428125
+12    373.049062
+Name: keyword_end_time, dtype: float64,0     0.872333
+1     0.886466
+2     0.761104
+3     0.744154
+4     0.400614
+5     0.799716
+6     0.859299
+7     0.965200
+8     0.999899
+9     0.892198
+10    0.874909
+11    0.829374
+12    0.859001
+Name: confidence, dtype: float640         from
+1     starting
+2         with
+3         that
+4          day
+5          had
+6          our
+7         very
+8        first
+9      meeting
+10        with
+11       other
+12      family
+13     members
+14       which
+15         was
+16        very
+Name: keyword, dtype: object,adversarial_36,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+13    911Mothers_2010W
+14    911Mothers_2010W
+15    911Mothers_2010W
+16    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_36,0     starting/common_voice_en_18436940.opus
+1     starting/common_voice_en_18436940.opus
+2     starting/common_voice_en_18436940.opus
+3     starting/common_voice_en_18436940.opus
+4     starting/common_voice_en_18436940.opus
+5     starting/common_voice_en_18436940.opus
+6     starting/common_voice_en_18436940.opus
+7     starting/common_voice_en_18436940.opus
+8     starting/common_voice_en_18436940.opus
+9     starting/common_voice_en_18436940.opus
+10    starting/common_voice_en_18436940.opus
+11    starting/common_voice_en_18436940.opus
+12    starting/common_voice_en_18436940.opus
+13    starting/common_voice_en_18436940.opus
+14    starting/common_voice_en_18436940.opus
+15    starting/common_voice_en_18436940.opus
+16    starting/common_voice_en_18436940.opus
+Name: MSWC_ID, dtype: object,0     373.730625
+1     374.613375
+2     375.034688
+3     375.195187
+4     375.456000
+5     375.937500
+6     376.118063
+7     376.258500
+8     376.559438
+9     376.860313
+10    377.783187
+11    378.064062
+12    378.344938
+13    378.746188
+14    379.267812
+15    379.528625
+16    379.789438
+Name: keyword_start_time, dtype: float64,0     373.931250
+1     374.994562
+2     375.175125
+3     375.395812
+4     375.696750
+5     376.077938
+6     376.198312
+7     376.459125
+8     376.780062
+9     377.201375
+10    377.943688
+11    378.264687
+12    378.706062
+13    379.107312
+14    379.448375
+15    379.669062
+16    379.970000
+Name: keyword_end_time, dtype: float64,0     0.999547
+1     0.999800
+2     0.944951
+3     0.851745
+4     0.999797
+5     0.866577
+6     0.999652
+7     0.999919
+8     0.999937
+9     0.956726
+10    0.755417
+11    0.899969
+12    0.977392
+13    0.999862
+14    0.896641
+15    0.866502
+16    0.745676
+Name: confidence, dtype: float640      private
+1      meeting
+2         with
+3     security
+4      because
+5          was
+6     november
+7          two
+8     thousand
+9          and
+10         two
+11         and
+12     frankly
+13        were
+14      afraid
+15         the
+Name: keyword, dtype: object,adversarial_37,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+13    911Mothers_2010W
+14    911Mothers_2010W
+15    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_37,0     private/common_voice_en_20947610.opus
+1     private/common_voice_en_20947610.opus
+2     private/common_voice_en_20947610.opus
+3     private/common_voice_en_20947610.opus
+4     private/common_voice_en_20947610.opus
+5     private/common_voice_en_20947610.opus
+6     private/common_voice_en_20947610.opus
+7     private/common_voice_en_20947610.opus
+8     private/common_voice_en_20947610.opus
+9     private/common_voice_en_20947610.opus
+10    private/common_voice_en_20947610.opus
+11    private/common_voice_en_20947610.opus
+12    private/common_voice_en_20947610.opus
+13    private/common_voice_en_20947610.opus
+14    private/common_voice_en_20947610.opus
+15    private/common_voice_en_20947610.opus
+Name: MSWC_ID, dtype: object,0     380.080250
+1     380.461250
+2     380.902375
+3     381.122937
+4     382.326000
+5     382.827250
+6     383.027750
+7     383.488938
+8     383.689437
+9     384.471437
+10    384.611750
+11    386.075500
+12    386.416375
+13    387.037937
+14    387.198312
+15    387.599375
+Name: keyword_start_time, dtype: float64,0     380.441188
+1     380.782062
+2     381.062750
+3     381.664312
+4     382.666812
+5     382.927500
+6     383.428750
+7     383.629313
+8     384.190688
+9     384.551625
+10    384.832313
+11    386.195812
+12    386.817375
+13    387.158250
+14    387.479062
+15    387.679562
+Name: keyword_end_time, dtype: float64,0     0.953153
+1     0.942645
+2     0.970854
+3     0.963407
+4     0.942232
+5     0.999746
+6     0.975025
+7     0.988059
+8     0.966968
+9     0.884242
+10    0.986868
+11    0.849240
+12    0.998817
+13    0.999583
+14    0.934257
+15    0.636671
+Name: confidence, dtype: float640       that
+1       time
+2        the
+3    country
+Name: keyword, dtype: object,adversarial_38,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_38,0    time/common_voice_en_17756269.opus
+1    time/common_voice_en_17756269.opus
+2    time/common_voice_en_17756269.opus
+3    time/common_voice_en_17756269.opus
+Name: MSWC_ID, dtype: object,0    388.960500
+1    389.162188
+2    390.090000
+3    390.211000
+Name: keyword_start_time, dtype: float64,0    389.121812
+1    389.464688
+2    390.170625
+3    390.634563
+Name: keyword_end_time, dtype: float64,0    0.962810
+1    0.999569
+2    0.948230
+3    0.946721
+Name: confidence, dtype: float640    those
+Name: keyword, dtype: object,adversarial_39,0    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_39,0    those/common_voice_en_580739.opus
+Name: MSWC_ID, dtype: object,0    391.87225
+Name: keyword_start_time, dtype: float64,0    392.21375
+Name: keyword_end_time, dtype: float64,0    0.929207
+Name: confidence, dtype: float640     family
+1    members
+Name: keyword, dtype: object,adversarial_40,0    911Mothers_2010W
+1    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_40,0    family/common_voice_en_21686779.opus
+1    family/common_voice_en_21686779.opus
+Name: MSWC_ID, dtype: object,0    394.086563
+1    394.510625
+Name: keyword_start_time, dtype: float64,0    394.470250
+1    394.894313
+Name: keyword_end_time, dtype: float64,0    0.999706
+1    0.926126
+Name: confidence, dtype: float640         but
+1        were
+2         all
+3     nervous
+4         why
+5        does
+6         she
+7        want
+8        meet
+9         and
+10       then
+11        she
+12        was
+13    nervous
+14        why
+15        did
+16       want
+17       meet
+18        her
+Name: keyword, dtype: object,adversarial_41,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+13    911Mothers_2010W
+14    911Mothers_2010W
+15    911Mothers_2010W
+16    911Mothers_2010W
+17    911Mothers_2010W
+18    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_41,0     was/common_voice_en_19804520.opus
+1     was/common_voice_en_19804520.opus
+2     was/common_voice_en_19804520.opus
+3     was/common_voice_en_19804520.opus
+4     was/common_voice_en_19804520.opus
+5     was/common_voice_en_19804520.opus
+6     was/common_voice_en_19804520.opus
+7     was/common_voice_en_19804520.opus
+8     was/common_voice_en_19804520.opus
+9     was/common_voice_en_19804520.opus
+10    was/common_voice_en_19804520.opus
+11    was/common_voice_en_19804520.opus
+12    was/common_voice_en_19804520.opus
+13    was/common_voice_en_19804520.opus
+14    was/common_voice_en_19804520.opus
+15    was/common_voice_en_19804520.opus
+16    was/common_voice_en_19804520.opus
+17    was/common_voice_en_19804520.opus
+18    was/common_voice_en_19804520.opus
+Name: MSWC_ID, dtype: object,0     395.780750
+1     396.361312
+2     396.641625
+3     397.902938
+4     398.923938
+5     399.144187
+6     399.344375
+7     399.524563
+8     399.824875
+9     400.966063
+10    401.106187
+11    401.846938
+12    402.127250
+13    402.347500
+14    403.068188
+15    403.308438
+16    403.869000
+17    404.169312
+18    404.409562
+Name: keyword_start_time, dtype: float64,0     396.041000
+1     396.521500
+2     396.841813
+3     398.363375
+4     399.104125
+5     399.304375
+6     399.484562
+7     399.684750
+8     400.045125
+9     401.066188
+10    401.306375
+11    402.047188
+12    402.287438
+13    402.707812
+14    403.268438
+15    403.468625
+16    404.029187
+17    404.369562
+18    404.589750
+Name: keyword_end_time, dtype: float64,0     0.999866
+1     0.778575
+2     0.790084
+3     0.957980
+4     0.892451
+5     0.745084
+6     0.908438
+7     0.982262
+8     0.908506
+9     0.997305
+10    0.993493
+11    0.903636
+12    0.867741
+13    0.999165
+14    0.902331
+15    0.959993
+16    0.957935
+17    0.928692
+18    0.879175
+Name: confidence, dtype: float640         what
+1          did
+2         want
+3         from
+4         each
+5        other
+6       before
+7         knew
+8         each
+9       others
+10       names
+11    anything
+12         had
+13    embraced
+Name: keyword, dtype: object,adversarial_42,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+13    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_42,0     did/common_voice_en_637526.opus
+1     did/common_voice_en_637526.opus
+2     did/common_voice_en_637526.opus
+3     did/common_voice_en_637526.opus
+4     did/common_voice_en_637526.opus
+5     did/common_voice_en_637526.opus
+6     did/common_voice_en_637526.opus
+7     did/common_voice_en_637526.opus
+8     did/common_voice_en_637526.opus
+9     did/common_voice_en_637526.opus
+10    did/common_voice_en_637526.opus
+11    did/common_voice_en_637526.opus
+12    did/common_voice_en_637526.opus
+13    did/common_voice_en_637526.opus
+Name: MSWC_ID, dtype: object,0     405.130125
+1     405.330375
+2     405.690750
+3     405.971125
+4     406.171312
+5     406.431625
+6     409.294938
+7     409.875625
+8     410.075875
+9     410.296125
+10    410.596437
+11    411.317313
+12    412.218313
+13    412.418563
+Name: keyword_start_time, dtype: float64,0     405.290313
+1     405.470500
+2     405.911063
+3     406.111250
+4     406.331500
+5     406.611875
+6     409.695438
+7     410.035813
+8     410.216000
+9     410.496312
+10    410.976875
+11    411.757812
+12    412.378500
+13    412.959187
+Name: keyword_end_time, dtype: float64,0     0.967415
+1     0.999813
+2     0.912778
+3     0.992331
+4     0.780026
+5     0.995841
+6     0.935141
+7     0.883324
+8     0.898668
+9     0.886189
+10    0.999879
+11    0.968889
+12    0.873576
+13    0.962759
+Name: confidence, dtype: float64Keyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidence0      know
+1      what
+2    suffer
+Name: keyword, dtype: object,adversarial_47,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_47,0    what/common_voice_en_640010.opus
+1    what/common_voice_en_640010.opus
+2    what/common_voice_en_640010.opus
+Name: MSWC_ID, dtype: object,0    440.583375
+1    440.744000
+2    441.306125
+Name: keyword_start_time, dtype: float64,0    440.723937
+1    440.864438
+2    441.627313
+Name: keyword_end_time, dtype: float64,0    0.717307
+1    0.837295
+2    0.937369
+Name: confidence, dtype: float640          and
+1         feel
+2         that
+3        there
+4        crime
+5       person
+6       should
+7        tried
+8       fairly
+9          and
+10    punished
+Name: keyword, dtype: object,adversarial_48,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_48,0     person/common_voice_en_21877557.opus
+1     person/common_voice_en_21877557.opus
+2     person/common_voice_en_21877557.opus
+3     person/common_voice_en_21877557.opus
+4     person/common_voice_en_21877557.opus
+5     person/common_voice_en_21877557.opus
+6     person/common_voice_en_21877557.opus
+7     person/common_voice_en_21877557.opus
+8     person/common_voice_en_21877557.opus
+9     person/common_voice_en_21877557.opus
+10    person/common_voice_en_21877557.opus
+Name: MSWC_ID, dtype: object,0     443.391750
+1     443.893188
+2     444.735563
+3     445.257063
+4     446.540687
+5     447.423187
+6     447.864438
+7     448.305687
+8     448.706813
+9     449.128062
+10    449.248375
+Name: keyword_start_time, dtype: float64,0     443.512063
+1     444.254188
+2     444.936125
+3     445.497687
+4     446.941813
+5     447.784187
+6     448.065000
+7     448.626625
+8     449.067875
+9     449.208250
+10    449.689625
+Name: keyword_end_time, dtype: float64,0     0.834373
+1     0.913358
+2     0.999758
+3     0.753802
+4     0.999921
+5     0.947973
+6     0.800987
+7     0.999918
+8     0.957896
+9     0.932196
+10    0.864235
+Name: confidence, dtype: float640    after
+1    lunch
+Name: keyword, dtype: object,adversarial_50,0    911Mothers_2010W
+1    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_50,0    lunch/common_voice_en_650034.opus
+1    lunch/common_voice_en_650034.opus
+Name: MSWC_ID, dtype: object,0    470.3315
+1    470.6535
+Name: keyword_start_time, dtype: float64,0    470.593125
+1    470.955438
+Name: keyword_end_time, dtype: float64,0    0.999815
+1    0.923804
+Name: confidence, dtype: float640         we'd
+1         felt
+2         we'd
+3        known
+4         each
+5        other
+6      forever
+7          now
+8         what
+9      learned
+10        from
+11         her
+12       woman
+13         not
+14        only
+15         who
+16       could
+17    generous
+18       under
+Name: keyword, dtype: object,adversarial_51,0     911Mothers_2010W
+1     911Mothers_2010W
+2     911Mothers_2010W
+3     911Mothers_2010W
+4     911Mothers_2010W
+5     911Mothers_2010W
+6     911Mothers_2010W
+7     911Mothers_2010W
+8     911Mothers_2010W
+9     911Mothers_2010W
+10    911Mothers_2010W
+11    911Mothers_2010W
+12    911Mothers_2010W
+13    911Mothers_2010W
+14    911Mothers_2010W
+15    911Mothers_2010W
+16    911Mothers_2010W
+17    911Mothers_2010W
+18    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_51,0     forever/common_voice_en_23458.opus
+1     forever/common_voice_en_23458.opus
+2     forever/common_voice_en_23458.opus
+3     forever/common_voice_en_23458.opus
+4     forever/common_voice_en_23458.opus
+5     forever/common_voice_en_23458.opus
+6     forever/common_voice_en_23458.opus
+7     forever/common_voice_en_23458.opus
+8     forever/common_voice_en_23458.opus
+9     forever/common_voice_en_23458.opus
+10    forever/common_voice_en_23458.opus
+11    forever/common_voice_en_23458.opus
+12    forever/common_voice_en_23458.opus
+13    forever/common_voice_en_23458.opus
+14    forever/common_voice_en_23458.opus
+15    forever/common_voice_en_23458.opus
+16    forever/common_voice_en_23458.opus
+17    forever/common_voice_en_23458.opus
+18    forever/common_voice_en_23458.opus
+Name: MSWC_ID, dtype: object,0     472.250625
+1     472.450875
+2     472.991500
+3     473.191750
+4     473.412062
+5     473.612250
+6     473.812500
+7     475.194250
+8     475.374437
+9     475.674812
+10    476.015250
+11    476.235500
+12    476.776187
+13    477.396937
+14    477.637187
+15    477.817437
+16    477.957625
+17    478.518312
+18    479.679750
+Name: keyword_start_time, dtype: float64,0     472.410813
+1     472.671125
+2     473.151687
+3     473.372000
+4     473.552188
+5     473.772500
+6     474.152938
+7     475.314375
+8     475.494562
+9     475.935125
+10    476.175437
+11    476.415687
+12    477.116562
+13    477.557125
+14    477.777375
+15    477.917562
+16    478.097812
+17    478.998875
+18    479.880000
+Name: keyword_end_time, dtype: float64,0     0.670515
+1     0.967195
+2     0.982039
+3     0.888702
+4     0.985913
+5     0.950572
+6     0.920545
+7     0.999414
+8     0.934558
+9     0.785177
+10    0.831052
+11    0.999810
+12    0.998399
+13    0.994114
+14    0.998098
+15    0.947929
+16    0.786160
+17    0.958017
+18    0.538330
+Name: confidence, dtype: float640         with
+1         such
+2         hard
+3         life
+4         from
+5         such
+6      totally
+7    different
+Name: keyword, dtype: object,adversarial_53,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+7    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_53,0    life/common_voice_en_317049.opus
+1    life/common_voice_en_317049.opus
+2    life/common_voice_en_317049.opus
+3    life/common_voice_en_317049.opus
+4    life/common_voice_en_317049.opus
+5    life/common_voice_en_317049.opus
+6    life/common_voice_en_317049.opus
+7    life/common_voice_en_317049.opus
+Name: MSWC_ID, dtype: object,0    489.560500
+1    489.841187
+2    490.422625
+3    490.743375
+4    491.384937
+5    491.625500
+6    492.006438
+7    492.587875
+Name: keyword_start_time, dtype: float64,0    489.740937
+1    490.081750
+2    490.663187
+3    490.983938
+4    491.565375
+5    491.866125
+6    492.507687
+7    493.028937
+Name: keyword_end_time, dtype: float64,0    0.989490
+1    0.924299
+2    0.999891
+3    0.986460
+4    0.999472
+5    0.914273
+6    0.942143
+7    0.917002
+Name: confidence, dtype: float640        culture
+1            and
+2    environment
+3           from
+4            own
+5            and
+Name: keyword, dtype: object,adversarial_54,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_54,0    from/common_voice_en_21103506.opus
+1    from/common_voice_en_21103506.opus
+2    from/common_voice_en_21103506.opus
+3    from/common_voice_en_21103506.opus
+4    from/common_voice_en_21103506.opus
+5    from/common_voice_en_21103506.opus
+Name: MSWC_ID, dtype: object,0    493.481063
+1    494.164125
+2    494.324813
+3    495.369500
+4    495.851688
+5    496.876250
+Name: keyword_start_time, dtype: float64,0    494.023500
+1    494.244500
+2    494.927563
+3    495.550313
+4    496.052563
+5    497.016875
+Name: keyword_end_time, dtype: float64,0    0.896021
+1    0.959381
+2    0.973671
+3    0.513889
+4    0.860214
+5    0.856612
+Name: confidence, dtype: float640    feel
+1    that
+2    have
+Name: keyword, dtype: object,adversarial_55,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_55,0    have/common_voice_en_579391.opus
+1    have/common_voice_en_579391.opus
+2    have/common_voice_en_579391.opus
+Name: MSWC_ID, dtype: object,0    498.132563
+1    498.513812
+2    499.216125
+Name: keyword_start_time, dtype: float64,0    498.453625
+1    498.714500
+2    499.717750
+Name: keyword_end_time, dtype: float64,0    0.937474
+1    0.998025
+2    0.881533
+Name: confidence, dtype: float64Keyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidence0    wanted
+1       say
+2      that
+3      have
+4       try
+5      know
+6     other
+7    people
+8       the
+9     other
+Name: keyword, dtype: object,adversarial_60,0    911Mothers_2010W
+1    911Mothers_2010W
+2    911Mothers_2010W
+3    911Mothers_2010W
+4    911Mothers_2010W
+5    911Mothers_2010W
+6    911Mothers_2010W
+7    911Mothers_2010W
+8    911Mothers_2010W
+9    911Mothers_2010W
+Name: TED_talk_id, dtype: object,adversarial_60,0    have/common_voice_en_510497.opus
+1    have/common_voice_en_510497.opus
+2    have/common_voice_en_510497.opus
+3    have/common_voice_en_510497.opus
+4    have/common_voice_en_510497.opus
+5    have/common_voice_en_510497.opus
+6    have/common_voice_en_510497.opus
+7    have/common_voice_en_510497.opus
+8    have/common_voice_en_510497.opus
+9    have/common_voice_en_510497.opus
+Name: MSWC_ID, dtype: object,0    537.460375
+1    537.941438
+2    538.202000
+3    538.763250
+4    539.084000
+5    539.525000
+6    540.166375
+7    540.386875
+8    541.048375
+9    541.449250
+Name: keyword_start_time, dtype: float64,0    537.720937
+1    538.161938
+2    538.462625
+3    538.903563
+4    539.284437
+5    539.765500
+6    540.346812
+7    540.787812
+8    541.208750
+9    541.709812
+Name: keyword_end_time, dtype: float64,0    0.976694
+1    0.999906
+2    0.898320
+3    0.977885
+4    0.978508
+5    0.875771
+6    0.904743
+7    0.952317
+8    0.928620
+9    0.843851
+Name: confidence, dtype: float640    thought
+1        i'd
+2       tell
+3        you
+4     little
+5      about
+Name: keyword, dtype: object,adversarial_62,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_62,0    tell/common_voice_en_583266.opus
+1    tell/common_voice_en_583266.opus
+2    tell/common_voice_en_583266.opus
+3    tell/common_voice_en_583266.opus
+4    tell/common_voice_en_583266.opus
+5    tell/common_voice_en_583266.opus
+Name: MSWC_ID, dtype: object,0    12.232562
+1    12.454562
+2    12.595812
+3    12.797688
+4    12.999500
+5    13.241687
+Name: keyword_start_time, dtype: float64,0    12.414188
+1    12.575688
+2    12.777500
+3    12.898563
+4    13.181188
+5    13.605000
+Name: keyword_end_time, dtype: float64,0    0.802924
+1    0.735845
+2    0.975423
+3    0.802820
+4    0.889038
+5    0.916239
+Name: confidence, dtype: float640     what
+1     like
+2    write
+3      and
+Name: keyword, dtype: object,adversarial_63,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_63,0    what/common_voice_en_17515582.opus
+1    what/common_voice_en_17515582.opus
+2    what/common_voice_en_17515582.opus
+3    what/common_voice_en_17515582.opus
+Name: MSWC_ID, dtype: object,0    14.544937
+1    14.868000
+2    15.211187
+3    15.716000
+Name: keyword_start_time, dtype: float64,0    14.726625
+1    15.049687
+2    15.453500
+3    16.140000
+Name: keyword_end_time, dtype: float64,0    0.372589
+1    0.851111
+2    0.841141
+3    0.838961
+Name: confidence, dtype: float640    like
+Name: keyword, dtype: object,adversarial_64,0    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_64,0    like/common_voice_en_20816333.opus
+Name: MSWC_ID, dtype: object,0    16.599812
+Name: keyword_start_time, dtype: float64,0    16.762187
+Name: keyword_end_time, dtype: float64,0    0.938634
+Name: confidence, dtype: float640     immerse
+1      myself
+2      topics
+3        just
+4        like
+5        dive
+6       right
+7         and
+8      become
+9        sort
+10      human
+11     guinea
+12        pig
+Name: keyword, dtype: object,adversarial_65,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_65,0     guinea/common_voice_en_20229215.opus
+1     guinea/common_voice_en_20229215.opus
+2     guinea/common_voice_en_20229215.opus
+3     guinea/common_voice_en_20229215.opus
+4     guinea/common_voice_en_20229215.opus
+5     guinea/common_voice_en_20229215.opus
+6     guinea/common_voice_en_20229215.opus
+7     guinea/common_voice_en_20229215.opus
+8     guinea/common_voice_en_20229215.opus
+9     guinea/common_voice_en_20229215.opus
+10    guinea/common_voice_en_20229215.opus
+11    guinea/common_voice_en_20229215.opus
+12    guinea/common_voice_en_20229215.opus
+Name: MSWC_ID, dtype: object,0     17.530500
+1     18.031125
+2     19.272687
+3     20.654438
+4     20.874688
+5     21.655687
+6     22.036188
+7     22.476750
+8     22.596875
+9     23.337812
+10    23.738375
+11    24.118813
+12    24.439250
+Name: keyword_start_time, dtype: float64,0     17.951000
+1     18.631875
+2     19.793375
+3     20.814625
+4     21.054938
+5     21.956063
+6     22.236438
+7     22.556875
+8     22.997375
+9     23.518062
+10    24.078750
+11    24.399188
+12    24.699562
+Name: keyword_end_time, dtype: float64,0     0.987709
+1     0.967871
+2     0.960901
+3     0.990164
+4     0.894731
+5     0.933738
+6     0.930802
+7     0.999029
+8     0.950151
+9     0.917066
+10    0.981042
+11    0.852134
+12    0.924803
+Name: confidence, dtype: float640    and
+Name: keyword, dtype: object,adversarial_66,0    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_66,0    and/common_voice_en_18618627.opus
+Name: MSWC_ID, dtype: object,0    25.48725
+Name: keyword_start_time, dtype: float64,0    25.71075
+Name: keyword_end_time, dtype: float64,0    0.799751
+Name: confidence, dtype: float640            see
+1           life
+2         series
+3    experiments
+Name: keyword, dtype: object,adversarial_67,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_67,0    experiments/common_voice_en_20783637.opus
+1    experiments/common_voice_en_20783637.opus
+2    experiments/common_voice_en_20783637.opus
+3    experiments/common_voice_en_20783637.opus
+Name: MSWC_ID, dtype: object,0    27.534562
+1    27.896875
+2    28.359875
+3    29.004062
+Name: keyword_start_time, dtype: float64,0    27.695563
+1    28.078063
+2    28.782625
+3    29.769063
+Name: keyword_end_time, dtype: float64,0    0.999803
+1    0.898909
+2    0.952348
+3    0.973577
+Name: confidence, dtype: float640           work
+1            for
+2        esquire
+3       magazine
+4            and
+5         couple
+6          years
+7            ago
+8          wrote
+9        article
+10        called
+11    outsourced
+12          life
+Name: keyword, dtype: object,adversarial_68,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_68,0     called/common_voice_en_20786749.opus
+1     called/common_voice_en_20786749.opus
+2     called/common_voice_en_20786749.opus
+3     called/common_voice_en_20786749.opus
+4     called/common_voice_en_20786749.opus
+5     called/common_voice_en_20786749.opus
+6     called/common_voice_en_20786749.opus
+7     called/common_voice_en_20786749.opus
+8     called/common_voice_en_20786749.opus
+9     called/common_voice_en_20786749.opus
+10    called/common_voice_en_20786749.opus
+11    called/common_voice_en_20786749.opus
+12    called/common_voice_en_20786749.opus
+Name: MSWC_ID, dtype: object,0     31.243563
+1     31.444125
+2     31.604563
+3     32.005688
+4     32.446875
+5     32.567188
+6     32.948250
+7     33.188875
+8     33.951000
+9     34.372125
+10    34.833375
+11    35.976500
+12    36.638312
+Name: keyword_start_time, dtype: float64,0     31.424063
+1     31.544438
+2     31.985625
+3     32.426813
+4     32.507063
+5     32.807875
+6     33.148813
+7     33.409500
+8     34.151500
+9     34.733125
+10    35.234500
+11    36.497937
+12    36.899062
+Name: keyword_end_time, dtype: float64,0     0.713551
+1     0.808942
+2     0.920865
+3     0.997033
+4     0.000002
+5     0.858194
+6     0.920743
+7     0.999865
+8     0.811383
+9     0.946653
+10    0.961814
+11    0.885105
+12    0.922944
+Name: confidence, dtype: float640        where
+1        hired
+2         team
+3       people
+4    bangalore
+5        india
+6         live
+7         life
+8          for
+Name: keyword, dtype: object,adversarial_69,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+8    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_69,0    for/common_voice_en_18166101__2.opus
+1    for/common_voice_en_18166101__2.opus
+2    for/common_voice_en_18166101__2.opus
+3    for/common_voice_en_18166101__2.opus
+4    for/common_voice_en_18166101__2.opus
+5    for/common_voice_en_18166101__2.opus
+6    for/common_voice_en_18166101__2.opus
+7    for/common_voice_en_18166101__2.opus
+8    for/common_voice_en_18166101__2.opus
+Name: MSWC_ID, dtype: object,0    37.440250
+1    38.101250
+2    38.642063
+3    39.142813
+4    39.783813
+5    40.484875
+6    41.346125
+7    41.666625
+8    41.927000
+Name: keyword_start_time, dtype: float64,0    37.660625
+1    38.481812
+2    38.942500
+3    39.503375
+4    40.384687
+5    40.865437
+6    41.486375
+7    41.846875
+8    42.127313
+Name: keyword_end_time, dtype: float64,0    0.938668
+1    0.947970
+2    0.999860
+3    0.999875
+4    0.913302
+5    0.921409
+6    0.929761
+7    0.958402
+8    0.916028
+Name: confidence, dtype: float640         they
+1     answered
+2       emails
+3         they
+4     answered
+5        phone
+6         they
+7       argued
+8         with
+9         wife
+10         for
+Name: keyword, dtype: object,adversarial_70,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_70,0     argued/common_voice_en_55160.opus
+1     argued/common_voice_en_55160.opus
+2     argued/common_voice_en_55160.opus
+3     argued/common_voice_en_55160.opus
+4     argued/common_voice_en_55160.opus
+5     argued/common_voice_en_55160.opus
+6     argued/common_voice_en_55160.opus
+7     argued/common_voice_en_55160.opus
+8     argued/common_voice_en_55160.opus
+9     argued/common_voice_en_55160.opus
+10    argued/common_voice_en_55160.opus
+Name: MSWC_ID, dtype: object,0     44.212000
+1     44.533187
+2     45.055188
+3     45.537000
+4     45.757812
+5     46.239625
+6     46.761562
+7     46.962375
+8     47.263500
+9     47.584688
+10    47.926000
+Name: keyword_start_time, dtype: float64,0     44.412750
+1     44.794187
+2     45.496812
+3     45.677500
+4     46.018813
+5     46.701375
+6     46.902125
+7     47.223312
+8     47.383938
+9     47.825562
+10    48.146813
+Name: keyword_end_time, dtype: float64,0     0.999829
+1     0.975609
+2     0.807595
+3     0.799586
+4     0.877262
+5     0.908011
+6     0.630145
+7     0.930816
+8     0.790045
+9     0.969528
+10    0.935380
+Name: confidence, dtype: float640    and
+Name: keyword, dtype: object,adversarial_71,0    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_71,0    and/common_voice_en_18733096.opus
+Name: MSWC_ID, dtype: object,0    49.635875
+Name: keyword_start_time, dtype: float64,0    49.799125
+Name: keyword_end_time, dtype: float64,0    0.535689
+Name: confidence, dtype: float640        read
+1         son
+2     bedtime
+3     stories
+4         was
+5         the
+6        best
+7       month
+8        life
+9     because
+10       just
+11        sat
+12       back
+13        and
+Name: keyword, dtype: object,adversarial_72,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_72,0     was/common_voice_en_41963.opus
+1     was/common_voice_en_41963.opus
+2     was/common_voice_en_41963.opus
+3     was/common_voice_en_41963.opus
+4     was/common_voice_en_41963.opus
+5     was/common_voice_en_41963.opus
+6     was/common_voice_en_41963.opus
+7     was/common_voice_en_41963.opus
+8     was/common_voice_en_41963.opus
+9     was/common_voice_en_41963.opus
+10    was/common_voice_en_41963.opus
+11    was/common_voice_en_41963.opus
+12    was/common_voice_en_41963.opus
+13    was/common_voice_en_41963.opus
+Name: MSWC_ID, dtype: object,0     51.930188
+1     52.370875
+2     52.651313
+3     53.212250
+4     54.334063
+5     54.454313
+6     54.554438
+7     54.794812
+8     55.275625
+9     55.616188
+10    56.117000
+11    56.297312
+12    56.577750
+13    56.998438
+Name: keyword_start_time, dtype: float64,0     52.110438
+1     52.611250
+2     53.152187
+3     53.632937
+4     54.434250
+5     54.514375
+6     54.734750
+7     54.995188
+8     55.496000
+9     55.916688
+10    56.257250
+11    56.537687
+12    56.858187
+13    57.098625
+Name: keyword_end_time, dtype: float64,0     0.857084
+1     0.982537
+2     0.974711
+3     0.954788
+4     0.787029
+5     0.999572
+6     0.999865
+7     0.860499
+8     0.949677
+9     0.797689
+10    0.999613
+11    0.921309
+12    0.974511
+13    0.745199
+Name: confidence, dtype: float640            about
+1          radical
+2          honesty
+3              and
+4             this
+5         movement
+6            where
+7             this
+8          started
+9     psychologist
+10        virginia
+11             who
+12            says
+13            that
+Name: keyword, dtype: object,adversarial_74,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_74,0     who/common_voice_en_19296915.opus
+1     who/common_voice_en_19296915.opus
+2     who/common_voice_en_19296915.opus
+3     who/common_voice_en_19296915.opus
+4     who/common_voice_en_19296915.opus
+5     who/common_voice_en_19296915.opus
+6     who/common_voice_en_19296915.opus
+7     who/common_voice_en_19296915.opus
+8     who/common_voice_en_19296915.opus
+9     who/common_voice_en_19296915.opus
+10    who/common_voice_en_19296915.opus
+11    who/common_voice_en_19296915.opus
+12    who/common_voice_en_19296915.opus
+13    who/common_voice_en_19296915.opus
+Name: MSWC_ID, dtype: object,0     67.261250
+1     67.622125
+2     68.203563
+3     69.065625
+4     69.185937
+5     69.627000
+6     70.448937
+7     71.691937
+8     71.992688
+9     72.473812
+10    73.736875
+11    74.278188
+12    74.458625
+13    74.759312
+Name: keyword_start_time, dtype: float64,0     67.541938
+1     68.043188
+2     68.644625
+3     69.165875
+4     69.346312
+5     70.027937
+6     71.170687
+7     71.832313
+8     72.253312
+9     73.255687
+10    74.198000
+11    74.398500
+12    74.699187
+13    74.939750
+Name: keyword_end_time, dtype: float64,0     0.999589
+1     0.957703
+2     0.923991
+3     0.817776
+4     0.982629
+5     0.951048
+6     0.898294
+7     0.962251
+8     0.986232
+9     0.929938
+10    0.999378
+11    0.937345
+12    0.836934
+13    0.872154
+Name: confidence, dtype: float640            you
+1         should
+2          never
+3           ever
+4            lie
+5         except
+6          maybe
+7         during
+8          poker
+9            and
+10          golf
+11           his
+12          only
+13    exceptions
+Name: keyword, dtype: object,adversarial_75,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_75,0     during/common_voice_en_18674136.opus
+1     during/common_voice_en_18674136.opus
+2     during/common_voice_en_18674136.opus
+3     during/common_voice_en_18674136.opus
+4     during/common_voice_en_18674136.opus
+5     during/common_voice_en_18674136.opus
+6     during/common_voice_en_18674136.opus
+7     during/common_voice_en_18674136.opus
+8     during/common_voice_en_18674136.opus
+9     during/common_voice_en_18674136.opus
+10    during/common_voice_en_18674136.opus
+11    during/common_voice_en_18674136.opus
+12    during/common_voice_en_18674136.opus
+13    during/common_voice_en_18674136.opus
+Name: MSWC_ID, dtype: object,0     75.590312
+1     75.831063
+2     76.352688
+3     76.834187
+4     77.155187
+5     78.017875
+6     78.338875
+7     78.639812
+8     78.940750
+9     79.301875
+10    79.402187
+11    79.803438
+12    80.244812
+13    80.866750
+Name: keyword_start_time, dtype: float64,0     75.750812
+1     76.132000
+2     76.673687
+3     77.074937
+4     77.436062
+5     78.298750
+6     78.599688
+7     78.880562
+8     79.261750
+9     79.362062
+10    79.683062
+11    80.124437
+12    80.485563
+13    81.348250
+Name: keyword_end_time, dtype: float64,0     0.952948
+1     0.779747
+2     0.900085
+3     0.861213
+4     0.887835
+5     0.888398
+6     0.984262
+7     0.968743
+8     0.950043
+9     0.782330
+10    0.951076
+11    0.759549
+12    0.851175
+13    0.912744
+Name: confidence, dtype: float640          and
+1         more
+2         than
+3         that
+4     whatever
+5         your
+6        brain
+7       should
+8         come
+9          out
+10        your
+11       mouth
+Name: keyword, dtype: object,adversarial_76,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_76,0     your/common_voice_en_28218.opus
+1     your/common_voice_en_28218.opus
+2     your/common_voice_en_28218.opus
+3     your/common_voice_en_28218.opus
+4     your/common_voice_en_28218.opus
+5     your/common_voice_en_28218.opus
+6     your/common_voice_en_28218.opus
+7     your/common_voice_en_28218.opus
+8     your/common_voice_en_28218.opus
+9     your/common_voice_en_28218.opus
+10    your/common_voice_en_28218.opus
+11    your/common_voice_en_28218.opus
+Name: MSWC_ID, dtype: object,0     82.162188
+1     82.302750
+2     82.523687
+3     82.684375
+4     83.307063
+5     83.869438
+6     84.030125
+7     84.612562
+8     84.833500
+9     85.074500
+10    85.315562
+11    85.456125
+Name: keyword_start_time, dtype: float64,0     82.262625
+1     82.483563
+2     82.644250
+3     82.905312
+4     83.608312
+5     83.989937
+6     84.431813
+7     84.793312
+8     84.994187
+9     85.174937
+10    85.416000
+11    85.757437
+Name: keyword_end_time, dtype: float64,0     0.984538
+1     0.920887
+2     0.997496
+3     0.938280
+4     0.935708
+5     0.782727
+6     0.920863
+7     0.932833
+8     0.927271
+9     0.941428
+10    0.980056
+11    0.873997
+Name: confidence, dtype: float640     decided
+1       would
+2         try
+3        this
+4         for
+5       month
+6        this
+7         was
+8         the
+9       worst
+10      month
+11       life
+Name: keyword, dtype: object,adversarial_77,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_77,0     for/common_voice_en_19858805.opus
+1     for/common_voice_en_19858805.opus
+2     for/common_voice_en_19858805.opus
+3     for/common_voice_en_19858805.opus
+4     for/common_voice_en_19858805.opus
+5     for/common_voice_en_19858805.opus
+6     for/common_voice_en_19858805.opus
+7     for/common_voice_en_19858805.opus
+8     for/common_voice_en_19858805.opus
+9     for/common_voice_en_19858805.opus
+10    for/common_voice_en_19858805.opus
+11    for/common_voice_en_19858805.opus
+Name: MSWC_ID, dtype: object,0     88.152062
+1     88.713000
+2     88.893313
+3     89.213813
+4     89.514313
+5     89.834875
+6     90.596125
+7     90.796500
+8     90.956750
+9     91.076937
+10    91.417500
+11    91.938375
+Name: keyword_start_time, dtype: float64,0     88.572750
+1     88.853250
+2     89.153750
+3     89.434188
+4     89.714687
+5     90.075250
+6     90.756375
+7     90.916687
+8     91.036875
+9     91.337375
+10    91.617812
+11    92.198813
+Name: keyword_end_time, dtype: float64,0     0.999917
+1     0.857800
+2     0.999925
+3     0.999875
+4     0.938961
+5     0.936839
+6     0.877980
+7     0.998237
+8     0.796144
+9     0.999752
+10    0.946914
+11    0.846649
+Name: confidence, dtype: float640            not
+1      recommend
+2           this
+3            all
+4           give
+5            you
+6          sense
+7            the
+8            the
+9     experience
+10           the
+11       article
+12           was
+13        called
+Name: keyword, dtype: object,adversarial_78,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_78,0     the/common_voice_en_17296906.opus
+1     the/common_voice_en_17296906.opus
+2     the/common_voice_en_17296906.opus
+3     the/common_voice_en_17296906.opus
+4     the/common_voice_en_17296906.opus
+5     the/common_voice_en_17296906.opus
+6     the/common_voice_en_17296906.opus
+7     the/common_voice_en_17296906.opus
+8     the/common_voice_en_17296906.opus
+9     the/common_voice_en_17296906.opus
+10    the/common_voice_en_17296906.opus
+11    the/common_voice_en_17296906.opus
+12    the/common_voice_en_17296906.opus
+13    the/common_voice_en_17296906.opus
+Name: MSWC_ID, dtype: object,0     93.801187
+1     94.061562
+2     94.542250
+3     94.942813
+4     95.503563
+5     95.643812
+6     95.844063
+7     96.204562
+8     97.045750
+9     97.185937
+10    98.147312
+11    98.387625
+12    98.728125
+13    98.908375
+Name: keyword_start_time, dtype: float64,0     93.981437
+1     94.522188
+2     94.722500
+3     95.083000
+4     95.623750
+5     95.743938
+6     96.084438
+7     96.464938
+8     97.145875
+9     97.706688
+10    98.247438
+11    98.688063
+12    98.828250
+13    99.188750
+Name: keyword_end_time, dtype: float64,0     0.999681
+1     0.957553
+2     0.999697
+3     0.890049
+4     0.849223
+5     0.792096
+6     0.845230
+7     0.801966
+8     0.629323
+9     0.999230
+10    0.968793
+11    0.937337
+12    0.884196
+13    0.998292
+Name: confidence, dtype: float640          more
+1     precisely
+2          from
+3         which
+4          type
+5          east
+6         asian
+7         music
+8           all
+9           the
+10          way
+Name: keyword, dtype: object,adversarial_80,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_80,0     way/common_voice_en_611440.opus
+1     way/common_voice_en_611440.opus
+2     way/common_voice_en_611440.opus
+3     way/common_voice_en_611440.opus
+4     way/common_voice_en_611440.opus
+5     way/common_voice_en_611440.opus
+6     way/common_voice_en_611440.opus
+7     way/common_voice_en_611440.opus
+8     way/common_voice_en_611440.opus
+9     way/common_voice_en_611440.opus
+10    way/common_voice_en_611440.opus
+Name: MSWC_ID, dtype: object,0     119.072125
+1     119.272750
+2     119.834438
+3     120.998000
+4     121.439312
+5     121.900750
+6     122.161500
+7     122.442375
+8     123.485563
+9     123.646062
+10    123.766437
+Name: keyword_start_time, dtype: float64,0     119.232625
+1     119.774250
+2     119.994938
+3     121.138437
+4     121.680063
+5     122.061250
+6     122.402250
+7     122.743313
+8     123.605937
+9     123.726313
+10    123.947000
+Name: keyword_end_time, dtype: float64,0     0.918349
+1     0.993866
+2     0.892590
+3     0.856828
+4     0.999848
+5     0.952232
+6     0.931222
+7     0.999316
+8     0.999878
+9     0.999751
+10    0.999908
+Name: confidence, dtype: float640     don't
+1      want
+2      ruin
+3       the
+4    ending
+5      it's
+6      very
+Name: keyword, dtype: object,adversarial_81,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_81,0    ending/common_voice_en_21489203.opus
+1    ending/common_voice_en_21489203.opus
+2    ending/common_voice_en_21489203.opus
+3    ending/common_voice_en_21489203.opus
+4    ending/common_voice_en_21489203.opus
+5    ending/common_voice_en_21489203.opus
+6    ending/common_voice_en_21489203.opus
+Name: MSWC_ID, dtype: object,0    126.570437
+1    126.710938
+2    126.911687
+3    127.132500
+4    127.273000
+5    128.096063
+6    128.377062
+Name: keyword_start_time, dtype: float64,0    126.670812
+1    126.791250
+2    127.112437
+3    127.212812
+4    127.554063
+5    128.216500
+6    129.160000
+Name: keyword_end_time, dtype: float64,0    0.996883
+1    0.999715
+2    0.913344
+3    0.999695
+4    0.995389
+5    0.856561
+6    0.899890
+Name: confidence, dtype: float640      although
+1     listening
+2         kevin
+3         kelly
+4           you
+5         don't
+6          have
+7      remember
+8      anything
+9           you
+10          can
+11         just
+Name: keyword, dtype: object,adversarial_83,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_83,0     have/common_voice_en_106316.opus
+1     have/common_voice_en_106316.opus
+2     have/common_voice_en_106316.opus
+3     have/common_voice_en_106316.opus
+4     have/common_voice_en_106316.opus
+5     have/common_voice_en_106316.opus
+6     have/common_voice_en_106316.opus
+7     have/common_voice_en_106316.opus
+8     have/common_voice_en_106316.opus
+9     have/common_voice_en_106316.opus
+10    have/common_voice_en_106316.opus
+11    have/common_voice_en_106316.opus
+Name: MSWC_ID, dtype: object,0     141.533187
+1     141.894813
+2     142.356812
+3     142.658125
+4     143.019688
+5     143.120125
+6     143.300938
+7     143.602250
+8     144.024063
+9     144.405750
+10    144.546375
+11    144.707063
+Name: keyword_start_time, dtype: float64,0     141.834500
+1     142.216187
+2     142.638062
+3     142.979500
+4     143.100062
+5     143.260750
+6     143.461625
+7     143.983937
+8     144.365562
+9     144.526312
+10    144.687000
+11    144.988313
+Name: keyword_end_time, dtype: float64,0     0.869407
+1     0.897497
+2     0.797788
+3     0.817396
+4     0.765378
+5     0.871431
+6     0.818712
+7     0.945471
+8     0.942090
+9     0.941114
+10    0.898536
+11    0.824758
+Name: confidence, dtype: float64Keyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidence0      where
+1      spent
+2       year
+3     trying
+4     follow
+5        all
+6        the
+7      rules
+8        the
+9      bible
+10       the
+11      year
+12    living
+Name: keyword, dtype: object,adversarial_87,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_87,0     living/common_voice_en_18152582.opus
+1     living/common_voice_en_18152582.opus
+2     living/common_voice_en_18152582.opus
+3     living/common_voice_en_18152582.opus
+4     living/common_voice_en_18152582.opus
+5     living/common_voice_en_18152582.opus
+6     living/common_voice_en_18152582.opus
+7     living/common_voice_en_18152582.opus
+8     living/common_voice_en_18152582.opus
+9     living/common_voice_en_18152582.opus
+10    living/common_voice_en_18152582.opus
+11    living/common_voice_en_18152582.opus
+12    living/common_voice_en_18152582.opus
+Name: MSWC_ID, dtype: object,0     159.570625
+1     160.713563
+2     161.275063
+3     161.776375
+4     162.297750
+5     162.919375
+6     163.460813
+7     164.002188
+8     164.483438
+9     164.603750
+10    165.024875
+11    165.165250
+12    165.586375
+Name: keyword_start_time, dtype: float64,0     159.891438
+1     161.034438
+2     161.555813
+3     162.097188
+4     162.678750
+5     163.099813
+6     163.581125
+7     164.303000
+8     164.563687
+9     164.904563
+10    165.125125
+11    165.405875
+12    165.867063
+Name: keyword_end_time, dtype: float64,0     0.917553
+1     0.932375
+2     0.927381
+3     0.975205
+4     0.999753
+5     0.983258
+6     0.827406
+7     0.860584
+8     0.882904
+9     0.874950
+10    0.998795
+11    0.759126
+12    0.929705
+Name: confidence, dtype: float640    and
+Name: keyword, dtype: object,adversarial_88,0    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_88,0    and/common_voice_en_19658259.opus
+Name: MSWC_ID, dtype: object,0    167.299437
+Name: keyword_start_time, dtype: float64,0    167.562875
+Name: keyword_end_time, dtype: float64,0    0.633612
+Name: confidence, dtype: float640     undertook
+1          this
+2           for
+3           two
+4       reasons
+5           the
+6         first
+7           was
+8          that
+9          grew
+10         with
+11     religion
+12          all
+Name: keyword, dtype: object,adversarial_89,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_89,0     grew/common_voice_en_21722053.opus
+1     grew/common_voice_en_21722053.opus
+2     grew/common_voice_en_21722053.opus
+3     grew/common_voice_en_21722053.opus
+4     grew/common_voice_en_21722053.opus
+5     grew/common_voice_en_21722053.opus
+6     grew/common_voice_en_21722053.opus
+7     grew/common_voice_en_21722053.opus
+8     grew/common_voice_en_21722053.opus
+9     grew/common_voice_en_21722053.opus
+10    grew/common_voice_en_21722053.opus
+11    grew/common_voice_en_21722053.opus
+12    grew/common_voice_en_21722053.opus
+Name: MSWC_ID, dtype: object,0     169.452250
+1     169.913687
+2     170.154438
+3     170.294875
+4     170.535625
+5     170.997062
+6     171.157562
+7     171.578875
+8     171.859750
+9     172.341312
+10    173.244125
+11    173.725625
+12    174.347562
+Name: keyword_start_time, dtype: float64,0     169.853500
+1     170.074187
+2     170.254750
+3     170.455375
+4     170.876688
+5     171.097375
+6     171.478562
+7     171.779500
+8     172.040375
+9     172.582062
+10    173.384562
+11    174.126875
+12    174.467937
+Name: keyword_end_time, dtype: float64,0     0.949954
+1     0.999843
+2     0.999839
+3     0.993390
+4     0.941217
+5     0.972654
+6     0.999923
+7     0.902230
+8     0.897249
+9     0.999923
+10    0.965338
+11    0.999921
+12    0.999632
+Name: confidence, dtype: float640       book
+1        i'm
+2     jewish
+3        the
+4       same
+5        way
+6        the
+7      olive
+8     garden
+9    italian
+Name: keyword, dtype: object,adversarial_90,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+8    AJJacobs_2007P
+9    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_90,0    same/common_voice_en_54640.opus
+1    same/common_voice_en_54640.opus
+2    same/common_voice_en_54640.opus
+3    same/common_voice_en_54640.opus
+4    same/common_voice_en_54640.opus
+5    same/common_voice_en_54640.opus
+6    same/common_voice_en_54640.opus
+7    same/common_voice_en_54640.opus
+8    same/common_voice_en_54640.opus
+9    same/common_voice_en_54640.opus
+Name: MSWC_ID, dtype: object,0    176.500750
+1    177.081875
+2    177.282250
+3    178.003688
+4    178.144000
+5    178.464625
+6    179.025750
+7    179.286250
+8    179.546750
+9    180.147938
+Name: keyword_start_time, dtype: float64,0    176.721188
+1    177.222125
+2    177.683063
+3    178.083875
+4    178.404500
+5    178.705062
+6    179.125937
+7    179.526688
+8    179.907500
+9    180.608875
+Name: keyword_end_time, dtype: float64,0    0.831115
+1    0.954807
+2    0.950241
+3    0.999890
+4    0.929333
+5    0.999934
+6    0.999902
+7    0.911718
+8    0.983123
+9    0.979653
+Name: confidence, dtype: float640     not
+1    very
+Name: keyword, dtype: object,adversarial_91,0    AJJacobs_2007P
+1    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_91,0    not/common_voice_en_21061118.opus
+1    not/common_voice_en_21061118.opus
+Name: MSWC_ID, dtype: object,0    183.053063
+1    183.374937
+Name: keyword_start_time, dtype: float64,0    183.294437
+1    183.737000
+Name: keyword_end_time, dtype: float64,0    0.998029
+1    0.930355
+Name: confidence, dtype: float640              but
+1             i've
+2           become
+3     increasingly
+4       interested
+5         religion
+6            think
+7             it's
+8              the
+9         defining
+10           issue
+11             our
+12            time
+Name: keyword, dtype: object,adversarial_92,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_92,0     defining/common_voice_en_18765567.opus
+1     defining/common_voice_en_18765567.opus
+2     defining/common_voice_en_18765567.opus
+3     defining/common_voice_en_18765567.opus
+4     defining/common_voice_en_18765567.opus
+5     defining/common_voice_en_18765567.opus
+6     defining/common_voice_en_18765567.opus
+7     defining/common_voice_en_18765567.opus
+8     defining/common_voice_en_18765567.opus
+9     defining/common_voice_en_18765567.opus
+10    defining/common_voice_en_18765567.opus
+11    defining/common_voice_en_18765567.opus
+12    defining/common_voice_en_18765567.opus
+Name: MSWC_ID, dtype: object,0     185.490938
+1     185.651187
+2     185.751375
+3     186.011875
+4     186.632937
+5     187.173937
+6     187.835125
+7     188.075562
+8     188.255875
+9     188.396125
+10    188.957125
+11    189.397938
+12    189.538187
+Name: keyword_start_time, dtype: float64,0     185.611125
+1     185.731313
+2     185.971750
+3     186.572875
+4     187.033688
+5     187.494500
+6     188.015437
+7     188.195750
+8     188.356063
+9     188.897063
+10    189.237687
+11    189.498125
+12    189.758625
+Name: keyword_end_time, dtype: float64,0     0.929220
+1     0.259721
+2     0.999509
+3     0.930887
+4     0.999877
+5     0.928541
+6     0.889513
+7     0.835390
+8     0.809104
+9     0.971724
+10    0.855948
+11    0.802498
+12    0.911121
+Name: confidence, dtype: float640                the
+1             second
+2             reason
+3          undertook
+4               this
+5            because
+6                i'm
+7          concerned
+8              about
+9                the
+10              rise
+11    fundamentalism
+12         religious
+13    fundamentalism
+Name: keyword, dtype: object,adversarial_94,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_94,0     this/common_voice_en_20078321.opus
+1     this/common_voice_en_20078321.opus
+2     this/common_voice_en_20078321.opus
+3     this/common_voice_en_20078321.opus
+4     this/common_voice_en_20078321.opus
+5     this/common_voice_en_20078321.opus
+6     this/common_voice_en_20078321.opus
+7     this/common_voice_en_20078321.opus
+8     this/common_voice_en_20078321.opus
+9     this/common_voice_en_20078321.opus
+10    this/common_voice_en_20078321.opus
+11    this/common_voice_en_20078321.opus
+12    this/common_voice_en_20078321.opus
+13    this/common_voice_en_20078321.opus
+Name: MSWC_ID, dtype: object,0     200.200125
+1     200.340313
+2     200.700875
+3     201.321812
+4     201.722438
+5     202.083000
+6     202.363438
+7     202.523687
+8     203.064500
+9     203.385000
+10    203.545250
+11    204.386562
+12    205.328000
+13    205.728563
+Name: keyword_start_time, dtype: float64,0     200.300250
+1     200.660812
+2     201.041438
+3     201.682375
+4     201.882688
+5     202.323375
+6     202.503625
+7     203.004437
+8     203.344937
+9     203.465125
+10    203.845687
+11    205.247875
+12    205.688500
+13    206.409625
+Name: keyword_end_time, dtype: float64,0     0.864109
+1     0.999939
+2     0.831824
+3     0.963215
+4     0.999322
+5     0.836862
+6     0.816406
+7     0.999907
+8     0.999812
+9     0.998295
+10    0.937010
+11    0.960610
+12    0.944568
+13    0.942491
+Name: confidence, dtype: float640          got
+1        stack
+2       bibles
+3          had
+4    christian
+5       bibles
+6          had
+Name: keyword, dtype: object,adversarial_99,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_99,0    bibles/common_voice_en_21797378.opus
+1    bibles/common_voice_en_21797378.opus
+2    bibles/common_voice_en_21797378.opus
+3    bibles/common_voice_en_21797378.opus
+4    bibles/common_voice_en_21797378.opus
+5    bibles/common_voice_en_21797378.opus
+6    bibles/common_voice_en_21797378.opus
+Name: MSWC_ID, dtype: object,0    230.050563
+1    230.894688
+2    231.437375
+3    232.120688
+4    232.281500
+5    232.723688
+6    233.507500
+Name: keyword_start_time, dtype: float64,0    230.291750
+1    231.236375
+2    231.839313
+3    232.221188
+4    232.683437
+5    233.226125
+6    233.748687
+Name: keyword_end_time, dtype: float64,0    0.992235
+1    0.998156
+2    0.898484
+3    0.944965
+4    0.973184
+5    0.959568
+6    0.805074
+Name: confidence, dtype: float640       jewish
+1       bibles
+2       friend
+3         mine
+4         sent
+5    something
+6       called
+7          hip
+8          hop
+9        bible
+Name: keyword, dtype: object,adversarial_100,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+8    AJJacobs_2007P
+9    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_100,0    hop/common_voice_en_20747027.opus
+1    hop/common_voice_en_20747027.opus
+2    hop/common_voice_en_20747027.opus
+3    hop/common_voice_en_20747027.opus
+4    hop/common_voice_en_20747027.opus
+5    hop/common_voice_en_20747027.opus
+6    hop/common_voice_en_20747027.opus
+7    hop/common_voice_en_20747027.opus
+8    hop/common_voice_en_20747027.opus
+9    hop/common_voice_en_20747027.opus
+Name: MSWC_ID, dtype: object,0    234.292062
+1    234.733937
+2    235.457000
+3    235.718125
+4    235.959125
+5    236.360813
+6    236.702250
+7    237.264625
+8    237.485562
+9    237.847062
+Name: keyword_start_time, dtype: float64,0    234.653625
+1    235.216000
+2    235.617687
+3    235.898875
+4    236.160000
+5    236.662062
+6    236.943250
+7    237.445375
+8    237.746688
+9    238.208625
+Name: keyword_end_time, dtype: float64,0    0.989381
+1    0.916360
+2    0.745961
+3    0.982046
+4    0.927845
+5    0.970964
+6    0.994773
+7    0.946895
+8    0.905885
+9    0.882642
+Name: confidence, dtype: float64Keyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidenceKeyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidenceKeyword, TEDLIUM_SampleID, TED_TALK_ID, TEDLIUM_SET, MSWC_AudioID, start_time, end_time, confidence0       jewish
+1       bibles
+2       friend
+3         mine
+4         sent
+5    something
+6       called
+7          hip
+8          hop
+9        bible
+Name: keyword, dtype: object,adversarial_100,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+8    AJJacobs_2007P
+9    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_100,0    hop/common_voice_en_20747027.opus
+1    hop/common_voice_en_20747027.opus
+2    hop/common_voice_en_20747027.opus
+3    hop/common_voice_en_20747027.opus
+4    hop/common_voice_en_20747027.opus
+5    hop/common_voice_en_20747027.opus
+6    hop/common_voice_en_20747027.opus
+7    hop/common_voice_en_20747027.opus
+8    hop/common_voice_en_20747027.opus
+9    hop/common_voice_en_20747027.opus
+Name: MSWC_ID, dtype: object,0    234.292062
+1    234.733937
+2    235.457000
+3    235.718125
+4    235.959125
+5    236.360813
+6    236.702250
+7    237.264625
+8    237.485562
+9    237.847062
+Name: keyword_start_time, dtype: float64,0    234.653625
+1    235.216000
+2    235.617687
+3    235.898875
+4    236.160000
+5    236.662062
+6    236.943250
+7    237.445375
+8    237.746688
+9    238.208625
+Name: keyword_end_time, dtype: float64,0    0.989381
+1    0.916360
+2    0.745961
+3    0.982046
+4    0.927845
+5    0.970964
+6    0.994773
+7    0.946895
+8    0.905885
+9    0.882642
+Name: confidence, dtype: float640        where
+1          the
+2       twenty
+3        third
+4     rendered
+5          the
+6         lord
+7          all
+8         that
+9      opposed
+10        what
+11        knew
+12         the
+13        lord
+14    shepherd
+Name: keyword, dtype: object,adversarial_101,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+14    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_101,0     third/common_voice_en_20031104.opus
+1     third/common_voice_en_20031104.opus
+2     third/common_voice_en_20031104.opus
+3     third/common_voice_en_20031104.opus
+4     third/common_voice_en_20031104.opus
+5     third/common_voice_en_20031104.opus
+6     third/common_voice_en_20031104.opus
+7     third/common_voice_en_20031104.opus
+8     third/common_voice_en_20031104.opus
+9     third/common_voice_en_20031104.opus
+10    third/common_voice_en_20031104.opus
+11    third/common_voice_en_20031104.opus
+12    third/common_voice_en_20031104.opus
+13    third/common_voice_en_20031104.opus
+14    third/common_voice_en_20031104.opus
+Name: MSWC_ID, dtype: object,0     238.770625
+1     239.091438
+2     239.271875
+3     239.572688
+4     240.314625
+5     241.237000
+6     241.397437
+7     242.079187
+8     242.299750
+9     243.322438
+10    243.843750
+11    244.124500
+12    244.585688
+13    244.706000
+14    245.327625
+Name: keyword_start_time, dtype: float64,0     239.011250
+1     239.211750
+2     239.512500
+3     239.773188
+4     240.655500
+5     241.337250
+6     241.678125
+7     242.239625
+8     242.600562
+9     243.683375
+10    243.964063
+11    244.264875
+12    244.665938
+13    244.906563
+14    245.708625
+Name: keyword_end_time, dtype: float64,0     0.842184
+1     0.999859
+2     0.971664
+3     0.899999
+4     0.942942
+5     0.906753
+6     0.940789
+7     0.884688
+8     0.892859
+9     0.942156
+10    0.992748
+11    0.849002
+12    0.931500
+13    0.999905
+14    0.852949
+Name: confidence, dtype: float640    then
+1    went
+2    down
+3     and
+4    read
+Name: keyword, dtype: object,adversarial_102,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_102,0    and/common_voice_en_134326.opus
+1    and/common_voice_en_134326.opus
+2    and/common_voice_en_134326.opus
+3    and/common_voice_en_134326.opus
+4    and/common_voice_en_134326.opus
+Name: MSWC_ID, dtype: object,0    246.513187
+1    247.016063
+2    247.317813
+3    248.001688
+4    248.645375
+Name: keyword_start_time, dtype: float64,0    246.714313
+1    247.237313
+2    247.679875
+3    248.142500
+4    248.927000
+Name: keyword_end_time, dtype: float64,0    0.899815
+1    0.918857
+2    0.999499
+3    0.952050
+4    0.847628
+Name: confidence, dtype: float640       and
+1     wrote
+2      down
+3     every
+4    single
+5       law
+Name: keyword, dtype: object,adversarial_103,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_103,0    single/common_voice_en_22397867.opus
+1    single/common_voice_en_22397867.opus
+2    single/common_voice_en_22397867.opus
+3    single/common_voice_en_22397867.opus
+4    single/common_voice_en_22397867.opus
+5    single/common_voice_en_22397867.opus
+Name: MSWC_ID, dtype: object,0    250.370500
+1    250.592437
+2    250.834563
+3    251.197750
+4    251.560937
+5    252.025000
+Name: keyword_start_time, dtype: float64,0    250.431000
+1    250.794187
+2    251.036313
+3    251.460062
+4    251.944312
+5    252.287313
+Name: keyword_end_time, dtype: float64,0    0.046628
+1    0.804906
+2    0.933109
+3    0.995283
+4    0.957418
+5    0.847024
+Name: confidence, dtype: float640        that
+1       could
+2        find
+3         and
+4        this
+5         was
+6        very
+7        long
+8        list
+9        over
+10      seven
+11    hundred
+Name: keyword, dtype: object,adversarial_104,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_104,0     that/common_voice_en_19026868.opus
+1     that/common_voice_en_19026868.opus
+2     that/common_voice_en_19026868.opus
+3     that/common_voice_en_19026868.opus
+4     that/common_voice_en_19026868.opus
+5     that/common_voice_en_19026868.opus
+6     that/common_voice_en_19026868.opus
+7     that/common_voice_en_19026868.opus
+8     that/common_voice_en_19026868.opus
+9     that/common_voice_en_19026868.opus
+10    that/common_voice_en_19026868.opus
+11    that/common_voice_en_19026868.opus
+Name: MSWC_ID, dtype: object,0     252.801750
+1     253.103062
+2     253.283875
+3     253.545063
+4     253.645500
+5     253.866437
+6     254.147687
+7     254.670000
+8     255.071812
+9     255.473563
+10    255.774937
+11    256.216875
+Name: keyword_start_time, dtype: float64,0     252.942375
+1     253.243687
+2     253.504875
+3     253.625375
+4     253.806187
+5     253.987000
+6     254.469125
+7     254.991437
+8     255.312875
+9     255.654375
+10    256.096375
+11    256.638750
+Name: keyword_end_time, dtype: float64,0     0.966586
+1     0.892173
+2     0.915459
+3     0.757980
+4     0.999823
+5     0.847500
+6     0.999919
+7     0.999921
+8     0.998828
+9     0.862624
+10    0.999765
+11    0.923103
+Name: confidence, dtype: float640    rules
+Name: keyword, dtype: object,adversarial_105,0    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_105,0    rules/common_voice_en_662501.opus
+Name: MSWC_ID, dtype: object,0    257.162938
+Name: keyword_start_time, dtype: float64,0    257.907875
+Name: keyword_end_time, dtype: float64,0    0.920897
+Name: confidence, dtype: float640              and
+1             they
+2            range
+3             from
+4              the
+5           famous
+6             ones
+7             that
+8              had
+9            heard
+10             the
+11             ten
+12    commandments
+Name: keyword, dtype: object,adversarial_106,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_106,0     famous/common_voice_en_19770458.opus
+1     famous/common_voice_en_19770458.opus
+2     famous/common_voice_en_19770458.opus
+3     famous/common_voice_en_19770458.opus
+4     famous/common_voice_en_19770458.opus
+5     famous/common_voice_en_19770458.opus
+6     famous/common_voice_en_19770458.opus
+7     famous/common_voice_en_19770458.opus
+8     famous/common_voice_en_19770458.opus
+9     famous/common_voice_en_19770458.opus
+10    famous/common_voice_en_19770458.opus
+11    famous/common_voice_en_19770458.opus
+12    famous/common_voice_en_19770458.opus
+Name: MSWC_ID, dtype: object,0     258.772063
+1     259.012625
+2     259.152938
+3     259.413500
+4     259.553812
+5     259.674062
+6     260.135063
+7     260.295437
+8     260.535937
+9     260.656250
+10    261.037062
+11    261.157312
+12    261.397875
+Name: keyword_start_time, dtype: float64,0     258.992563
+1     259.112813
+2     259.393438
+3     259.533750
+4     259.613938
+5     259.994750
+6     260.255313
+7     260.395625
+8     260.616125
+9     260.816562
+10    261.117250
+11    261.357750
+12    262.019250
+Name: keyword_end_time, dtype: float64,0     0.522134
+1     0.902027
+2     0.826516
+3     0.898751
+4     0.998773
+5     0.939674
+6     0.939763
+7     0.882974
+8     0.886562
+9     0.779322
+10    0.999478
+11    0.999823
+12    0.966495
+Name: confidence, dtype: float640    definitely
+1          take
+2      projects
+3     seriously
+4           but
+Name: keyword, dtype: object,adversarial_108,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_108,0    definitely/common_voice_en_109215.opus
+1    definitely/common_voice_en_109215.opus
+2    definitely/common_voice_en_109215.opus
+3    definitely/common_voice_en_109215.opus
+4    definitely/common_voice_en_109215.opus
+Name: MSWC_ID, dtype: object,0    272.804688
+1    273.328312
+2    273.690812
+3    274.133875
+4    274.818562
+Name: keyword_start_time, dtype: float64,0    273.267875
+1    273.509563
+2    274.093563
+3    274.576937
+4    274.919250
+Name: keyword_end_time, dtype: float64,0    0.962529
+1    0.902747
+2    0.914004
+3    0.922846
+4    0.833526
+Name: confidence, dtype: float640         also
+1       wanted
+2       follow
+3          the
+4     hundreds
+5       arcane
+6          and
+7      obscure
+8         laws
+9         that
+10         are
+11         the
+12       bible
+Name: keyword, dtype: object,adversarial_109,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_109,0     the/common_voice_en_18304897__2.opus
+1     the/common_voice_en_18304897__2.opus
+2     the/common_voice_en_18304897__2.opus
+3     the/common_voice_en_18304897__2.opus
+4     the/common_voice_en_18304897__2.opus
+5     the/common_voice_en_18304897__2.opus
+6     the/common_voice_en_18304897__2.opus
+7     the/common_voice_en_18304897__2.opus
+8     the/common_voice_en_18304897__2.opus
+9     the/common_voice_en_18304897__2.opus
+10    the/common_voice_en_18304897__2.opus
+11    the/common_voice_en_18304897__2.opus
+12    the/common_voice_en_18304897__2.opus
+Name: MSWC_ID, dtype: object,0     275.080125
+1     275.340562
+2     275.761312
+3     276.462562
+4     276.702938
+5     277.584500
+6     278.165563
+7     278.325812
+8     278.846750
+9     279.307563
+10    279.467812
+11    279.688188
+12    279.808438
+Name: keyword_start_time, dtype: float64,0     275.280438
+1     275.581000
+2     276.182062
+3     276.562687
+4     277.183812
+5     278.145500
+6     278.245687
+7     278.766563
+8     279.127250
+9     279.427750
+10    279.547937
+11    279.768375
+12    280.129000
+Name: keyword_end_time, dtype: float64,0     0.943180
+1     0.999845
+2     0.952615
+3     0.999606
+4     0.999843
+5     0.828821
+6     0.999649
+7     0.962265
+8     0.999901
+9     0.999834
+10    0.790021
+11    0.758683
+12    0.885799
+Name: confidence, dtype: float640         you
+1         can
+2     imagine
+3       spent
+4         lot
+5        time
+6     airport
+7    security
+Name: keyword, dtype: object,adversarial_111,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_111,0    security/common_voice_en_18779723.opus
+1    security/common_voice_en_18779723.opus
+2    security/common_voice_en_18779723.opus
+3    security/common_voice_en_18779723.opus
+4    security/common_voice_en_18779723.opus
+5    security/common_voice_en_18779723.opus
+6    security/common_voice_en_18779723.opus
+7    security/common_voice_en_18779723.opus
+Name: MSWC_ID, dtype: object,0    293.163187
+1    293.283750
+2    293.444437
+3    294.006937
+4    294.348500
+5    294.730187
+6    295.252500
+7    295.714562
+Name: keyword_start_time, dtype: float64,0    293.243562
+1    293.384187
+2    293.866312
+3    294.248063
+4    294.569500
+5    295.031563
+6    295.674438
+7    296.277125
+Name: keyword_end_time, dtype: float64,0    0.983030
+1    0.998383
+2    0.917049
+3    0.832951
+4    0.909278
+5    0.934048
+6    0.970652
+7    0.929220
+Name: confidence, dtype: float640        wife
+1    wouldn't
+2        kiss
+Name: keyword, dtype: object,adversarial_112,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_112,0    wife/common_voice_en_18451892.opus
+1    wife/common_voice_en_18451892.opus
+2    wife/common_voice_en_18451892.opus
+Name: MSWC_ID, dtype: object,0    299.068500
+1    299.351688
+2    299.655125
+Name: keyword_start_time, dtype: float64,0    299.311250
+1    299.614688
+2    299.897875
+Name: keyword_end_time, dtype: float64,0    0.995765
+1    0.749533
+2    0.963661
+Name: confidence, dtype: float640       for
+1       the
+2      last
+3       two
+4    months
+Name: keyword, dtype: object,adversarial_113,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_113,0    months/common_voice_en_22128962.opus
+1    months/common_voice_en_22128962.opus
+2    months/common_voice_en_22128962.opus
+3    months/common_voice_en_22128962.opus
+4    months/common_voice_en_22128962.opus
+Name: MSWC_ID, dtype: object,0    300.081062
+1    300.243313
+2    300.344688
+3    300.669125
+4    300.892187
+Name: keyword_start_time, dtype: float64,0    300.223000
+1    300.324437
+2    300.628562
+3    300.831375
+4    301.155813
+Name: keyword_end_time, dtype: float64,0    0.871809
+1    0.752893
+2    0.999855
+3    0.935656
+4    0.928549
+Name: confidence, dtype: float640    got
+1    rid
+2    all
+Name: keyword, dtype: object,adversarial_115,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_115,0    all/common_voice_en_17881499.opus
+1    all/common_voice_en_17881499.opus
+2    all/common_voice_en_17881499.opus
+Name: MSWC_ID, dtype: object,0    313.505000
+1    313.746438
+2    314.008000
+Name: keyword_start_time, dtype: float64,0    313.686062
+1    313.887313
+2    314.128750
+Name: keyword_end_time, dtype: float64,0    0.999200
+1    0.857152
+2    0.817247
+Name: confidence, dtype: float640      then
+1       her
+2      hand
+3     shall
+4       cut
+5       off
+6    wanted
+7    follow
+8      that
+9      rule
+Name: keyword, dtype: object,adversarial_117,0    AJJacobs_2007P
+1    AJJacobs_2007P
+2    AJJacobs_2007P
+3    AJJacobs_2007P
+4    AJJacobs_2007P
+5    AJJacobs_2007P
+6    AJJacobs_2007P
+7    AJJacobs_2007P
+8    AJJacobs_2007P
+9    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_117,0    wanted/common_voice_en_189741.opus
+1    wanted/common_voice_en_189741.opus
+2    wanted/common_voice_en_189741.opus
+3    wanted/common_voice_en_189741.opus
+4    wanted/common_voice_en_189741.opus
+5    wanted/common_voice_en_189741.opus
+6    wanted/common_voice_en_189741.opus
+7    wanted/common_voice_en_189741.opus
+8    wanted/common_voice_en_189741.opus
+9    wanted/common_voice_en_189741.opus
+Name: MSWC_ID, dtype: object,0    325.660375
+1    325.841313
+2    326.002125
+3    326.303688
+4    326.665563
+5    326.987250
+6    327.731063
+7    328.113000
+8    328.434687
+9    328.696000
+Name: keyword_start_time, dtype: float64,0    325.801125
+1    325.941813
+2    326.283625
+3    326.504750
+4    326.846500
+5    327.107875
+6    327.952187
+7    328.394500
+8    328.615625
+9    328.957375
+Name: keyword_end_time, dtype: float64,0    0.856871
+1    0.805934
+2    0.935913
+3    0.937055
+4    0.899095
+5    0.997989
+6    0.993613
+7    0.957980
+8    0.997295
+9    0.871878
+Name: confidence, dtype: float640         that
+1          one
+2     followed
+3      default
+4          not
+5      getting
+6        fight
+7         with
+8          man
+9        whose
+10        wife
+11         was
+12    standing
+13      nearby
+Name: keyword, dtype: object,adversarial_118,0     AJJacobs_2007P
+1     AJJacobs_2007P
+2     AJJacobs_2007P
+3     AJJacobs_2007P
+4     AJJacobs_2007P
+5     AJJacobs_2007P
+6     AJJacobs_2007P
+7     AJJacobs_2007P
+8     AJJacobs_2007P
+9     AJJacobs_2007P
+10    AJJacobs_2007P
+11    AJJacobs_2007P
+12    AJJacobs_2007P
+13    AJJacobs_2007P
+Name: TED_talk_id, dtype: object,adversarial_118,0     that/common_voice_en_504398.opus
+1     that/common_voice_en_504398.opus
+2     that/common_voice_en_504398.opus
+3     that/common_voice_en_504398.opus
+4     that/common_voice_en_504398.opus
+5     that/common_voice_en_504398.opus
+6     that/common_voice_en_504398.opus
+7     that/common_voice_en_504398.opus
+8     that/common_voice_en_504398.opus
+9     that/common_voice_en_504398.opus
+10    that/common_voice_en_504398.opus
+11    that/common_voice_en_504398.opus
+12    that/common_voice_en_504398.opus
+13    that/common_voice_en_504398.opus
+Name: MSWC_ID, dtype: object,0     331.753813
+1     332.074625
+2     332.355313
+3     333.097188
+4     333.859062
+5     334.139813
+6     334.721250
+7     335.362875
+8     335.623500
+9     335.984438
+10    336.265125
+11    336.585938
+12    336.726313
+13    337.127313
+Name: keyword_start_time, dtype: float64,0     331.974375
+1     332.154812
+2     332.756313
+3     333.558312
+4     334.079625
+5     334.460625
+6     335.001937
+7     335.483188
+8     335.904250
+9     336.184938
+10    336.505750
+11    336.686188
+12    337.067125
+13    337.588437
+Name: keyword_end_time, dtype: float64,0     0.953700
+1     0.992097
+2     0.979735
+3     0.948266
+4     0.999879
+5     0.999809
+6     0.953087
+7     0.999723
+8     0.999902
+9     0.837815
+10    0.940588
+11    0.997440
+12    0.999843
+13    0.940837
+Name: confidence, dtype: float64
