@@ -2,8 +2,9 @@ import os
 from sphfile import SPHFile
 
 
-path = '/home/bella/Documents/University/MLP/MLP_Group_Project/src/Data/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
-out_path = '/home/bella/Documents/University/MLP/MLP_Group_Project/src/Data/TEDLIUM_wav'
+path = '/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
+out_path = '/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/'
+
 folder = os.fsencode(path)
 
 filenames = []
@@ -23,14 +24,16 @@ for i in range(length):
 	folderpath.append(fpath)
 	outpath = os.path.join(filenames[i]+".wav")	
 	outputfile.append(outpath)
+
+folderpath = sorted(folderpath)
+outputfile = sorted(outputfile)
 print(folderpath)
 print(outputfile)
-
 
 for i in range(length):
 	sph =SPHFile(folderpath[i])
 	print(sph.format)
-	sph.write_wav(os.path.join(out_path, outputfile[i]), 0, 123.57 ) # Customize the period of time to crop
+	sph.write_wav(os.path.join(out_path, outputfile[i])) # Customize the period of time to crop
 
 
 
