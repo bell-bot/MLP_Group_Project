@@ -1,0 +1,22 @@
+WER: 1.0
+Target: and our family and when i saw it and yet through the shock  the terrible shock  and the terrible
+Prediction: 
+Target: and our family and when i saw it and yet through the shock  the terrible shock  and the terrible
+Prediction: 
+Target: and our family and when i saw it and yet through the shock  the terrible shock  and the terrible
+Prediction: 
+Target: explosion in our lives  literally
+Prediction: 
+Target: explosion in our lives  literally
+Prediction: 
+WER: 1.0
+Target: explosion in our lives  literally
+Prediction: 
+Target: explosion in our lives  literally
+Prediction: 
+Target: and our family and when i saw it and yet through the shock  the terrible shock  and the terrible
+Prediction: 
+Target: and our family and when i saw it and yet through the shock  the terrible shock  and the terrible
+Prediction: 
+Target: explosion in our lives  literally
+Prediction: 
