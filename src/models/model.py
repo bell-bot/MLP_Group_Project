@@ -31,11 +31,11 @@ frame_step = 160
 # If not provided, uses the smallest power of 2 enclosing frame_length.
 fft_length = 384
 
-NUM_OF_SAMPLES = 10 #<---- DATASET SIZE
-BATCH_SIZE =2
-RNN_UNITS=1 #original: 512
-RNN_LAYERS = 1 #original : 5
-LR_ADAM = 1e-1
+NUM_OF_SAMPLES = 10000 #<---- DATASET SIZE
+BATCH_SIZE = 16
+RNN_UNITS=512 #original: 512
+RNN_LAYERS = 5 #original : 5
+LR_ADAM = 1e-4
 
 EPOCHS =100
 # ------------------------------------------
@@ -202,7 +202,7 @@ def decode_batch_predictions(pred):
 
 metadata_df = read_ctrlf_dataset(num_of_samples=NUM_OF_SAMPLES)
 print(metadata_df[0:10])
-split = int(len(metadata_df) * 0.80)
+split = int(len(metadata_df) * 0.90)
 df_train = metadata_df[:split]
 df_val = metadata_df[split:]
 print(f"Size of the training set: {len(df_train)}")
