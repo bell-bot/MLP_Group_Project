@@ -30,9 +30,9 @@ frame_step =  160
 # If not provided, uses the smallest power of 2 enclosing frame_length.
 
 fft_length = 384  #Original: None
-NUM_OF_SAMPLES = 10000 #<---- DATASET SIZE
+NUM_OF_SAMPLES = 3000 #<---- DATASET SIZE
 BATCH_SIZE = 16
-RNN_UNITS=64 #original: 512
+RNN_UNITS=128 #original: 512
 RNN_LAYERS = 2 #original : 5
 LR_ADAM = 1e-4
 
@@ -200,6 +200,13 @@ validation_dataset = (
     .prefetch(buffer_size=tf.data.AUTOTUNE)
 )
 
+#Disable Auto Sharding
+options = tf.data.Options()
+options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.OFF
+train_dataset = train_dataset.with_options(options)
+validation_dataset = validation_dataset.with_options(options)
+
+
 # fig = plt.figure(figsize=(8, 5))
 # for batch in train_dataset.take(1):
 #     spectrogram = batch[0][0].numpy()
@@ -292,7 +299,7 @@ def make_or_restore_model():
     if checkpoints:
         latest_checkpoint = max(checkpoints, key=os.path.getctime)
         print("Restoring from", latest_checkpoint)
-        return keras.models.load_model(latest_checkpoint)
+        return keras.models.load_model(latest_checkpoint, custom_objects= {'CTCLoss': CTCLoss})
     print("Creating a new model")
     model = build_model(
         input_dim=fft_length // 2 + 1,
