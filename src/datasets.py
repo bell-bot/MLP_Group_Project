@@ -128,7 +128,6 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
         return results_dict
 
 
-
 class MultiLingualSpokenWordsEnglish():
     MLCOMMONS_FOLDER_NAME = "Multilingual_Spoken_Words"
     AUDIO_DIR_NAME="audio"
@@ -291,24 +290,25 @@ class CTRLF_DatasetWrapper:
         return output_df
     
     
-    #get function that returns minimal data needed, 1D array
-    def get_ted_simplified(self,TEDSample_id: int, sampling_rate=16000):
-        TED_results_dict = self.TED.__getitem__(TEDSample_id)
+    #get function that returns minimal data needed, 1D array/
+    def get_ted_talk_id_and_transcript(self,TEDSample_id: int):
         if TEDSample_id not in self.TED_sampleids_in_labels_set:
             print("*" * 80)
             print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
             print("If you think it should exist, please check the data types you are comparing with (i.e str vs int) and the csv file itself")
             print("*" * 80)
             return []
+        
+        
+        fileid, line = self.TED._filelist[TEDSample_id]
+        transcript_path = os.path.join(self.TED._path, "stm", fileid)
+        with open(transcript_path + ".stm") as f:
+            transcript = f.readlines()[line]
+            talk_id, _, speaker_id, start_time, end_time, identifier, transcript = transcript.split(" ", 6)
 
-        #Resample Audio file into same sampling rate
-        TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=sampling_rate)
-        TED_results_dict["sample_rate"] = sampling_rate
 
         #Create new row
-        waveform = (TED_results_dict["waveform"])
-        # np.reshape(waveform , (len(waveform)))
-        output_row = [waveform, TED_results_dict["transcript"] ]
+        output_row = [talk_id, transcript]
 
         return output_row #1D array
 
@@ -345,9 +345,8 @@ if __name__== "__main__":
     print(output_df.MSWC_audio_waveform.iloc[0].shape, output_df.MSWC_sample_rate.iloc[0])
     
     print("Concise TED Results")
-    output_rows = x.get_ted_simplified(4)
+    output_rows = x.get_ted_talk_id_and_transcript(4)
     print(output_rows)
-    print(np.array(output_rows[0]).shape)
 
     ####### Testing TEDLIUM
     print("-"*20)  
