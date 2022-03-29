@@ -8,17 +8,40 @@ from tensorflow.keras import layers
 import matplotlib.pyplot as plt
 from IPython import display
 from jiwer import wer
+import csv
+import os
+
 from tqdm import tqdm
 from src.datasets import CTRLF_DatasetWrapper
 metadata_path = "/home/szy/Documents/MLP_Group_Project/src/metadata.csv"
-sph_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
+wav_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
+model_directory = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
+generated_text_stats_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
+generated_history_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
 
-generated_model_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
+# --------- HYPERPARAMETER SETTINGS --------------- 
+REMOVE_UNK = True
+
+# An integer scalar Tensor. The window length in samples.
+frame_length = 256
+# An integer scalar Tensor. The number of samples to step.
+frame_step = 160
+# An integer scalar Tensor. The size of the FFT to apply.
+# If not provided, uses the smallest power of 2 enclosing frame_length.
+fft_length = 384
+
+NUM_OF_SAMPLES = 10 #<---- DATASET SIZE
+BATCH_SIZE =2
+RNN_UNITS=1 #original: 512
+RNN_LAYERS = 1 #original : 5
+LR_ADAM = 1e-4
+
+EPOCHS =1 
+# ------------------------------------------
 
 print(tf.__version__)
 print(tf.test.gpu_device_name())
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-tf.executing_eagerly()
 
 CTRLF_Engine = CTRLF_DatasetWrapper()
 
@@ -31,7 +54,7 @@ def read_dataset_metadata():
     metadata_df.head(3)
     return metadata_df
 
-def read_ctrlf_dataset(num_of_samples=6):
+def read_ctrlf_dataset(num_of_samples=3000):
     audio_df = pd.DataFrame(columns=CTRLF_Engine.COLS_OUTPUT_TED_SIMPLIFIED)
     output_rows = []
     for i in tqdm(range(0,num_of_samples),desc="Preparing Dataset"):
@@ -42,6 +65,8 @@ def read_ctrlf_dataset(num_of_samples=6):
             continue
         else:
             row[0]= str(i) + "_" + CTRLF_Engine.TED.__getitem__(i)["talk_id"]
+            if REMOVE_UNK:
+                row[1] = row[1].replace("<unk>", "") #TODO: See if this is plausible
             output_rows.append(row)
     audio_df = pd.DataFrame(data= output_rows, columns=["TED_Talk_ID", "TED_transcript"])
     audio_df.reset_index(inplace=True, drop=True)
@@ -52,14 +77,8 @@ def encode_single_sample(wav_file, label):
     ###########################################
     ##  Process the Audio
     ##########################################
-    # 1. Read wav file
-    # sample_id = tf.py_function(get_int, [sample_id_tf], tf.Tensor)
-    # with tf.compat.v1.Session() as sess:
-    #     sess.run(tf.compat.v1.global_variables_initializer())
-    #     sample_id = sample_id_tf.eval()
-    #     print(int((sample_id)))
      # 1. Read wav file
-    file = tf.io.read_file(sph_path + wav_file + ".wav")
+    file = tf.io.read_file(wav_path + wav_file + ".wav")
     # 2. Decode the wav file
     audio, _ = tf.audio.decode_wav(file)
     audio = tf.squeeze(audio, axis=-1)
@@ -154,7 +173,7 @@ def build_model(input_dim, output_dim, rnn_layers=5, rnn_units=128):
     # Model
     model = keras.Model(input_spectrogram, output, name="DeepSpeech_2")
     # Optimizer
-    opt = keras.optimizers.Adam(learning_rate=1e-4)
+    opt = keras.optimizers.Adam(learning_rate=LR_ADAM)
     # Compile the model and return
     model.compile(optimizer=opt, loss=CTCLoss)
     return model
@@ -172,7 +191,7 @@ def decode_batch_predictions(pred):
     return output_text
 
 
-metadata_df = read_ctrlf_dataset()
+metadata_df = read_ctrlf_dataset(num_of_samples=NUM_OF_SAMPLES)
 print(metadata_df[0:10])
 split = int(len(metadata_df) * 0.80)
 df_train = metadata_df[:split]
@@ -194,16 +213,6 @@ print(
     f"(size ={char_to_num.vocabulary_size()})"
 )
 
-# An integer scalar Tensor. The window length in samples.
-frame_length = 256
-# An integer scalar Tensor. The number of samples to step.
-frame_step = 160
-# An integer scalar Tensor. The size of the FFT to apply.
-# If not provided, uses the smallest power of 2 enclosing frame_length.
-fft_length = 384
-
-
-batch_size = 32
 # Define the trainig dataset
 
 
@@ -212,7 +221,7 @@ train_dataset = tf.data.Dataset.from_tensor_slices(
 )
 train_dataset = (
     train_dataset.map(encode_single_sample, num_parallel_calls=tf.data.AUTOTUNE)
-    .padded_batch(batch_size)
+    .padded_batch(BATCH_SIZE)
     .prefetch(buffer_size=tf.data.AUTOTUNE)
 )
 
@@ -222,7 +231,7 @@ validation_dataset = tf.data.Dataset.from_tensor_slices(
 )
 validation_dataset = (
     validation_dataset.map(encode_single_sample, num_parallel_calls=tf.data.AUTOTUNE)
-    .padded_batch(batch_size)
+    .padded_batch(BATCH_SIZE)
     .prefetch(buffer_size=tf.data.AUTOTUNE)
 )
 
@@ -238,7 +247,7 @@ validation_dataset = (
 #     ax.set_title(label)
 #     ax.axis("off")
 #     # Wav
-#     file = tf.io.read_file(sph_path + list(df_train["TED_Talk_ID"])[0] + ".wav")
+#     file = tf.io.read_file(wav_path + list(df_train["TED_Talk_ID"])[0] + ".wav")
 #     audio, _ = tf.audio.decode_wav(file)
 #     audio = audio.numpy()
 #     ax = plt.subplot(2, 1, 2)
@@ -252,11 +261,10 @@ validation_dataset = (
 model = build_model(
     input_dim=fft_length // 2 + 1,
     output_dim=char_to_num.vocabulary_size(),
-    # rnn_units=512,
-    rnn_units=1
+    rnn_units=RNN_UNITS,
+    rnn_layers=RNN_LAYERS
 )
 model.summary(line_length=110)
-
 ##Class needs to be here
 # A callback class to output a few TED_transcriptions during training
 class CallbackEval(keras.callbacks.Callback):
@@ -287,11 +295,25 @@ class CallbackEval(keras.callbacks.Callback):
             print(f"Target    : {targets[i]}")
             print(f"Prediction: {predictions[i]}")
             print("-" * 100)
+        
+        if ('lr' not in logs.keys()):
+            logs.setdefault('lr',0)
+            logs['lr'] = keras.backend.get_value(self.model.optimizer.lr)
+
+        if not ('model_history.csv' in os.listdir(model_directory)):
+            with open(model_directory+'model_history.csv','a') as f:
+                y=csv.DictWriter(f,logs.keys())
+                y.writeheader()
+
+        with open(model_directory+'model_history.csv','a') as f:
+            y=csv.DictWriter(f,logs.keys())
+            y.writerow(logs)
+
 
 
 def train_model():
     # Define the number of epochs.
-    epochs = 100
+    epochs = EPOCHS
     # Callback function to check TED_transcription on the val set.
     validation_callback = CallbackEval(validation_dataset)
     # Train the model
@@ -301,8 +323,9 @@ def train_model():
         epochs=epochs,
         callbacks=[validation_callback],
     )
+    return history
 
-def eval_model():
+def eval_model(history, num_of_predictions_to_print=5):
     
     # Let's check results on more validation samples
     predictions = []
@@ -315,35 +338,29 @@ def eval_model():
         for label in y:
             label = tf.strings.reduce_join(num_to_char(label)).numpy().decode("utf-8")
             targets.append(label)
+    tf.saved_model.save(model, model_directory)
     wer_score = wer(targets, predictions)
-    print("-" * 100)
-    print(f"Word Error Rate: {wer_score:.4f}")
-    print("-" * 100)
-    for i in np.random.randint(0, len(predictions), 5):
-        print(f"Target    : {targets[i]}")
-        print(f"Prediction: {predictions[i]}")
+    
+    with open(model_directory + "model_stats.txt", "a") as f:  
         print("-" * 100)
-        
-        
+        print(f"Word Error Rate: {wer_score:.4f}")
+        f.write("WER: " + str(wer_score) +"\n")
+        print("-" * 100)
+        for i in np.random.randint(0, len(predictions), num_of_predictions_to_print):
+            print(f"Target    : {targets[i]}")
+            print(f"Prediction: {predictions[i]}")
+            print("-" * 100)
 
+            f.write(f"Target: {targets[i]}\n")
+            f.write(f"Prediction: {predictions[i]}\n") 
+    
+ 
+        
+        
+#Train the model
+history =train_model()
 # Let's check results on more validation samples
-predictions = []
-targets = []
-for batch in validation_dataset:
-    X, y = batch
-    batch_predictions = model.predict(X)
-    batch_predictions = decode_batch_predictions(batch_predictions)
-    predictions.extend(batch_predictions)
-    for label in y:
-        label = tf.strings.reduce_join(num_to_char(label)).numpy().decode("utf-8")
-        targets.append(label)
-wer_score = wer(targets, predictions)
-print("-" * 100)
-print(f"Word Error Rate: {wer_score:.4f}")
-print("-" * 100)
-for i in np.random.randint(0, len(predictions), 5):
-    print(f"Target    : {targets[i]}")
-    print(f"Prediction: {predictions[i]}")
-    print("-" * 100)
+eval_model(history)
 
-tf.saved_model.save(model, generated_model_path)
+
+    
