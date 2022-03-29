@@ -17,7 +17,15 @@ for i in tqdm(range(len(samples_to_write))):
     Ted_talk_id = TED_sample_dict["talk_id"]
     ofile = str(sample)+"_" +Ted_talk_id +".wav" 
     # output_signal = tf.audio.encode_wav(TED_sample_dict["waveform"], TED_sample_dict["sample_rate"])
-    scipy.io.wavfile.write(out_path + ofile, TED_sample_dict["sample_rate"], data = TED_sample_dict["waveform"][0].astype(np.int16)) #
+    # scipy.io.wavfile.write(out_path + ofile, TED_sample_dict["sample_rate"], data = TED_sample_dict["waveform"][0].astype(np.int16)) #
+    ted_waveform = TED_sample_dict["waveform"]
+    ted_waveform = ted_waveform.reshape(ted_waveform.shape[1],1)
+    encode = tf.audio.encode_wav(
+    ted_waveform, TED_sample_dict["sample_rate"], name=None
+    )
+    tf.io.write_file(
+    out_path + ofile, encode, name=None
+    )
     # tf.io.write_file(out_path + ofile , output_signal)
 
 
