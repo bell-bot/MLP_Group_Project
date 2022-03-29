@@ -173,7 +173,7 @@ def decode_batch_predictions(pred):
 
 
 metadata_df = read_ctrlf_dataset()
-print(metadata_df[0:100])
+print(metadata_df[0:10])
 split = int(len(metadata_df) * 0.80)
 df_train = metadata_df[:split]
 df_val = metadata_df[split:]

@@ -4,7 +4,7 @@ from re import L
 from typing import Dict, Tuple
 import sys
 import logging
-import numpy
+import numpy as np
 import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
 import librosa
@@ -82,7 +82,7 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
         Returns:
             Dictionary: ``(waveform, sample_rate, transcript, talk_id, speaker_id, identifier, start_time, end_time)`` 
             
-            """
+            """        
         fileid, line = self._filelist[sampleID]
         return self._load_tedlium_item(fileid, line, self._path)
 
@@ -221,7 +221,7 @@ class MultiLingualSpokenWordsEnglish():
 #TODO! Create mapping between talk ids and datatype set (i.e not just sample mapping). Use the defined train_audio_sets, dev_audio_sets, test_audio_sets to help. Might be better to implement this in the TEDLIUMCustom instead of here.
 class CTRLF_DatasetWrapper:
     COLS_OUTPUT= ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
-
+    COLS_OUTPUT_TED_SIMPLIFIED = ["TED_waveform", "TED_transcript"] #Used for the keras ASR model
     """
     Main class wrapper for both TEDLIUM dataset and MSWC dataset. Using the labels csv file, use the functions to retrieve audio samples and their corresponding keywords that was linked to.
         
@@ -240,9 +240,11 @@ class CTRLF_DatasetWrapper:
 
         #Initialise Keyword dataset
         self.MSWC = MultiLingualSpokenWordsEnglish(root=path_to_MSWC)
+        
+        #Store the TED sample ids found in set()
+        self.TED_sampleids_in_labels_set = set(self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID].unique())
 
 
-    
     def get(self, TEDSample_id: int, sampling_rate=16000):
         """
         Given Ted Sample ID and the dataset type, return three separate corresponding dictionaries.
@@ -251,7 +253,6 @@ class CTRLF_DatasetWrapper:
             ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
 
         """
-        output_df = pd.DataFrame(columns=self.COLS_OUTPUT)
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
@@ -286,10 +287,30 @@ class CTRLF_DatasetWrapper:
 
             output_rows.append(new_row)
 
-
         output_df = pd.DataFrame(data=output_rows, columns=self.COLS_OUTPUT)
         return output_df
+    
+    
+    #get function that returns minimal data needed, 1D array
+    def get_ted_simplified(self,TEDSample_id: int, sampling_rate=16000):
+        TED_results_dict = self.TED.__getitem__(TEDSample_id)
+        if TEDSample_id not in self.TED_sampleids_in_labels_set:
+            print("*" * 80)
+            print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
+            print("If you think it should exist, please check the data types you are comparing with (i.e str vs int) and the csv file itself")
+            print("*" * 80)
+            return []
 
+        #Resample Audio file into same sampling rate
+        TED_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=sampling_rate)
+        TED_results_dict["sample_rate"] = sampling_rate
+
+        #Create new row
+        waveform = (TED_results_dict["waveform"])
+        # np.reshape(waveform , (len(waveform)))
+        output_row = [waveform, TED_results_dict["transcript"] ]
+
+        return output_row #1D array
 
     #TODO: Return more results like speaker_id, etc..
     def get_verbose(TEDSample_id: int, sampling_rate = 16000):
@@ -311,16 +332,22 @@ class CTRLF_DatasetWrapper:
         return samples_df
 
 
+            
 
 if __name__== "__main__":
     ####### Testing CTRLF_DatasetWrapper
     print("-"*20)  
     print("CTRL_F Wrapper") 
-
+    
+    print("Dataframe Results")
     x= CTRLF_DatasetWrapper(path_to_labels_csv = LABELS_KEYPHRASES_CSV_PATH)
     output_df = x.get(4)
     print(output_df.MSWC_audio_waveform.iloc[0].shape, output_df.MSWC_sample_rate.iloc[0])
-
+    
+    print("Concise TED Results")
+    output_rows = x.get_ted_simplified(4)
+    print(output_rows)
+    print(np.array(output_rows[0]).shape)
 
     ####### Testing TEDLIUM
     print("-"*20)  
