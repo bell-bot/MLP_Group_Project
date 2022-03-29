@@ -16,24 +16,24 @@ from tqdm import tqdm
 from src.datasets import CTRLF_DatasetWrapper
 from Data import data_utils
 metadata_path = "/home/szy/Documents/MLP_Group_Project/src/metadata.csv"
-wav_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
-model_directory = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
 
+wav_path = "/home/wassim_jabrane/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
+model_directory = "/home/wassim_jabrane/MLP_Group_Project/src/models/"
 # --------- HYPERPARAMETER SETTINGS --------------- 
 REMOVE_UNK = True
 PREPROCESS = True
 # An integer scalar Tensor. The window length in samples.
 frame_length = 256
 # An integer scalar Tensor. The number of samples to step.
-frame_step = 160
+frame_step =  160
 # An integer scalar Tensor. The size of the FFT to apply.
 # If not provided, uses the smallest power of 2 enclosing frame_length.
-fft_length = 384 #original 3
 
+fft_length = 384  #Original: None
 NUM_OF_SAMPLES = 10000 #<---- DATASET SIZE
 BATCH_SIZE = 16
-RNN_UNITS=512 #original: 512
-RNN_LAYERS = 5 #original : 5
+RNN_UNITS=64 #original: 512
+RNN_LAYERS = 2 #original : 5
 LR_ADAM = 1e-4
 
 EPOCHS =100
@@ -79,7 +79,6 @@ def read_ctrlf_dataset(num_of_samples=3000):
             continue
         else:
             row[0]= str(i) + "_" + row[0]
-            print(row[1])
             if REMOVE_UNK:
                 row[1] = row[1].replace("<unk>", "") #TODO: See if this is plausible
             if PREPROCESS:
@@ -88,6 +87,7 @@ def read_ctrlf_dataset(num_of_samples=3000):
                     tokens = [data_utils.parse_number_string(word) for word in row[1].split()]
                     row[1] = " ".join(tokens)
                 except:
+                    num_of_samples+=1
                     continue
             output_rows.append(row)
     audio_df = pd.DataFrame(data= output_rows, columns=["TED_Talk_ID", "TED_transcript"])
