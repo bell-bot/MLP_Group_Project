@@ -58,13 +58,13 @@ def read_ctrlf_dataset(num_of_samples=3000):
     audio_df = pd.DataFrame(columns=CTRLF_Engine.COLS_OUTPUT_TED_SIMPLIFIED)
     output_rows = []
     for i in tqdm(range(0,num_of_samples),desc="Preparing Dataset"):
-        row = CTRLF_Engine.get_ted_simplified(i)
+        row = CTRLF_Engine.get_ted_talk_id_and_transcript(i)
         
         if len(row) ==0:
             num_of_samples+=1
             continue
         else:
-            row[0]= str(i) + "_" + CTRLF_Engine.TED.__getitem__(i)["talk_id"]
+            row[0]= str(i) + "_" + row[0]
             if REMOVE_UNK:
                 row[1] = row[1].replace("<unk>", "") #TODO: See if this is plausible
             output_rows.append(row)
