@@ -1,5 +1,6 @@
 
 import os
+print(os.getcwd())
 from re import L
 from typing import Dict, Tuple
 import sys
@@ -8,7 +9,6 @@ import numpy as np
 import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
 import librosa
-
 from MLP_Group_Project.Data import tedlium_local as tedlium
 import torchaudio
 from torch import Tensor
