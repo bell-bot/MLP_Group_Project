@@ -9,11 +9,11 @@ DATASET_TEDLIUM_PATH = data_paths
 DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "KeywordPerSample", "keywords.csv")
 KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "keyphrases.csv")
-
-
+ 
 LABELS_KEYPHRASES_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "labels.csv")
-
-
+#Adverserials 
+ADVERSERIAL_DATASET_PATH = os.path.join(data_paths, "adversarial")
+LABELS_WITH_ADVERSERIAL = os.path.join(data_paths, "Keyphrases" , "adv_labels.csv")
 ############# ---------CSV HEADERS --------------################
 
 #TODO! Might be better to have a header called keyword_id, in order to take into account the different varations of keywords and phrases inside the same sample
