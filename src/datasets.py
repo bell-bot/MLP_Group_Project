@@ -9,16 +9,16 @@ import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
 import librosa
 
-from disk.scratch2.s1834237.MLP_MULTIPLE_GPU.MLP_Group_Project.Data import tedlium_local as tedlium
+from MLP_Group_Project.Data import tedlium_local as tedlium
 import torchaudio
 from torch import Tensor
 import pandas as pd
 
-from disk.scratch2.s1834237.MLP_MULTIPLE_GPU.MLP_Group_Project.src.utils import get_git_root
-from disk.scratch2.s1834237.MLP_MULTIPLE_GPU.MLP_Group_Project.src.Preprocessing.pre_processing import resample_audio
+from MLP_Group_Project.src.utils import get_git_root
+from MLP_Group_Project.src.Preprocessing.pre_processing import resample_audio
 
 
-from disk.scratch2.s1834237.MLP_MULTIPLE_GPU.MLP_Group_Project.src.constants import DATASET_TEDLIUM_PATH, DATASET_MLCOMMONS_PATH, LabelsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
+from MLP_Group_Project.src.constants import DATASET_TEDLIUM_PATH, DATASET_MLCOMMONS_PATH, LabelsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
 
 ############# --------- DATASETS --------------################
 
