@@ -1,6 +1,5 @@
 # Code from :`https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/audio/ipynb/ctc_asr.ipynb#scrollTo=yY84aJdKPkbA``
 
-from re import I
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -16,20 +15,21 @@ from tqdm import tqdm
 from src.datasets import CTRLF_DatasetWrapper
 from Data import data_utils
 metadata_path = "/home/szy/Documents/MLP_Group_Project/src/metadata.csv"
+wav_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
+model_directory = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
+generated_text_stats_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
+generated_history_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
 
-wav_path = "/home/wassim_jabrane/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
-model_directory = "/home/wassim_jabrane/MLP_Group_Project/src/models/"
 # --------- HYPERPARAMETER SETTINGS --------------- 
 REMOVE_UNK = True
 PREPROCESS = True
 # An integer scalar Tensor. The window length in samples.
 frame_length = 256
 # An integer scalar Tensor. The number of samples to step.
-frame_step =  160
+frame_step = 160
 # An integer scalar Tensor. The size of the FFT to apply.
 # If not provided, uses the smallest power of 2 enclosing frame_length.
-
-fft_length = 384  #Original: None
+fft_length = 384
 NUM_OF_SAMPLES = 6000 #<---- DATASET SIZE
 BATCH_SIZE = 16
 RNN_UNITS= 128 #original: 512
@@ -39,24 +39,10 @@ LR_ADAM = 1e-3
 EPOCHS =100
 # ------------------------------------------
 
-# Prepare a directory to store all the checkpoints.
-checkpoint_dir = "./ckpt"
-if not os.path.exists(checkpoint_dir):
-    os.makedirs(checkpoint_dir)
+print(tf.__version__)
+print(tf.test.gpu_device_name())
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-
-# ------------- Preparation -------------#
-
-def setup_gpus():
-    print(tf.__version__)
-    print(tf.test.gpu_device_name())
-    print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-    mirrored_strategy = tf.distribute.MirroredStrategy()
-    print('Number of devices: {}'.format(mirrored_strategy.num_replicas_in_sync))
-
-    return mirrored_strategy
-
-strategy = setup_gpus()
 CTRLF_Engine = CTRLF_DatasetWrapper()
 
 def read_dataset_metadata():
@@ -79,6 +65,7 @@ def read_ctrlf_dataset(num_of_samples=3000):
             continue
         else:
             row[0]= str(i) + "_" + row[0]
+            print(row[1])
             if REMOVE_UNK:
                 row[1] = row[1].replace("<unk>", "") #TODO: See if this is plausible
             if PREPROCESS:
@@ -87,7 +74,6 @@ def read_ctrlf_dataset(num_of_samples=3000):
                     tokens = [data_utils.parse_number_string(word) for word in row[1].split()]
                     row[1] = " ".join(tokens)
                 except:
-                    num_of_samples+=1
                     continue
             output_rows.append(row)
     audio_df = pd.DataFrame(data= output_rows, columns=["TED_Talk_ID", "TED_transcript"])
@@ -141,7 +127,64 @@ def CTCLoss(y_true, y_pred):
     loss = keras.backend.ctc_batch_cost(y_true, y_pred, input_length, label_length)
     return loss
 
-
+def build_model(input_dim, output_dim, rnn_layers=5, rnn_units=128):
+    # Model's input
+    input_spectrogram = layers.Input((None, input_dim), name="input")
+    # Expand the dimension to use 2D CNN.
+    x = layers.Reshape((-1, input_dim, 1), name="expand_dim")(input_spectrogram)
+    # Convolution layer 1
+    x = layers.Conv2D(
+        filters=32,
+        kernel_size=[11, 41],
+        strides=[2, 2],
+        padding="same",
+        use_bias=False,
+        name="conv_1",
+    )(x)
+    x = layers.BatchNormalization(name="conv_1_bn")(x)
+    x = layers.ReLU(name="conv_1_relu")(x)
+    # Convolution layer 2
+    x = layers.Conv2D(
+        filters=32,
+        kernel_size=[11, 21],
+        strides=[1, 2],
+        padding="same",
+        use_bias=False,
+        name="conv_2",
+    )(x)
+    x = layers.BatchNormalization(name="conv_2_bn")(x)
+    x = layers.ReLU(name="conv_2_relu")(x)
+    # Reshape the resulted volume to feed the RNNs layers
+    x = layers.Reshape((-1, x.shape[-2] * x.shape[-1]))(x)
+    # RNN layers
+    for i in range(1, rnn_layers + 1):
+        recurrent = layers.GRU(
+            units=rnn_units,
+            activation="tanh",
+            recurrent_activation="sigmoid",
+            use_bias=True,
+            return_sequences=True,
+            reset_after=True,
+            name=f"gru_{i}",
+        )
+        x = layers.Bidirectional(
+            recurrent, name=f"bidirectional_{i}", merge_mode="concat"
+        )(x)
+        if i < rnn_layers:
+            x = layers.Dropout(rate=0.5)(x)
+    # Dense layer
+    x = layers.Dense(units=rnn_units * 2, name="dense_1")(x)
+    x = layers.ReLU(name="dense_1_relu")(x)
+    x = layers.Dropout(rate=0.5)(x)
+    # Classification layer
+    output = layers.Dense(units=output_dim + 1, activation="softmax")(x)
+    # Model
+    model = keras.Model(input_spectrogram, output, name="DeepSpeech_2")
+    # Optimizer
+    opt = keras.optimizers.Adam(learning_rate=LR_ADAM)
+    # Compile the model and return
+    model.compile(optimizer=opt, loss=CTCLoss)
+    return model
 
 # A utility function to decode the output of the network
 def decode_batch_predictions(pred):
@@ -307,6 +350,7 @@ def make_or_restore_model():
         rnn_units=RNN_UNITS,
         rnn_layers=RNN_LAYERS
     )
+    model.summary(line=110)
     return model
 
 
@@ -324,7 +368,8 @@ class CallbackEval(keras.callbacks.Callback):
         targets = []
         for batch in self.dataset:
             X, y = batch
-            batch_predictions = model.predict(X)
+            batch_predictions = 
+            predict(X)
             batch_predictions = decode_batch_predictions(batch_predictions)
             predictions.extend(batch_predictions)
             for label in y:
@@ -361,15 +406,12 @@ def train_model():
     epochs = EPOCHS
     # Callback function to check TED_transcription on the val set.
     validation_callback = CallbackEval(validation_dataset)
-    model_callback = keras.callbacks.ModelCheckpoint(
-            filepath=checkpoint_dir + "/ckpt-{epoch}", save_freq="epoch"
-    )
     # Train the model
     history = model.fit(
         train_dataset,
         validation_data=validation_dataset,
         epochs=epochs,
-        callbacks=[validation_callback, model_callback],
+        callbacks=[validation_callback],
     )
     return history
 
@@ -404,18 +446,11 @@ def eval_model(history, num_of_predictions_to_print=5):
     
  
         
-
-
-# Open a strategy scope.
-with strategy.scope():
-    # Everything that creates variables should be under the strategy scope.
-    # In general this is only model construction & `compile()`.
-    model = make_or_restore_model()
-    
-    
-model.summary(line_length=110)
-
+        
 #Train the model
 history =train_model()
 # Let's check results on more validation samples
 eval_model(history)
+
+
+    
