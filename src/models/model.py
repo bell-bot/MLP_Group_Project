@@ -30,11 +30,11 @@ frame_step =  160
 # If not provided, uses the smallest power of 2 enclosing frame_length.
 
 fft_length = 384  #Original: None
-NUM_OF_SAMPLES = 3000 #<---- DATASET SIZE
+NUM_OF_SAMPLES = 6000 #<---- DATASET SIZE
 BATCH_SIZE = 16
-RNN_UNITS=128 #original: 512
+RNN_UNITS= 128 #original: 512
 RNN_LAYERS = 2 #original : 5
-LR_ADAM = 1e-4
+LR_ADAM = 1e-3
 
 EPOCHS =100
 # ------------------------------------------
