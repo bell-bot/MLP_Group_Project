@@ -40,6 +40,7 @@ class TEDLIUMCustom(tedlium.TEDLIUM):
         super().__init__(root, release=release)
      
         path_to_speaker_adaptation = os.path.join(root, tedlium._RELEASE_CONFIGS[release]["folder_in_archive"], "speaker-adaptation")
+        path_to_speaker_adaptation = "/disk/scratch2/s1834237/TEDLIUM_release-3/speaker-adaptation"
         train_audio_sets = set(line.strip() for line in open(os.path.join(path_to_speaker_adaptation, "train.lst")))
         dev_audio_sets = set(line.strip() for line in open(os.path.join(path_to_speaker_adaptation, "dev.lst")))
         test_audio_sets = set(line.strip() for line in open(os.path.join(path_to_speaker_adaptation, "test.lst")))
