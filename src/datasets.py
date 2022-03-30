@@ -134,6 +134,11 @@ class MultiLingualSpokenWordsEnglish():
     SPLITS_DIR_NAME="splits"
     ALIGNMENTS_DIR_NAME="alignments"
 
+    MSWC_EN_AUDIO_FOLDER = os.path.join(DATASET_MLCOMMONS_PATH, \
+                    MLCOMMONS_FOLDER_NAME, \
+                    AUDIO_DIR_NAME, \
+                    "en", \
+                    "clips")
  
 
     def raise_directory_error(self):
@@ -170,8 +175,7 @@ class MultiLingualSpokenWordsEnglish():
         
         #Retrieve the splits csv file from MSWC folder
         if read_splits_file:
-            self._path_to_splits = os.path.join(self._path, self._subfolder_names_dict["splits"])
-            self.splits_df = pd.read_csv(os.path.join(self._path_to_splits, "en_splits.csv"))
+            self.load_splits_df()
             if subset == "train":
                 self.splits_df = self.splits_df[self.splits_df["SET"] == "TRAIN"]
             elif subset == "dev":
@@ -185,6 +189,11 @@ class MultiLingualSpokenWordsEnglish():
             self.splits_df = self.splits_df[self.splits_df["VALID"] == True]
             #Retrieve the keywords in the dataset
             self.keywords = set(self.splits_df["WORD"].unique())
+    
+    def load_splits_df(self):
+        self._path_to_splits = os.path.join(self._path, self._subfolder_names_dict["splits"])
+        self.splits_df = pd.read_csv(os.path.join(self._path_to_splits, "en_splits.csv"))
+
 
 
     def _load_audio(self, path_to_audio, to_numpy=True):
@@ -228,7 +237,7 @@ class CTRLF_DatasetWrapper:
         single_keywords_label: Represents a toggle which defines what types of labels we are dealing with.
             ------------> NOTE: This was added for the time being as handling of multiple keywords may require some changes in the implementation of the code here and elsewhere
     """
-    def __init__(self,path_to_labels_csv=LABELS_KEYPHRASES_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True):
+    def __init__(self,path_to_labels_csv=LABELS_KEYPHRASES_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True, label_mswc_id_error_handling=True):
         self._path_to_TED = path_to_TED
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
@@ -243,8 +252,8 @@ class CTRLF_DatasetWrapper:
         #Store the TED sample ids found in set()
         self.TED_sampleids_in_labels_set = set(self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID].unique())
 
-
-    def get(self, TEDSample_id: int, sampling_rate=16000):
+    #NOTE: THE TEDLIUM_SET IS DEPRECATED, will need to be handled as well in the future. It is currently not used
+    def get(self, TEDSample_id: int, sampling_rate=16000, label_mswc_id_error_handling=True):
         """
         Given Ted Sample ID and the dataset type, return three separate corresponding dictionaries.
         Returns: DataFrame
@@ -252,10 +261,13 @@ class CTRLF_DatasetWrapper:
             ['TED_waveform', 'TED_sample_rate', 'TED_transcript', 'TED_talk_id', 'TED_start_time', 'TED_end_time', 'MSWC_audio_waveform', 'MSWC_sample_rate', 'MSWC_ID', 'keyword', 'keyword_start_time', 'keyword_end_time', 'confidence']
 
         """
+        
         TED_results_dict = self.TED.__getitem__(TEDSample_id)
 
         TEDSample_id = str(TEDSample_id) #TODO: Return pandas in appropriate form
         label_rows = self.labels_df[self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID] == int(TEDSample_id)].reset_index()
+        
+        
         if len(label_rows) == 0:
             print("*" * 80)
             print("NOT FOUND: \nSample TED Audio ID {} does not exist in the csv file".format(TEDSample_id))
@@ -263,6 +275,20 @@ class CTRLF_DatasetWrapper:
             print("*" * 80)
         output_rows = []
         for i in range(0,len(label_rows)):
+            #Labels.csv error, in case keyword audio file is not linked to the right recording.
+            if label_mswc_id_error_handling:
+                from random import randint
+                #Get the keyword in the current row
+                keyword = label_rows[LabelsCSVHeaders.KEYWORD][i]
+                #find the folder in MSWC dataset
+                keyword_folder = os.path.join(self.MSWC.MSWC_EN_AUDIO_FOLDER, keyword)
+                audio_files  = os.listdir(keyword_folder)
+                #Find a random recording
+                random_number = randint(0,len(audio_files)-1)
+                corrected_keyword_ID= os.path.join(keyword, audio_files[random_number])
+                label_rows[LabelsCSVHeaders.MSWC_ID][i] =  corrected_keyword_ID
+            
+            
             MSWC_results_dict =  self.MSWC.__getitem__(label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i])
             #Resample Audio files into same sampling rate
             TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
@@ -342,8 +368,9 @@ if __name__== "__main__":
     print("Dataframe Results")
     x= CTRLF_DatasetWrapper(path_to_labels_csv = LABELS_KEYPHRASES_CSV_PATH)
     output_df = x.get(4)
-    print(output_df.MSWC_audio_waveform.iloc[0].shape, output_df.MSWC_sample_rate.iloc[0])
-    
+    print(output_df.MSWC_ID)
+    print(output_df.keyword)
+
     print("Concise TED Results")
     output_rows = x.get_ted_talk_id_and_transcript(4)
     print(output_rows)
