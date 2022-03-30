@@ -30,12 +30,11 @@ frame_step = 160
 # An integer scalar Tensor. The size of the FFT to apply.
 # If not provided, uses the smallest power of 2 enclosing frame_length.
 fft_length = 384
-
-NUM_OF_SAMPLES = 10000 #<---- DATASET SIZE
+NUM_OF_SAMPLES = 6000 #<---- DATASET SIZE
 BATCH_SIZE = 16
-RNN_UNITS=512 #original: 512
-RNN_LAYERS = 5 #original : 5
-LR_ADAM = 1e-4
+RNN_UNITS= 128 #original: 512
+RNN_LAYERS = 2 #original : 5
+LR_ADAM = 1e-3
 
 EPOCHS =100
 # ------------------------------------------
@@ -244,6 +243,13 @@ validation_dataset = (
     .prefetch(buffer_size=tf.data.AUTOTUNE)
 )
 
+#Disable Auto Sharding
+options = tf.data.Options()
+options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.OFF
+train_dataset = train_dataset.with_options(options)
+validation_dataset = validation_dataset.with_options(options)
+
+
 # fig = plt.figure(figsize=(8, 5))
 # for batch in train_dataset.take(1):
 #     spectrogram = batch[0][0].numpy()
@@ -266,14 +272,88 @@ validation_dataset = (
 #     display.display(display.Audio(np.transpose(audio), rate=16000))
 # plt.show()
 
-# Get the model
-model = build_model(
-    input_dim=fft_length // 2 + 1,
-    output_dim=char_to_num.vocabulary_size(),
-    rnn_units=RNN_UNITS,
-    rnn_layers=RNN_LAYERS
-)
-model.summary(line_length=110)
+
+# -------------------------- Model ---------------------------------- #
+
+def build_model(input_dim, output_dim, rnn_layers=5, rnn_units=128):
+    # Model's input
+    input_spectrogram = layers.Input((None, input_dim), name="input")
+    # Expand the dimension to use 2D CNN.
+    x = layers.Reshape((-1, input_dim, 1), name="expand_dim")(input_spectrogram)
+    # Convolution layer 1
+    x = layers.Conv2D(
+        filters=32,
+        kernel_size=[11, 41],
+        strides=[2, 2],
+        padding="same",
+        use_bias=False,
+        name="conv_1",
+    )(x)
+    x = layers.BatchNormalization(name="conv_1_bn")(x)
+    x = layers.ReLU(name="conv_1_relu")(x)
+    # Convolution layer 2
+    x = layers.Conv2D(
+        filters=32,
+        kernel_size=[11, 21],
+        strides=[1, 2],
+        padding="same",
+        use_bias=False,
+        name="conv_2",
+    )(x)
+    x = layers.BatchNormalization(name="conv_2_bn")(x)
+    x = layers.ReLU(name="conv_2_relu")(x)
+    # Reshape the resulted volume to feed the RNNs layers
+    x = layers.Reshape((-1, x.shape[-2] * x.shape[-1]))(x)
+    # RNN layers
+    for i in range(1, rnn_layers + 1):
+        recurrent = layers.GRU(
+            units=rnn_units,
+            activation="tanh",
+            recurrent_activation="sigmoid",
+            use_bias=True,
+            return_sequences=True,
+            reset_after=True,
+            name=f"gru_{i}",
+        )
+        x = layers.Bidirectional(
+            recurrent, name=f"bidirectional_{i}", merge_mode="concat"
+        )(x)
+        if i < rnn_layers:
+            x = layers.Dropout(rate=0.5)(x)
+    # Dense layer
+    x = layers.Dense(units=rnn_units * 2, name="dense_1")(x)
+    x = layers.ReLU(name="dense_1_relu")(x)
+    x = layers.Dropout(rate=0.5)(x)
+    # Classification layer
+    output = layers.Dense(units=output_dim + 1, activation="softmax")(x)
+    # Model
+    model = keras.Model(input_spectrogram, output, name="DeepSpeech_2")
+    # Optimizer
+    opt = keras.optimizers.Adam(learning_rate=LR_ADAM)
+    # Compile the model and return
+    model.compile(optimizer=opt, loss=CTCLoss)
+    return model
+
+
+def make_or_restore_model():
+    # Either restore the latest model, or create a fresh one
+    # if there is no checkpoint available.
+    checkpoints = [checkpoint_dir + "/" + name for name in os.listdir(checkpoint_dir)]
+    if checkpoints:
+        latest_checkpoint = max(checkpoints, key=os.path.getctime)
+        print("Restoring from", latest_checkpoint)
+        return keras.models.load_model(latest_checkpoint, custom_objects= {'CTCLoss': CTCLoss})
+    print("Creating a new model")
+    model = build_model(
+        input_dim=fft_length // 2 + 1,
+        output_dim=char_to_num.vocabulary_size(),
+        rnn_units=RNN_UNITS,
+        rnn_layers=RNN_LAYERS
+    )
+    model.summary(line=110)
+    return model
+
+
 ##Class needs to be here
 # A callback class to output a few TED_transcriptions during training
 class CallbackEval(keras.callbacks.Callback):
@@ -288,7 +368,8 @@ class CallbackEval(keras.callbacks.Callback):
         targets = []
         for batch in self.dataset:
             X, y = batch
-            batch_predictions = model.predict(X)
+            batch_predictions = 
+            predict(X)
             batch_predictions = decode_batch_predictions(batch_predictions)
             predictions.extend(batch_predictions)
             for label in y:
