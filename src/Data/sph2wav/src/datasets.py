@@ -9,7 +9,7 @@ import numpy as np
 import regex as re
 # import torchaudio.datasets.tedlium as tedlium 
 import librosa
-from Data import tedlium_local as tedlium
+import tedlium_local as tedlium
 import torchaudio
 from torch import Tensor
 import pandas as pd
