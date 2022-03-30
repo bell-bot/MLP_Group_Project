@@ -109,6 +109,7 @@ class TEDLIUM(Dataset):
         # Create list for all samples
         self._filelist = []
         stm_path = os.path.join(self._path, "stm")
+        stm_path = "/disk/scratch2/s1834237/TEDLIUM_release-3/data/stm/"
         for file in sorted(os.listdir(stm_path)):
             if file.endswith(".stm"):
                 stm_path = os.path.join(self._path, "stm", file)
