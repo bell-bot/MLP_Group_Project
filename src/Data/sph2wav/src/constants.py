@@ -5,8 +5,7 @@ from utils import get_git_root
 ######### ------------------ PATHING ------------- ############
 """Specify path to TEDLIUM directory"""
 data_paths = os.path.join(get_git_root(os.getcwd()) ,'Data')
-data_paths = "/disk/scratch2/s1834237/TEDLIUM_release-3/"
-DATASET_TEDLIUM_PATH = data_paths
+DATASET_TEDLIUM_PATH = "/disk/scratch2/s1834237/TEDLIUM_release-3/data"
 DATASET_MLCOMMONS_PATH = data_paths
 KEYWORDS_LINK_CSV_PATH = os.path.join(data_paths, "KeywordPerSample", "keywords.csv")
 KEYPHRASES_LINK_CSV_PATH = os.path.join(data_paths, "Keyphrases" , "keyphrases.csv")
