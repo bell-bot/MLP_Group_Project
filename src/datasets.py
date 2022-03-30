@@ -239,6 +239,7 @@ class CTRLF_DatasetWrapper:
     """
     def __init__(self,path_to_labels_csv=LABELS_KEYPHRASES_CSV_PATH, path_to_TED=DATASET_TEDLIUM_PATH, path_to_MSWC=DATASET_MLCOMMONS_PATH, single_keywords_labels=True, label_mswc_id_error_handling=True):
         self._path_to_TED = path_to_TED
+        self._path_to_TED = "/disk/scratch2/s1834237/TEDLIUM_release-3/"
         self._path_to_MSWC = path_to_MSWC
         self.single_keywords_labels = single_keywords_labels
         #Initialise keyword dataframe
@@ -247,7 +248,7 @@ class CTRLF_DatasetWrapper:
         self.TED = TEDLIUMCustom(root=path_to_TED,release="release3")
 
         #Initialise Keyword dataset
-        self.MSWC = MultiLingualSpokenWordsEnglish(root=path_to_MSWC)
+        #self.MSWC = MultiLingualSpokenWordsEnglish(root=path_to_MSWC)
         
         #Store the TED sample ids found in set()
         self.TED_sampleids_in_labels_set = set(self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID].unique())

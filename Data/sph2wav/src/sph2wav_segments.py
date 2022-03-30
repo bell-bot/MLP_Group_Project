@@ -4,8 +4,8 @@ import scipy.io.wavfile
 import os
 import tensorflow as tf
 import numpy as np
-path = '/home/wassim_jabrane/MLP_Group_Project/Data/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
-out_path = '/home/wassim_jabrane/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/'
+path = '/disk/scratch2/s1834237/TEDLIUM_release-3/data/sph/'  # Path of folder containing .sph files
+out_path = '/disk/scratch2/s1834237/TEDLIUM_release-3/data/wav/'
 
 #NOTE: Writes only wav files that have at least one label timestamp in that audio segment
 x = CTRLF_DatasetWrapper()
