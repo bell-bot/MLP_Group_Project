@@ -1,0 +1,5 @@
+/var/spool/slurmd/job1408053/slurm_script: line 13: s1837246: command not found
+Traceback (most recent call last):
+  File "/home/s1837246/MLP_Group_Project/src/Experiments/baseline.py", line 2, in <module>
+    import librosa
+ModuleNotFoundError: No module named 'librosa'
