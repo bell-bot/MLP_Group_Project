@@ -1,4 +1,4 @@
-from src.datasets import CTRLF_DatasetWrapper 
+from datasets import CTRLF_DatasetWrapper
 from tqdm import tqdm
 import scipy.io.wavfile
 import os
