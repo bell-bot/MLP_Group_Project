@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from torch.nn import L1Loss, MSELoss
 from enum import Enum
+from tqdm import tqdm
 import gc
 import ctypes
 
@@ -75,23 +76,29 @@ accuracy = []
 # idx keeps track of the ted talk id
 idx = 0
 
-for idx in range(1000):
-    try:
-        # Retrieve the sample at the current index
-        sample = x.get(idx)
+samples_to_write= sorted(list(x.TED_sampleids_in_labels_set))
 
-        # We require the ted audio waveform, keyword waveform, audio start and end time, and keyword start and 
-        # end time
-        ted_waveform = sample["TED_waveform"][0]
-        keyword = sample["MSWC_audio_waveform"][0]
-        ted_start_time = sample["TED_start_time"][0]
-        ted_end_time = sample["TED_end_time"][0]
-        ted_length = ted_end_time-ted_start_time
-        ted_sample_rate = sample["TED_sample_rate"][0]
-        keyword_sample_rate = sample["MSWC_sample_rate"][0]
-        keyword_start_time = sample["keyword_start_time"][0]
-        keyword_end_time = sample["keyword_end_time"][0]
+for i in tqdm(range(len(samples_to_write))):
+    idx = samples_to_write[i]
+    # Retrieve the sample at the current index
+    sample = x.get(idx)
 
+    # We require the ted audio waveform, keyword waveform, audio start and end time, and keyword start and 
+    # end time
+    ted_waveform = sample["TED_waveform"][0]
+
+    keywords = sample["MSWC_audio_waveform"].tolist()
+    ted_start_time = sample["TED_start_time"][0]
+    ted_end_time = sample["TED_end_time"][0]
+    ted_length = ted_end_time-ted_start_time
+    ted_sample_rate = sample["TED_sample_rate"][0]
+    keyword_sample_rate = sample["MSWC_sample_rate"].tolist()
+    keyword_start_time = sample["keyword_start_time"].tolist()
+    keyword_end_time = sample["keyword_end_time"].tolist()
+
+    # Iterate through all keywords:
+
+    for (keyword, keyword_start, keyword_end, keyword_sr) in zip(keywords, keyword_start_time, keyword_end_time, keyword_sample_rate):
 
         # Length of the window has to be the length of the keyword
         window_len = len(keyword)
@@ -112,13 +119,13 @@ for idx in range(1000):
         least_mse = np.argmin(windowed_mse)
 
         coef_ted = ted_length/ted_waveform.shape[1]
-        coef_keyword = (keyword_end_time-keyword_start_time)
+        coef_keyword = (keyword_end-keyword_start)
 
         # Compute the start and end timestamp
         start_timestamp = ted_start_time + least_mse*coef_ted
         end_timestamp = start_timestamp + coef_keyword
 
-        accuracy.append(match_timestamps(start_timestamp, end_timestamp, keyword_start_time, keyword_end_time))
+        accuracy.append(match_timestamps(start_timestamp, end_timestamp, keyword_start, keyword_end))
         print(f"Sample {idx} done.\n")
         del keyword_mfcc
         del ted_mfcc
@@ -127,11 +134,9 @@ for idx in range(1000):
         del windowed_frames
         del ted_waveform
         gc.collect()
-    except:
-        continue
         
 
 final_accuracy = np.sum(accuracy)/len(accuracy)
 acc = open("final_acc.txt", "w")
-acc.write(final_accuracy)
+acc.write(str(final_accuracy))
 acc.close()
