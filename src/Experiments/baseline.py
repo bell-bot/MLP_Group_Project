@@ -23,9 +23,9 @@ def features_extractor_windowed(frames):
 
 def window_split(frame_len, hop_len,data, print_frame = False):
     frames = librosa.util.frame(data, frame_length=frame_len, hop_length=hop_len)
-    windowed_frames = np.hanning(frame_len).reshape(-1, 1) * frames
+    #windowed_frames = np.hanning(frame_len).reshape(-1, 1) * frames
         
-    return frames,windowed_frames
+    return windowed_frames
     
 
 def mae_loss(x, y):
