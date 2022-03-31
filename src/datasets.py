@@ -281,6 +281,7 @@ class CTRLF_DatasetWrapper:
             if label_mswc_id_error_handling:
                 #Get the keyword in the current row
                 keyword = label_rows[LabelsCSVHeaders.KEYWORD][i]
+                keyword = keyword.replace("\'", "’")
                 #find the folder in MSWC dataset
                 currentDirectory = (self.MSWC.MSWC_EN_AUDIO_FOLDER + "/" +  keyword)
 
