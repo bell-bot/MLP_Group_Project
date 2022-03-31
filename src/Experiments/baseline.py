@@ -131,7 +131,7 @@ for i in tqdm(range(len(samples_to_write))):
         start_timestamp = ted_start_time + least_mse*coef_ted
         end_timestamp = start_timestamp + coef_keyword
 
-        accuracy.append(correct_time(start_timestamp, end_timestamp, keyword_start, keyword_end))
+        accuracy.append(correct_timestamp(start_timestamp, end_timestamp, keyword_start, keyword_end))
         print(f"Sample {idx} done.\n")
         del keyword_mfcc
         del ted_mfcc
