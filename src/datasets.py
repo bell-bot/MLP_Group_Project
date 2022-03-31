@@ -310,11 +310,11 @@ class CTRLF_DatasetWrapper:
                 TED_results_dict["end_time"],\
                 MSWC_results_dict["waveform"],\
                 MSWC_results_dict["sample_rate"],\
-                label_rows.iloc[i][LabelsCSVHeaders.MSWC_ID],\
-                label_rows.iloc[i][LabelsCSVHeaders.KEYWORD],\
-                label_rows.iloc[i][LabelsCSVHeaders.START_TIMESTAMP],\
-                label_rows.iloc[i][LabelsCSVHeaders.END_TIMESTAMP], \
-                label_rows.iloc[i][LabelsCSVHeaders.CONFIDENCE], \
+                label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i],\
+                label_rows[LabelsCSVHeaders.KEYWORD].iloc[i],\
+                label_rows[LabelsCSVHeaders.START_TIMESTAMP]iloc[i],\
+                label_rows[LabelsCSVHeaders.END_TIMESTAMP].iloc[i], \
+                label_rows[LabelsCSVHeaders.CONFIDENCE].iloc[i], \
             ]
             
 
