@@ -1,5 +1,6 @@
 # Code from :`https://colab.research.google.com/github/keras-team/keras-io/blob/master/examples/audio/ipynb/ctc_asr.ipynb#scrollTo=yY84aJdKPkbA``
 
+from re import T
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -14,6 +15,8 @@ from src.utils import get_git_root
 from tqdm import tqdm
 from src.datasets import CTRLF_DatasetWrapper
 from Data import data_utils
+from moviepy.audio.AudioClip import AudioArrayClip
+
 metadata_path = "/home/szy/Documents/MLP_Group_Project/src/metadata.csv"
 wav_path = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/Data/TEDLIUM_release-3/data/wav/"
 model_directory = "/Users/Wassim/Documents/Year 4/MLP/CW3:4/MLP_Group_Project/src/models/"
@@ -38,6 +41,9 @@ RNN_LAYERS = 2 #original : 5
 LR_ADAM = 1e-3
 
 EPOCHS =100
+
+TEST_START =NUM_OF_SAMPLES
+TEST_END = NUM_OF_SAMPLES + 400
 # ------------------------------------------
 
 print(tf.__version__)
@@ -55,7 +61,53 @@ def read_dataset_metadata():
     metadata_df.head(3)
     return metadata_df
 
-def read_ctrlf_dataset(num_of_samples=3000):
+def read_ctrlf_dataset(start_sample= 0, num_of_samples=3000, if_keyword=False):
+    audio_df = pd.DataFrame(columns=CTRLF_Engine.COLS_OUTPUT_TED_SIMPLIFIED)
+    
+    output_rows = []
+    for i in tqdm(range(start_sample,num_of_samples),desc="Preparing Dataset"):
+        sample = CTRLF_Engine.get(i)
+  
+        if len(sample) ==0:
+            num_of_samples+=1
+            continue
+        else:
+            ted_waveform = sample["TED_waveform"][0]
+            ted_waveform = ted_waveform.reshape(ted_waveform.shape[1],1)
+            keyword_audio = sample["MSWC_audio_waveform"][0]
+            keyword_audio = keyword_audio.reshape(keyword_audio.shape[0],1)
+            ted_start_time = sample["TED_start_time"][0]
+            ted_end_time = sample["TED_end_time"][0]
+            ted_length = ted_end_time-ted_start_time
+            ted_sample_rate = sample["TED_sample_rate"][0]
+            keyword_sample_rate = sample["MSWC_sample_rate"][0]
+            keyword_start_time = sample["keyword_start_time"][0]
+            keyword_end_time = sample["keyword_end_time"][0]
+            ted_transcript = sample["TED_transcript"][0]
+            ted_talk_id = sample["talk_id"][0]
+
+            keyword_id = sample["MSWC_ID"][0]
+            if if_keyword:
+                row = [keyword_id, sample["keyword"]]
+            else:
+                row = [ted_talk_id, ted_transcript]
+                row[0]= str(i) + "_" + row[0]
+                if REMOVE_UNK:
+                    row[1] = row[1].replace("<unk>", "") #TODO: See if this is plausible
+            if PREPROCESS:
+                row[1] = data_utils.preprocess_text(row[1])
+                try:
+                    tokens = [data_utils.parse_number_string(word) for word in row[1].split()]
+                    row[1] = " ".join(tokens)
+                except:
+                    continue
+            output_rows.append(row)
+    audio_df = pd.DataFrame(data= output_rows, columns=["TED_Talk_ID", "TED_transcript"])
+    audio_df.reset_index(inplace=True, drop=True)
+    return audio_df
+  
+  
+def read_ctrlf_dataset_keyword(num_of_samples=3000):
     audio_df = pd.DataFrame(columns=CTRLF_Engine.COLS_OUTPUT_TED_SIMPLIFIED)
     output_rows = []
     for i in tqdm(range(0,num_of_samples),desc="Preparing Dataset"):
@@ -78,8 +130,7 @@ def read_ctrlf_dataset(num_of_samples=3000):
             output_rows.append(row)
     audio_df = pd.DataFrame(data= output_rows, columns=["TED_Talk_ID", "TED_transcript"])
     audio_df.reset_index(inplace=True, drop=True)
-    return audio_df
-        
+    return audio_df      
 
 def encode_single_sample(wav_file, label):
     ###########################################
@@ -141,13 +192,12 @@ def decode_batch_predictions(pred):
     return output_text
 
 
-metadata_df = read_ctrlf_dataset(num_of_samples=NUM_OF_SAMPLES)
+metadata_df = read_ctrlf_dataset(start_sample= TEST_START, num_of_samples=TEST_END)
 print(metadata_df[0:10])
-split = int(len(metadata_df) * 0.90)
-df_train = metadata_df[:split]
-df_val = metadata_df[split:]
-print(f"Size of the training set: {len(df_train)}")
-print(f"Size of the training set: {len(df_val)}")
+# df_train = metadata_df[:split]
+df_val = metadata_df
+# print(f"Size of the training set: {len(df_train)}")
+print(f"Size of the test set: {len(df_val)}")
 # The set of characters accepted in the TED_transcription.
 
 characters = [x for x in "abcdefghijklmnopqrstuvwxyz'?! "]
@@ -232,7 +282,7 @@ def eval_model(num_of_predictions_to_print=5):
         for label in y:
             label = tf.strings.reduce_join(num_to_char(label)).numpy().decode("utf-8")
             targets.append(label)
-    tf.saved_model.save(model, model_directory)
+    # tf.saved_model.save(model, model_directory)
     wer_score = wer(targets, predictions)
     
     with open(model_directory + "model_stats.txt", "a") as f:  
@@ -246,13 +296,21 @@ def eval_model(num_of_predictions_to_print=5):
             print("-" * 100)
 
             f.write(f"Target: {targets[i]}\n")
-            f.write(f"Prediction: {predictions[i]}\n") 
-    
- 
+            f.write(f"Prediction: {predictions[i]}\n")
+            
+
+
+
+
+
+
+
+# ------------------------------------------------
         
         
 # Let's check results on more validation samples
 eval_model()
+
 
 
     
