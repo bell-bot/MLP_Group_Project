@@ -131,7 +131,6 @@ for i in tqdm(range(len(samples_to_write))):
         del ted_mfcc
         del windowed_mse
         del windowed_frames
-        del ted_waveform
         gc.collect()
         
 
