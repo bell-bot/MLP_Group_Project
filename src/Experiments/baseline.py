@@ -25,7 +25,7 @@ def window_split(frame_len, hop_len,data, print_frame = False):
     frames = librosa.util.frame(data, frame_length=frame_len, hop_length=hop_len)
     #windowed_frames = np.hanning(frame_len).reshape(-1, 1) * frames
         
-    return windowed_frames
+    return frames
     
 
 def mae_loss(x, y):
