@@ -1,5 +1,6 @@
 
 import os
+import pathlib
 from re import L
 from typing import Dict, Tuple
 import sys
@@ -17,6 +18,7 @@ import pandas as pd
 from src.utils import get_git_root
 from src.Preprocessing.pre_processing import resample_audio
 
+from random import randint
 
 from src.constants import DATASET_TEDLIUM_PATH, DATASET_MLCOMMONS_PATH, LabelsCSVHeaders, LABELS_KEYPHRASES_CSV_PATH
 
@@ -277,21 +279,25 @@ class CTRLF_DatasetWrapper:
         for i in range(0,len(label_rows)):
             #Labels.csv error, in case keyword audio file is not linked to the right recording.
             if label_mswc_id_error_handling:
-                from random import randint
                 #Get the keyword in the current row
                 keyword = label_rows[LabelsCSVHeaders.KEYWORD][i]
                 #find the folder in MSWC dataset
-                keyword_folder = os.path.join(self.MSWC.MSWC_EN_AUDIO_FOLDER, keyword)
-                audio_files  = os.listdir(keyword_folder)
-                #Find a random recording
+                currentDirectory = (self.MSWC.MSWC_EN_AUDIO_FOLDER + "/" +  keyword)
+
+                #Find a random recording\
+                audio_files  = (os.listdir(currentDirectory))
+
                 random_number = randint(0,len(audio_files)-1)
+
                 corrected_keyword_ID= os.path.join(keyword, audio_files[random_number])
                 label_rows[LabelsCSVHeaders.MSWC_ID][i] =  corrected_keyword_ID
             
-            
+
             MSWC_results_dict =  self.MSWC.__getitem__(label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i])
-            #Resample Audio files into same sampling rate
-            TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
+            #Resample MSWC 
+            MSWC_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=sampling_rate)
+            MSWC_results_dict["sample_rate"] = sampling_rate
+            # TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
 
             #Create new row
             new_row = [  \
@@ -303,12 +309,14 @@ class CTRLF_DatasetWrapper:
                 TED_results_dict["end_time"],\
                 MSWC_results_dict["waveform"],\
                 MSWC_results_dict["sample_rate"],\
-                label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i],\
-                label_rows[LabelsCSVHeaders.KEYWORD].iloc[i],\
-                label_rows[LabelsCSVHeaders.START_TIMESTAMP].iloc[i],\
-                label_rows[LabelsCSVHeaders.END_TIMESTAMP].iloc[i], \
-                label_rows[LabelsCSVHeaders.CONFIDENCE].iloc[i], \
+                label_rows.iloc[i][LabelsCSVHeaders.MSWC_ID],\
+                label_rows.iloc[i][LabelsCSVHeaders.KEYWORD],\
+                label_rows.iloc[i][LabelsCSVHeaders.START_TIMESTAMP],\
+                label_rows.iloc[i][LabelsCSVHeaders.END_TIMESTAMP], \
+                label_rows.iloc[i][LabelsCSVHeaders.CONFIDENCE], \
             ]
+            
+
 
             output_rows.append(new_row)
 
