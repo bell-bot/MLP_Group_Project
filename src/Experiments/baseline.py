@@ -104,7 +104,7 @@ for i in tqdm(range(len(samples_to_write))):
         window_len = len(keyword)
 
         # Window the ted waveform
-        frames, windowed_frames = window_split(window_len, 1, ted_waveform)
+        windowed_frames = window_split(window_len, 1, ted_waveform)
 
         # Convert the frames and keyword waveform to MFCC
         ted_mfcc = features_extractor_windowed(windowed_frames[0].T)
