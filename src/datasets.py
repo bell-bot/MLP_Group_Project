@@ -255,7 +255,7 @@ class CTRLF_DatasetWrapper:
         self.TED_sampleids_in_labels_set = set(self.labels_df[LabelsCSVHeaders.TED_SAMPLE_ID].unique())
 
     #NOTE: THE TEDLIUM_SET IS DEPRECATED, will need to be handled as well in the future. It is currently not used
-    def get(self, TEDSample_id: int, sampling_rate=16000, label_mswc_id_error_handling=True):
+    def get(self, TEDSample_id: int, label_mswc_id_error_handling=True):
         """
         Given Ted Sample ID and the dataset type, return three separate corresponding dictionaries.
         Returns: DataFrame
