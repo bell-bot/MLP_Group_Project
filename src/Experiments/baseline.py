@@ -65,6 +65,12 @@ def match_timestamps(start, end, actual_start, actual_end):
     end_valid = end - 0.1 < actual_end and end + 0.1 > actual_end
     return start_valid and end_valid
 
+def correct_timestamp(start, end, keyword_start, keyword_end):
+    start_before = keyword_start <= start and keyword_end > end 
+    end_after = keyword_start < start and keyword_end > end and keyword_end < end
+
+    return start_before or end_after
+
 # Initialise the CTRL-wrapper for datasets.py
 x = CTRLF_DatasetWrapper()
 
@@ -125,7 +131,7 @@ for i in tqdm(range(len(samples_to_write))):
         start_timestamp = ted_start_time + least_mse*coef_ted
         end_timestamp = start_timestamp + coef_keyword
 
-        accuracy.append(match_timestamps(start_timestamp, end_timestamp, keyword_start, keyword_end))
+        accuracy.append(correct_timestamp(start_timestamp, end_timestamp, keyword_start, keyword_end))
         print(f"Sample {idx} done.\n")
         del keyword_mfcc
         del ted_mfcc
