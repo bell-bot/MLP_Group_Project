@@ -294,9 +294,9 @@ class CTRLF_DatasetWrapper:
             
 
             MSWC_results_dict =  self.MSWC.__getitem__(label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i])
-            #Resample MSWC 
-            MSWC_results_dict["waveform"] = resample_audio(TED_results_dict["waveform"], TED_results_dict["sample_rate"], target_rate=sampling_rate)
-            MSWC_results_dict["sample_rate"] = sampling_rate
+            #Resample MSWC  to the sampling rate of TED
+            MSWC_results_dict["waveform"] = resample_audio(MSWC_results_dict["waveform"], MSWC_results_dict["sample_rate"], target_rate=TED_results_dict["sample_rate"])
+            MSWC_results_dict["sample_rate"] = TED_results_dict["sample_rate"]
             # TED_results_dict, MSWC_results_dict = self.resample_both_audio_files(TED_results_dict, MSWC_results_dict)
 
             #Create new row
@@ -378,6 +378,7 @@ if __name__== "__main__":
     output_df = x.get(4)
     print(output_df.MSWC_ID)
     print(output_df.keyword)
+    print(output_df)
 
     print("Concise TED Results")
     output_rows = x.get_ted_talk_id_and_transcript(4)
