@@ -312,7 +312,7 @@ class CTRLF_DatasetWrapper:
                 MSWC_results_dict["sample_rate"],\
                 label_rows[LabelsCSVHeaders.MSWC_ID].iloc[i],\
                 label_rows[LabelsCSVHeaders.KEYWORD].iloc[i],\
-                label_rows[LabelsCSVHeaders.START_TIMESTAMP]iloc[i],\
+                label_rows[LabelsCSVHeaders.START_TIMESTAMP].iloc[i],\
                 label_rows[LabelsCSVHeaders.END_TIMESTAMP].iloc[i], \
                 label_rows[LabelsCSVHeaders.CONFIDENCE].iloc[i], \
             ]
